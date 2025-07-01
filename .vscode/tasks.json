@@ -1,0 +1,17 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Ejecutar Sistema Inventario",
+			"type": "shell",
+			"command": "java",
+			"args": [
+				"-jar",
+				"target/sistema-inventario-1.0.0.jar"
+			],
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head('Dashboard Administrador')}"></div>
+    <title>Dashboard Administrador - Sistema Saga Falabella</title>
+    <style>
+        .dashboard-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .quick-action-btn {
+            border-radius: 10px;
+            padding: 12px 20px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+        }
+        .recent-activity {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .activity-item {
+            border-left: 3px solid #e53e3e;
+            padding-left: 15px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container-fluid mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="mb-1">Dashboard Administrador</h2>
+                        <p class="text-muted">Bienvenido, <span sec:authentication="name">Admin</span></p>
+                    </div>
+                    <div>
+                        <span class="badge bg-success fs-6">
+                            <i class="fas fa-circle me-1"></i>Sistema Activo
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Estadísticas Principales -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card dashboard-card text-white bg-primary">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number" th:text="${totalUsuarios ?: 0}">0</div>
+                        <h6 class="card-title">Total Usuarios</h6>
+                        <small>Activos en el sistema</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card dashboard-card text-white bg-success">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-number" th:text="${totalProductos ?: 0}">0</div>
+                        <h6 class="card-title">Productos</h6>
+                        <small>En inventario</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card dashboard-card text-white bg-warning">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-number" th:text="${pedidosPendientes ?: 0}">0</div>
+                        <h6 class="card-title">Pedidos Pendientes</h6>
+                        <small>Requieren atención</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card dashboard-card text-white bg-info">
+                    <div class="card-body text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="stat-number" th:text="${proveedoresActivos ?: 0}">0</div>
+                        <h6 class="card-title">Proveedores</h6>
+                        <small>Activos</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Acciones Rápidas -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-bolt me-2"></i>Acciones Rápidas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2 mb-2">
+                                <a href="/admin/usuarios" class="btn btn-outline-primary quick-action-btn w-100">
+                                    <i class="fas fa-user-plus d-block mb-2"></i>
+                                    Gestionar Usuarios
+                                </a>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <a href="/admin/productos" class="btn btn-outline-success quick-action-btn w-100">
+                                    <i class="fas fa-plus-circle d-block mb-2"></i>
+                                    Agregar Producto
+                                </a>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <a href="/admin/proveedores" class="btn btn-outline-info quick-action-btn w-100">
+                                    <i class="fas fa-truck-loading d-block mb-2"></i>
+                                    Gestionar Proveedores
+                                </a>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <a href="/admin/reportes" class="btn btn-outline-warning quick-action-btn w-100">
+                                    <i class="fas fa-chart-bar d-block mb-2"></i>
+                                    Ver Reportes
+                                </a>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <a href="/admin/configuracion" class="btn btn-outline-secondary quick-action-btn w-100">
+                                    <i class="fas fa-cog d-block mb-2"></i>
+                                    Configuración
+                                </a>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <a href="/admin/respaldos" class="btn btn-outline-dark quick-action-btn w-100">
+                                    <i class="fas fa-database d-block mb-2"></i>
+                                    Respaldos
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contenido Principal -->
+        <div class="row">
+            <!-- Alertas y Notificaciones -->
+            <div class="col-md-6 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-bell me-2"></i>Alertas del Sistema
+                        </h5>
+                        <span class="badge bg-danger" th:text="${alertasCount ?: 3}">3</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Stock Bajo:</strong> 15 productos tienen stock menor a 10 unidades.
+                        </div>
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Usuarios Pendientes:</strong> 3 empleados esperan aprobación.
+                        </div>
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-times-circle me-2"></i>
+                            <strong>Pedidos Atrasados:</strong> 2 pedidos superaron el tiempo de entrega.
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="/admin/alertas" class="btn btn-outline-primary btn-sm">
+                                Ver Todas las Alertas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actividad Reciente -->
+            <div class="col-md-6 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-history me-2"></i>Actividad Reciente
+                        </h5>
+                    </div>
+                    <div class="card-body recent-activity">
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-1">Nuevo usuario registrado</h6>
+                                    <p class="mb-1 text-muted">Juan Pérez se registró como cliente</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>Hace 5 minutos
+                                    </small>
+                                </div>
+                                <span class="badge bg-success">Usuario</span>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-1">Producto actualizado</h6>
+                                    <p class="mb-1 text-muted">Stock de "Laptop HP" actualizado</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>Hace 10 minutos
+                                    </small>
+                                </div>
+                                <span class="badge bg-info">Inventario</span>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-1">Pedido completado</h6>
+                                    <p class="mb-1 text-muted">Pedido #P-001 entregado al cliente</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>Hace 15 minutos
+                                    </small>
+                                </div>
+                                <span class="badge bg-warning">Pedido</span>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-1">Respaldo completado</h6>
+                                    <p class="mb-1 text-muted">Respaldo automático de la base de datos</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>Hace 1 hora
+                                    </small>
+                                </div>
+                                <span class="badge bg-secondary">Sistema</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <a href="/admin/actividad" class="btn btn-outline-primary btn-sm">
+                                Ver Toda la Actividad
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gráficos y Estadísticas -->
+        <div class="row">
+            <div class="col-md-8 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-line me-2"></i>Ventas del Mes
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="ventasChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-pie-chart me-2"></i>Productos por Categoría
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="categoriasChart" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Gráfico de ventas
+        const ventasCtx = document.getElementById('ventasChart').getContext('2d');
+        new Chart(ventasCtx, {
+            type: 'line',
+            data: {
+                labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+                datasets: [{
+                    label: 'Ventas (S/)',
+                    data: [12000, 19000, 15000, 25000],
+                    borderColor: '#e53e3e',
+                    backgroundColor: 'rgba(229, 62, 62, 0.1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Gráfico de categorías
+        const categoriasCtx = document.getElementById('categoriasChart').getContext('2d');
+        new Chart(categoriasCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Electrónicos', 'Ropa', 'Hogar', 'Deportes'],
+                datasets: [{
+                    data: [35, 25, 25, 15],
+                    backgroundColor: ['#e53e3e', '#dd6b20', '#38a169', '#3182ce']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

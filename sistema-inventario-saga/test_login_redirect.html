@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prueba Login - Sistema Saga Falabella</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; }
+        .container { max-width: 500px; margin: 0 auto; }
+        .form-group { margin: 15px 0; }
+        input[type="text"], input[type="password"] { 
+            width: 100%; padding: 10px; margin: 5px 0; 
+        }
+        button { 
+            background: #007bff; color: white; padding: 10px 20px; 
+            border: none; cursor: pointer; 
+        }
+        .result { 
+            margin: 20px 0; padding: 10px; 
+            background: #f8f9fa; border: 1px solid #dee2e6; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Prueba de Login - Sistema Saga Falabella</h2>
+        <p>Usuarios de prueba:</p>
+        <ul>
+            <li><strong>super_admin</strong> / admin123 → Redirige a <strong>/admin/portal</strong></li>
+            <li><strong>cliente_test</strong> / cliente123 → Redirige a <strong>/client/dashboard</strong></li>
+            <li><strong>empleado_almacen</strong> / empleado123 → Redirige a <strong>/empleado/dashboard</strong></li>
+        </ul>
+        
+        <form action="http://localhost:8080/auth/login" method="post">
+            <div class="form-group">
+                <label>Usuario:</label>
+                <input type="text" name="username" value="super_admin" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" name="password" value="admin123" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        
+        <div class="result">
+            <h3>Resultado esperado:</h3>
+            <p>Después del login exitoso, deberías ser redirigido automáticamente a:</p>
+            <ul>
+                <li><strong>Super Admin</strong> → Portal de Administración (/admin/portal)</li>
+                <li><strong>Cliente</strong> → Dashboard de Cliente (/client/dashboard)</li>
+                <li><strong>Empleado</strong> → Dashboard de Empleado (/empleado/dashboard)</li>
+            </ul>
+        </div>
+        
+        <p><a href="http://localhost:8080">Ir al sistema directamente</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Respaldos del Sistema - Admin')}"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/portal}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/usuarios}">
+                                <i class="fas fa-users"></i>
+                                Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/productos}">
+                                <i class="fas fa-box"></i>
+                                Productos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/proveedores}">
+                                <i class="fas fa-truck"></i>
+                                Proveedores
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/pedidos}">
+                                <i class="fas fa-shopping-cart"></i>
+                                Pedidos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/reportes}">
+                                <i class="fas fa-chart-bar"></i>
+                                Reportes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/alertas}">
+                                <i class="fas fa-bell"></i>
+                                Alertas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/actividad}">
+                                <i class="fas fa-history"></i>
+                                Actividad
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/configuracion}">
+                                <i class="fas fa-cog"></i>
+                                Configuración
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/admin/respaldos}">
+                                <i class="fas fa-database"></i>
+                                Respaldos
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        <i class="fas fa-database me-2"></i>
+                        Gestión de Respaldos
+                    </h1>                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <form th:action="@{/admin/respaldos/crear}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-plus"></i> Crear Respaldo
+                                </button>
+                            </form>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#restaurarModal">
+                                <i class="fas fa-upload"></i> Restaurar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensaje de desarrollo -->
+                <div class="alert alert-info" role="alert" th:if="${mensaje}">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span th:text="${mensaje}">Funcionalidad en desarrollo</span>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Total Respaldos
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-archive fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Último Respaldo
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Nunca</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            Tamaño Total
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0 MB</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-hdd fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Respaldo Automático
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Activo</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-sync-alt fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuración de Respaldos Automáticos -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-cog me-2"></i>
+                            Configuración de Respaldos Automáticos
+                        </h6>
+                    </div>                    <div class="card-body">
+                        <form th:action="@{/admin/respaldos/configuracion}" method="post" class="row g-3">
+                            <div class="col-md-3">
+                                <label for="frecuencia" class="form-label">Frecuencia</label>
+                                <select name="frecuencia" class="form-select" id="frecuencia">
+                                    <option value="diario" selected>Diario</option>
+                                    <option value="semanal">Semanal</option>
+                                    <option value="mensual">Mensual</option>
+                                    <option value="manual">Solo manual</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="hora" class="form-label">Hora</label>
+                                <input type="time" name="hora" class="form-control" id="hora" value="02:00">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="retencion" class="form-label">Retener (días)</label>
+                                <input type="number" name="diasRetencion" class="form-control" id="retencion" value="30">
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-save"></i> Guardar Configuración
+                                </button>
+                            </div>
+                        </form>
+                        <div class="mt-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="respaldoAutomatico" value="true" id="notificarEmail" checked>
+                                <label class="form-check-label" for="notificarEmail">
+                                    Habilitar respaldos automáticos
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crear Respaldo Manual -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-plus me-2"></i>
+                            Crear Respaldo Manual
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <form class="row g-3">
+                            <div class="col-md-6">
+                                <label for="nombreRespaldo" class="form-label">Nombre del Respaldo</label>
+                                <input type="text" class="form-control" id="nombreRespaldo" placeholder="respaldo_manual_2024_01_15" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tipoRespaldo" class="form-label">Tipo de Respaldo</label>
+                                <select class="form-select" id="tipoRespaldo" disabled>
+                                    <option value="completo" selected>Completo (Base de datos + archivos)</option>
+                                    <option value="bd">Solo base de datos</option>
+                                    <option value="archivos">Solo archivos</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="descripcion" class="form-label">Descripción (opcional)</label>
+                                <textarea class="form-control" id="descripcion" rows="2" placeholder="Describe el propósito de este respaldo..." disabled></textarea>
+                            </div>                            <div class="col-12">
+                                <form th:action="@{/admin/respaldos/crear}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-play"></i> Crear Respaldo Ahora
+                                    </button>
+                                </form>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Lista de Respaldos -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-list me-2"></i>
+                            Historial de Respaldos
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <!-- Ejemplo de respaldos simulados -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Fecha/Hora</th>
+                                        <th>Tipo</th>
+                                        <th>Tamaño</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>respaldo_automatico_2024_01_15</td>
+                                        <td>2024-01-15 02:00:00</td>
+                                        <td><span class="badge bg-primary">Completo</span></td>
+                                        <td>156.2 MB</td>
+                                        <td><span class="badge bg-success">Completado</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" disabled>
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success" disabled>
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" disabled>
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>respaldo_automatico_2024_01_14</td>
+                                        <td>2024-01-14 02:00:00</td>
+                                        <td><span class="badge bg-primary">Completo</span></td>
+                                        <td>154.8 MB</td>
+                                        <td><span class="badge bg-success">Completado</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" disabled>
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success" disabled>
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" disabled>
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>respaldo_manual_preupdate</td>
+                                        <td>2024-01-13 10:30:00</td>
+                                        <td><span class="badge bg-info">Manual</span></td>
+                                        <td>153.1 MB</td>
+                                        <td><span class="badge bg-success">Completado</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" disabled>
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success" disabled>
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" disabled>
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="text-center py-3">
+                            <p class="text-gray-500">Este es un ejemplo del sistema de respaldos. En la versión completa incluirá:</p>
+                            <ul class="list-unstyled text-gray-500">
+                                <li><i class="fas fa-check text-success me-2"></i>Respaldos automáticos programados</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Restauración selectiva de datos</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Compresión y encriptación</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Almacenamiento en la nube</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Herramientas de Mantenimiento -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-warning">
+                            <i class="fas fa-tools me-2"></i>
+                            Herramientas de Mantenimiento
+                        </h6>
+                    </div>
+                    <div class="card-body">                        <div class="row">
+                            <div class="col-md-4">
+                                <h6>Limpieza de Base de Datos</h6>
+                                <p class="text-muted">Optimiza y limpia la base de datos</p>
+                                <form th:action="@{/admin/respaldos/limpiar}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-outline-warning">
+                                        <i class="fas fa-broom"></i> Ejecutar Limpieza
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Verificar Integridad</h6>
+                                <p class="text-muted">Verifica la integridad de los respaldos</p>
+                                <form th:action="@{/admin/respaldos/verificar}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-outline-info">
+                                        <i class="fas fa-check-double"></i> Verificar
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Exportar Configuración</h6>
+                                <p class="text-muted">Exporta la configuración del sistema</p>
+                                <a href="/admin/reportes/exportar/pdf" class="btn btn-outline-secondary">
+                                    <i class="fas fa-file-export"></i> Exportar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Modal para Restaurar Respaldo -->
+    <div class="modal fade" id="restaurarModal" tabindex="-1" aria-labelledby="restaurarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restaurarModalLabel">
+                        <i class="fas fa-upload me-2"></i>Restaurar Respaldo
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/admin/respaldos/restaurar}" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Atención:</strong> La restauración sobrescribirá los datos actuales. Asegúrese de tener un respaldo reciente.
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="archivo" class="form-label">Seleccionar archivo de respaldo (.sql)</label>
+                            <input type="file" name="archivo" class="form-control" id="archivo" accept=".sql" required>
+                            <div class="form-text">Solo archivos SQL generados por el sistema.</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-upload me-2"></i>Restaurar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

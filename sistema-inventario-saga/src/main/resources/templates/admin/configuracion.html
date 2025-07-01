@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head('Configuración del Sistema')}"></div>
+    <title>Configuración del Sistema - Saga Falabella</title>
+    <style>
+        .config-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .config-section {
+            border-left: 4px solid #007bff;
+            padding-left: 20px;
+            margin-bottom: 30px;
+        }
+        .config-section h5 {
+            color: #007bff;
+            font-weight: 600;
+        }
+        .setting-item {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
+        }
+        .setting-item:hover {
+            background-color: #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-active { background-color: #28a745; }
+        .status-inactive { background-color: #dc3545; }
+        .status-warning { background-color: #ffc107; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container-fluid mt-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/portal">Portal Admin</a></li>
+                <li class="breadcrumb-item active">Configuración</li>
+            </ol>
+        </nav>
+        
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2>
+                    <i class="fas fa-cogs me-2 text-primary"></i>
+                    Configuración del Sistema
+                </h2>
+                <p class="text-muted">Administra la configuración general del sistema de inventario</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <button type="button" class="btn btn-success">
+                    <i class="fas fa-save me-2"></i>Guardar Cambios
+                </button>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Configuraciones Principales -->
+            <div class="col-lg-8">
+                <!-- Configuración General -->
+                <div class="card config-card">
+                    <div class="card-body">
+                        <div class="config-section">
+                            <h5><i class="fas fa-building me-2"></i>Información de la Empresa</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre de la Empresa</label>
+                                        <input type="text" class="form-control" value="Saga Falabella">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">RUC</label>
+                                        <input type="text" class="form-control" value="20100070970">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Teléfono</label>
+                                        <input type="text" class="form-control" value="+51 1 618-2000">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email Corporativo</label>
+                                        <input type="email" class="form-control" value="contacto@sagafalabella.com.pe">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Dirección</label>
+                                <textarea class="form-control" rows="2">Av. Paseo de la República 3220, San Isidro, Lima, Perú</textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Configuración de Inventario -->
+                        <div class="config-section">
+                            <h5><i class="fas fa-warehouse me-2"></i>Configuración de Inventario</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Stock Mínimo Global</label>
+                                        <input type="number" class="form-control" value="10">
+                                        <div class="form-text">Valor por defecto para nuevos productos</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Días de Alerta de Vencimiento</label>
+                                        <input type="number" class="form-control" value="30">
+                                        <div class="form-text">Días antes del vencimiento</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Margen de Precio (%)</label>
+                                        <input type="number" class="form-control" value="25" step="0.1">
+                                        <div class="form-text">Margen de ganancia por defecto</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="autoReorder" checked>
+                                        <label class="form-check-label" for="autoReorder">
+                                            Activar reorden automático
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="stockAlerts" checked>
+                                        <label class="form-check-label" for="stockAlerts">
+                                            Enviar alertas de stock bajo
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Configuración de Seguridad -->
+                        <div class="config-section">
+                            <h5><i class="fas fa-shield-alt me-2"></i>Configuración de Seguridad</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tiempo de Sesión (minutos)</label>
+                                        <input type="number" class="form-control" value="60">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Intentos de Login Fallidos</label>
+                                        <input type="number" class="form-control" value="3">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="twoFactorAuth">
+                                        <label class="form-check-label" for="twoFactorAuth">
+                                            Autenticación de dos factores
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="loginAudit" checked>
+                                        <label class="form-check-label" for="loginAudit">
+                                            Auditoría de inicios de sesión
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Configuración de Notificaciones -->
+                        <div class="config-section">
+                            <h5><i class="fas fa-bell me-2"></i>Configuración de Notificaciones</h5>
+                            
+                            <div class="setting-item">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h6 class="mb-1">Notificaciones por Email</h6>
+                                        <p class="text-muted mb-0">Enviar alertas y reportes por correo electrónico</p>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h6 class="mb-1">Notificaciones Push</h6>
+                                        <p class="text-muted mb-0">Notificaciones en tiempo real en el navegador</p>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="pushNotifications">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h6 class="mb-1">Reportes Automáticos</h6>
+                                        <p class="text-muted mb-0">Generar y enviar reportes semanales</p>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="autoReports" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Panel de Estado del Sistema -->
+            <div class="col-lg-4">
+                <!-- Estado del Sistema -->
+                <div class="card config-card">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-server me-2"></i>Estado del Sistema
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span>Base de Datos</span>
+                            <span>
+                                <span class="status-indicator status-active"></span>
+                                Conectado
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span>Servidor Web</span>
+                            <span>
+                                <span class="status-indicator status-active"></span>
+                                Activo
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span>Sistema de Archivos</span>
+                            <span>
+                                <span class="status-indicator status-active"></span>
+                                Normal
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span>Backup Automático</span>
+                            <span>
+                                <span class="status-indicator status-warning"></span>
+                                Pendiente
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Información del Sistema -->
+                <div class="card config-card">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>Información del Sistema
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Versión:</span>
+                            <strong>v1.0.0</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Última Actualización:</span>
+                            <strong>21/06/2025</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Uso de Disco:</span>
+                            <strong>45.2 GB</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Memoria RAM:</span>
+                            <strong>2.1 GB</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Usuarios Conectados:</span>
+                            <strong>12</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Acciones Rápidas -->
+                <div class="card config-card">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-tools me-2"></i>Herramientas de Administración
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-database me-2"></i>
+                                Backup Manual
+                            </button>
+                            <button class="btn btn-outline-warning">
+                                <i class="fas fa-broom me-2"></i>
+                                Limpiar Cache
+                            </button>
+                            <button class="btn btn-outline-info">
+                                <i class="fas fa-chart-line me-2"></i>
+                                Generar Reporte
+                            </button>
+                            <button class="btn btn-outline-secondary">
+                                <i class="fas fa-download me-2"></i>
+                                Exportar Datos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para guardar configuración
+        function guardarConfiguracion() {
+            // Aquí iría la lógica para guardar la configuración
+            alert('Configuración guardada exitosamente');
+        }
+        
+        // Actualizar estado del sistema cada 30 segundos
+        setInterval(function() {
+            // Aquí se actualizaría el estado del sistema vía AJAX
+            console.log('Actualizando estado del sistema...');
+        }, 30000);
+    </script>
+</body>
+</html>

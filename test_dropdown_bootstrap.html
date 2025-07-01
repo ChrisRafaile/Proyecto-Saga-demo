@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dropdown Bootstrap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Test Dropdown Bootstrap 5.3.0</h2>
+        
+        <div class="dropdown">
+            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" 
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-download"></i> Exportar Log
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="/admin/actividad/exportar/excel">
+                    <i class="fas fa-file-excel"></i> Exportar a Excel
+                </a></li>
+                <li><a class="dropdown-item" href="/admin/actividad/exportar/pdf">
+                    <i class="fas fa-file-pdf"></i> Exportar a PDF
+                </a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        console.log('Bootstrap version:', window.bootstrap?.Tooltip?.VERSION || 'No detectado');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM cargado');
+            
+            const dropdownButton = document.getElementById('dropdownMenuButton');
+            if (dropdownButton) {
+                console.log('BotÃ³n dropdown encontrado');
+                
+                dropdownButton.addEventListener('click', function() {
+                    console.log('Click en dropdown button');
+                });
+                
+                // Verificar si Bootstrap dropdown estÃ¡ inicializado
+                const dropdown = new bootstrap.Dropdown(dropdownButton);
+                console.log('Dropdown inicializado:', dropdown);
+            } else {
+                console.error('BotÃ³n dropdown NO encontrado');
+            }
+        });
+    </script>
+</body>
+</html>

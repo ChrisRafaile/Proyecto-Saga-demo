@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head('Acerca de Nosotros')}"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-gradient-saga text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-info-circle me-3"></i>Acerca del Sistema
+                    </h1>
+                    <p class="lead mb-4">
+                        Conoce más sobre nuestro Sistema de Gestión de Inventario Saga Falabella
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Información del Sistema -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Descripción del Sistema -->
+                <div class="col-lg-8">
+                    <div class="about-content">
+                        <h2 class="fw-bold mb-4">Sistema de Gestión de Inventario</h2>
+                        <p class="lead text-muted mb-4">
+                            Nuestro sistema está diseñado específicamente para optimizar la gestión de inventarios 
+                            en entornos empresariales complejos, proporcionando herramientas avanzadas para el 
+                            control de stock, análisis de datos y toma de decisiones estratégicas.
+                        </p>
+
+                        <div class="features-grid">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="feature-item">
+                                        <h5 class="fw-bold">
+                                            <i class="fas fa-shield-alt text-primary me-2"></i>
+                                            Seguridad Avanzada
+                                        </h5>
+                                        <p class="text-muted">
+                                            Sistema de autenticación robusto con roles diferenciados 
+                                            y permisos granulares para diferentes tipos de usuarios.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-item">
+                                        <h5 class="fw-bold">
+                                            <i class="fas fa-chart-line text-success me-2"></i>
+                                            Análisis en Tiempo Real
+                                        </h5>
+                                        <p class="text-muted">
+                                            Métricas y reportes actualizados constantemente para 
+                                            mantener un control preciso del estado del inventario.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-item">
+                                        <h5 class="fw-bold">
+                                            <i class="fas fa-mobile-alt text-info me-2"></i>
+                                            Diseño Responsivo
+                                        </h5>
+                                        <p class="text-muted">
+                                            Interfaz optimizada para funcionar perfectamente en 
+                                            dispositivos móviles, tablets y computadoras de escritorio.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-item">
+                                        <h5 class="fw-bold">
+                                            <i class="fas fa-cog text-warning me-2"></i>
+                                            Altamente Configurable
+                                        </h5>
+                                        <p class="text-muted">
+                                            Sistema modular que se adapta a las necesidades específicas 
+                                            de cada organización y proceso de negocio.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información Técnica -->
+                <div class="col-lg-4">
+                    <div class="tech-info bg-light p-4 rounded">
+                        <h4 class="fw-bold mb-4">Información Técnica</h4>
+                        
+                        <div class="tech-item mb-3">
+                            <h6 class="fw-bold">Versión del Sistema</h6>
+                            <p class="text-muted mb-0">v2.1.0 (2024)</p>
+                        </div>
+                        
+                        <div class="tech-item mb-3">
+                            <h6 class="fw-bold">Tecnologías</h6>
+                            <div class="tech-badges">
+                                <span class="badge bg-primary me-1 mb-1">Spring Boot</span>
+                                <span class="badge bg-success me-1 mb-1">Thymeleaf</span>
+                                <span class="badge bg-info me-1 mb-1">Bootstrap 5</span>
+                                <span class="badge bg-warning me-1 mb-1">MySQL</span>
+                                <span class="badge bg-danger me-1 mb-1">Spring Security</span>
+                            </div>
+                        </div>
+                        
+                        <div class="tech-item mb-3">
+                            <h6 class="fw-bold">Desarrollado por</h6>
+                            <p class="text-muted mb-0">Christopher Lincoln Rafaile Naupay</p>
+                        </div>
+                        
+                        <div class="tech-item mb-3">
+                            <h6 class="fw-bold">Institución</h6>
+                            <p class="text-muted mb-0">Universidad Tecnológica del Perú</p>
+                        </div>
+                        
+                        <div class="tech-item">
+                            <h6 class="fw-bold">Licencia</h6>
+                            <p class="text-muted mb-0">Proyecto Académico</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Objetivos del Sistema -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="fw-bold">Objetivos del Sistema</h2>
+                    <p class="text-muted">Metas y propósitos que guían el desarrollo del proyecto</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="objective-card text-center p-4">
+                        <div class="objective-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 80px; height: 80px;">
+                            <i class="fas fa-bullseye fa-2x text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold">Eficiencia Operativa</h5>
+                        <p class="text-muted">
+                            Optimizar los procesos de gestión de inventario para reducir tiempos 
+                            y costos operativos en la cadena de suministro.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="objective-card text-center p-4">
+                        <div class="objective-icon bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 80px; height: 80px;">
+                            <i class="fas fa-users fa-2x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold">Experiencia de Usuario</h5>
+                        <p class="text-muted">
+                            Proporcionar una interfaz intuitiva y fácil de usar que permita 
+                            a los usuarios realizar sus tareas de manera eficiente.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="objective-card text-center p-4">
+                        <div class="objective-icon bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 80px; height: 80px;">
+                            <i class="fas fa-chart-bar fa-2x text-info"></i>
+                        </div>
+                        <h5 class="fw-bold">Toma de Decisiones</h5>
+                        <p class="text-muted">
+                            Facilitar el análisis de datos y la generación de reportes 
+                            para apoyar la toma de decisiones estratégicas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h3 class="fw-bold mb-4">¿Quieres conocer más?</h3>
+                    <p class="lead text-muted mb-4">
+                        Explora nuestro sistema o ponte en contacto para más información.
+                    </p>
+                    <div class="cta-buttons">
+                        <a th:href="@{/demo}" class="btn btn-saga-primary btn-lg me-3 shadow-hover">
+                            <i class="fas fa-play me-2"></i>Ver Demo
+                        </a>
+                        <a th:href="@{/contact}" class="btn btn-outline-primary btn-lg shadow-hover">
+                            <i class="fas fa-envelope me-2"></i>Contactar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script th:replace="~{fragments/scripts :: scripts}"></script>
+</body>
+</html>

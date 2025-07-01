@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragments/head :: head}"></div>
+    <title>Registro de Empleado - Sistema Saga Falabella</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .register-header {
+            background: linear-gradient(45deg, #e53e3e, #dd6b20);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        .btn-register {
+            background: linear-gradient(45deg, #e53e3e, #dd6b20);
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(229, 62, 62, 0.3);
+        }
+        .btn-back {
+            background: #6c757d;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 30px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            color: white;
+        }
+        .required-field::after {
+            content: " *";
+            color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="register-container">
+                    <!-- Header -->
+                    <div class="register-header">
+                        <div class="mb-3">
+                            <i class="fas fa-user-tie fa-3x"></i>
+                        </div>
+                        <h2 class="mb-2">Registro de Empleado</h2>
+                        <p class="mb-0">Complete la información para crear su cuenta de empleado</p>
+                    </div>
+                    
+                    <!-- Form -->
+                    <div class="p-4">
+                        <!-- Alertas -->
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span th:text="${error}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        
+                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span th:text="${success}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        
+                        <!-- Info sobre autorización -->
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Importante:</strong> El registro de empleados requiere autorización posterior por parte del administrador del sistema.
+                        </div>
+                        
+                        <form th:action="@{/registro/empleado}" method="post" th:object="${usuario}">
+                            <!-- Información Personal -->
+                            <h5 class="mb-3 text-primary">
+                                <i class="fas fa-user me-2"></i>Información Personal
+                            </h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="nombres" 
+                                               th:field="*{nombres}"
+                                               placeholder="Nombres"
+                                               required>
+                                        <label for="nombres" class="required-field">Nombres</label>
+                                        <div th:if="${#fields.hasErrors('nombres')}" 
+                                             class="invalid-feedback d-block" 
+                                             th:errors="*{nombres}"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="apellidos" 
+                                               th:field="*{apellidos}"
+                                               placeholder="Apellidos"
+                                               required>
+                                        <label for="apellidos" class="required-field">Apellidos</label>
+                                        <div th:if="${#fields.hasErrors('apellidos')}" 
+                                             class="invalid-feedback d-block" 
+                                             th:errors="*{apellidos}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" 
+                                               class="form-control" 
+                                               id="email" 
+                                               th:field="*{email}"
+                                               placeholder="name@example.com"
+                                               required>
+                                        <label for="email" class="required-field">Correo Electrónico</label>
+                                        <div th:if="${#fields.hasErrors('email')}" 
+                                             class="invalid-feedback d-block" 
+                                             th:errors="*{email}"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="tel" 
+                                               class="form-control" 
+                                               id="telefono" 
+                                               th:field="*{telefono}"
+                                               placeholder="Teléfono"
+                                               pattern="[0-9]{9}"
+                                               required>
+                                        <label for="telefono" class="required-field">Teléfono</label>
+                                        <div th:if="${#fields.hasErrors('telefono')}" 
+                                             class="invalid-feedback d-block" 
+                                             th:errors="*{telefono}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-floating">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="dni" 
+                                       th:field="*{dni}"
+                                       placeholder="DNI"
+                                       pattern="[0-9]{8}"
+                                       maxlength="8"
+                                       required>
+                                <label for="dni" class="required-field">DNI</label>
+                                <div th:if="${#fields.hasErrors('dni')}" 
+                                     class="invalid-feedback d-block" 
+                                     th:errors="*{dni}"></div>
+                            </div>
+                            
+                            <!-- Información de Cuenta -->
+                            <h5 class="mb-3 text-primary mt-4">
+                                <i class="fas fa-key me-2"></i>Información de Cuenta
+                            </h5>
+                            
+                            <div class="form-floating">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="username" 
+                                       th:field="*{username}"
+                                       placeholder="Usuario"
+                                       pattern="[a-zA-Z0-9_]{3,20}"
+                                       required>
+                                <label for="username" class="required-field">Nombre de Usuario</label>
+                                <div class="form-text">El nombre de usuario debe tener entre 3 y 20 caracteres, solo letras, números y guiones bajos.</div>
+                                <div th:if="${#fields.hasErrors('username')}" 
+                                     class="invalid-feedback d-block" 
+                                     th:errors="*{username}"></div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="password" 
+                                               class="form-control" 
+                                               id="password" 
+                                               th:field="*{password}"
+                                               placeholder="Contraseña"
+                                               minlength="6"
+                                               required>
+                                        <label for="password" class="required-field">Contraseña</label>
+                                        <div th:if="${#fields.hasErrors('password')}" 
+                                             class="invalid-feedback d-block" 
+                                             th:errors="*{password}"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="password" 
+                                               class="form-control" 
+                                               id="confirmPassword" 
+                                               name="confirmPassword"
+                                               placeholder="Confirmar Contraseña"
+                                               minlength="6"
+                                               required>
+                                        <label for="confirmPassword" class="required-field">Confirmar Contraseña</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Información Laboral -->
+                            <h5 class="mb-3 text-primary mt-4">
+                                <i class="fas fa-briefcase me-2"></i>Información Laboral
+                            </h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select" 
+                                                id="departamento" 
+                                                name="departamento"
+                                                required>
+                                            <option value="">Seleccione un departamento</option>
+                                            <option value="VENTAS">Ventas</option>
+                                            <option value="INVENTARIO">Inventario</option>
+                                            <option value="LOGISTICA">Logística</option>
+                                            <option value="COMPRAS">Compras</option>
+                                            <option value="ATENCION_CLIENTE">Atención al Cliente</option>
+                                            <option value="SISTEMAS">Sistemas</option>
+                                            <option value="RECURSOS_HUMANOS">Recursos Humanos</option>
+                                        </select>
+                                        <label for="departamento" class="required-field">Departamento</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="cargo" 
+                                               name="cargo"
+                                               placeholder="Cargo"
+                                               required>
+                                        <label for="cargo" class="required-field">Cargo</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Términos y condiciones -->
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="aceptaTerminos" 
+                                       name="aceptaTerminos"
+                                       required>
+                                <label class="form-check-label" for="aceptaTerminos">
+                                    Acepto los <a href="#" data-bs-toggle="modal" data-bs-target="#terminosModal">términos y condiciones</a> del sistema
+                                    <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            
+                            <!-- Botones -->
+                            <div class="d-grid gap-3">
+                                <button type="submit" class="btn btn-primary btn-register">
+                                    <i class="fas fa-user-plus me-2"></i>Registrar Empleado
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Enlaces -->
+                        <div class="text-center mt-4">
+                            <a th:href="@{/auth/register}" class="btn-back">
+                                <i class="fas fa-arrow-left me-2"></i>Volver a Opciones
+                            </a>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="text-center">
+                            <p class="mb-0">¿Ya tienes una cuenta?</p>
+                            <a th:href="@{/auth/login}" class="text-decoration-none">
+                                <i class="fas fa-sign-in-alt me-1"></i>Iniciar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Términos y Condiciones -->
+    <div class="modal fade" id="terminosModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Términos y Condiciones</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>1. Aceptación de términos</h6>
+                    <p>Al registrarse como empleado, acepta cumplir con todas las políticas y procedimientos de Saga Falabella.</p>
+                    
+                    <h6>2. Responsabilidades del empleado</h6>
+                    <p>El empleado se compromete a usar el sistema de manera responsable y solo para fines laborales autorizados.</p>
+                    
+                    <h6>3. Confidencialidad</h6>
+                    <p>Toda la información del sistema es confidencial y no debe ser compartida con terceros no autorizados.</p>
+                    
+                    <h6>4. Seguridad de la cuenta</h6>
+                    <p>Es responsabilidad del empleado mantener segura su información de acceso y reportar cualquier uso no autorizado.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Validación de contraseña -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            
+            function validatePassword() {
+                if (password.value !== confirmPassword.value) {
+                    confirmPassword.setCustomValidity('Las contraseñas no coinciden');
+                } else {
+                    confirmPassword.setCustomValidity('');
+                }
+            }
+            
+            password.addEventListener('change', validatePassword);
+            confirmPassword.addEventListener('keyup', validatePassword);
+        });
+    </script>
+</body>
+</html>

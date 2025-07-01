@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Automático de Producto - Saga Falabella</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #e53e3e;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        .btn {
+            background: linear-gradient(45deg, #e53e3e, #dd6b20);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .product-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .instructions {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            color: #0d47a1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 Sistema de Inventario - Saga Falabella</h1>
+            <h2>📱 Registro Automático de Producto</h2>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Instrucciones:</h3>
+            <ol>
+                <li>Haz clic en "Login Automático" para autenticarte</li>
+                <li>Luego haz clic en "Registrar Producto" para completar el formulario</li>
+                <li>Finalmente, verifica el producto en la lista</li>
+            </ol>
+        </div>
+
+        <div class="product-info">
+            <h3>📊 Datos del Producto a Registrar:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div><strong>Nombre:</strong> Smartphone Samsung Galaxy S24 Ultra</div>
+                <div><strong>Código:</strong> SAM-S24U-512GB-TIT</div>
+                <div><strong>Categoría:</strong> Electronica</div>
+                <div><strong>Marca:</strong> Samsung</div>
+                <div><strong>Precio:</strong> S/ 4,299.99</div>
+                <div><strong>Stock Actual:</strong> 25 unidades</div>
+                <div><strong>Stock Mínimo:</strong> 5 unidades</div>
+                <div><strong>Ubicación:</strong> A-15-C</div>
+                <div><strong>Vencimiento:</strong> 22/06/2026</div>
+                <div><strong>Estado:</strong> Activo</div>
+            </div>
+            <div style="margin-top: 15px;">
+                <strong>Descripción:</strong> Smartphone premium Samsung Galaxy S24 Ultra con 512GB de almacenamiento, cámara de 200MP, pantalla AMOLED de 6.8 pulgadas, S Pen incluido, procesador Snapdragon 8 Gen 3, resistente al agua IP68, carga rápida de 45W y conectividad 5G. Color Titanium Gray.
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="btn" onclick="loginAutomatico()">🔐 Login Automático</button>
+            <button class="btn" onclick="registrarProducto()">📱 Registrar Producto</button>
+            <button class="btn" onclick="verificarProducto()">📋 Verificar en Lista</button>
+        </div>
+
+        <div id="resultado" style="margin-top: 20px;"></div>
+
+        <!-- Formulario oculto para envío de datos -->
+        <form id="productForm" action="http://localhost:8080/admin/productos/guardar" method="POST" style="display: none;">
+            <input type="text" name="nombre" value="Smartphone Samsung Galaxy S24 Ultra">
+            <input type="text" name="codigoProducto" value="SAM-S24U-512GB-TIT">
+            <input type="text" name="categoria" value="Electronica">
+            <input type="text" name="marca" value="Samsung">
+            <input type="number" name="precio" value="4299.99" step="0.01">
+            <textarea name="descripcion">Smartphone premium Samsung Galaxy S24 Ultra con 512GB de almacenamiento, cámara de 200MP, pantalla AMOLED de 6.8 pulgadas, S Pen incluido, procesador Snapdragon 8 Gen 3, resistente al agua IP68, carga rápida de 45W y conectividad 5G. Color Titanium Gray.</textarea>
+            <input type="number" name="stockActual" value="25">
+            <input type="number" name="stockMinimo" value="5">
+            <input type="text" name="ubicacionAlmacen" value="A-15-C">
+            <input type="date" name="fechaVencimiento" value="2026-06-22">
+            <input type="hidden" name="activo" value="true">
+        </form>
+    </div>
+
+    <script>
+        function loginAutomatico() {
+            document.getElementById('resultado').innerHTML = '<div class="success-message">🔄 Abriendo página de login...</div>';
+            window.open('http://localhost:8080/auth/login', '_blank');
+            setTimeout(() => {
+                document.getElementById('resultado').innerHTML = '<div class="success-message">✅ Página de login abierta. Usa credenciales: <strong>admin / admin123</strong></div>';
+            }, 1000);
+        }
+
+        function registrarProducto() {
+            document.getElementById('resultado').innerHTML = '<div class="success-message">🔄 Abriendo formulario de registro...</div>';
+            
+            // Abrir formulario en nueva ventana
+            const url = 'http://localhost:8080/admin/productos/nuevo';
+            const newWindow = window.open(url, '_blank');
+            
+            setTimeout(() => {
+                document.getElementById('resultado').innerHTML = `
+                    <div class="success-message">
+                        📋 <strong>Formulario abierto.</strong> 
+                        <br><br>
+                        <strong>Completa estos campos:</strong>
+                        <ul style="text-align: left; margin: 10px 0;">
+                            <li><strong>Nombre:</strong> Smartphone Samsung Galaxy S24 Ultra</li>
+                            <li><strong>Código:</strong> SAM-S24U-512GB-TIT</li>
+                            <li><strong>Categoría:</strong> Electronica</li>
+                            <li><strong>Marca:</strong> Samsung</li>
+                            <li><strong>Precio:</strong> 4299.99</li>
+                            <li><strong>Descripción:</strong> Smartphone premium Samsung Galaxy S24 Ultra con 512GB de almacenamiento, cámara de 200MP, pantalla AMOLED de 6.8 pulgadas, S Pen incluido, procesador Snapdragon 8 Gen 3, resistente al agua IP68, carga rápida de 45W y conectividad 5G. Color Titanium Gray.</li>
+                            <li><strong>Stock Actual:</strong> 25</li>
+                            <li><strong>Stock Mínimo:</strong> 5</li>
+                            <li><strong>Ubicación:</strong> A-15-C</li>
+                            <li><strong>Fecha Vencimiento:</strong> 2026-06-22</li>
+                            <li><strong>Estado:</strong> Producto Activo (marcado)</li>
+                        </ul>
+                        <br>
+                        Después haz clic en <strong>"Guardar Producto"</strong>
+                    </div>
+                `;
+            }, 1500);
+        }
+
+        function verificarProducto() {
+            document.getElementById('resultado').innerHTML = '<div class="success-message">🔄 Abriendo lista de productos...</div>';
+            window.open('http://localhost:8080/admin/productos', '_blank');
+            setTimeout(() => {
+                document.getElementById('resultado').innerHTML = '<div class="success-message">✅ Lista de productos abierta. Busca el código: <strong>SAM-S24U-512GB-TIT</strong></div>';
+            }, 1000);
+        }
+
+        // Auto-abrir login al cargar la página
+        window.onload = function() {
+            document.getElementById('resultado').innerHTML = '<div class="instructions">🚀 <strong>¡Listo para registrar el producto!</strong><br>Haz clic en "Login Automático" para comenzar.</div>';
+        };
+    </script>
+</body>
+</html>

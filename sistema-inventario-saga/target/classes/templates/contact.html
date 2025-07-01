@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head('Contacto')}"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-gradient-saga text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-envelope me-3"></i>Contactar
+                    </h1>
+                    <p class="lead mb-4">
+                        ¿Tienes preguntas o necesitas soporte? Estamos aquí para ayudarte
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Información de Contacto -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Formulario de Contacto -->
+                <div class="col-lg-8">
+                    <div class="contact-form">
+                        <h2 class="fw-bold mb-4">Envíanos un Mensaje</h2>
+                        <p class="text-muted mb-4">
+                            Completa el formulario y te responderemos lo antes posible.
+                        </p>
+
+                        <form id="contactForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">Nombre *</label>
+                                    <input type="text" class="form-control" id="firstName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Apellido *</label>
+                                    <input type="text" class="form-control" id="lastName" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="email" class="form-label">Correo Electrónico *</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="phone" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="phone">
+                                </div>
+                                <div class="col-12">
+                                    <label for="subject" class="form-label">Asunto *</label>
+                                    <select class="form-select" id="subject" required>
+                                        <option value="">Selecciona un asunto</option>
+                                        <option value="soporte">Soporte Técnico</option>
+                                        <option value="consulta">Consulta General</option>
+                                        <option value="bug">Reporte de Error</option>
+                                        <option value="feature">Solicitud de Funcionalidad</option>
+                                        <option value="account">Problemas de Cuenta</option>
+                                        <option value="otros">Otros</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="message" class="form-label">Mensaje *</label>
+                                    <textarea class="form-control" id="message" rows="6" required 
+                                              placeholder="Describe tu consulta o problema con el mayor detalle posible..."></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="privacy" required>
+                                        <label class="form-check-label" for="privacy">
+                                            Acepto que mis datos sean utilizados para responder a mi consulta
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-saga-primary btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Información de Contacto -->
+                <div class="col-lg-4">
+                    <div class="contact-info">
+                        <h3 class="fw-bold mb-4">Información de Contacto</h3>
+                        
+                        <!-- Información del Desarrollador -->
+                        <div class="contact-card bg-light p-4 rounded mb-4">
+                            <h5 class="fw-bold mb-3">
+                                <i class="fas fa-user-graduate text-primary me-2"></i>
+                                Desarrollador
+                            </h5>
+                            <div class="contact-item mb-2">
+                                <i class="fas fa-user me-2 text-muted"></i>
+                                <span>Christopher Lincoln Rafaile Naupay</span>
+                            </div>
+                            <div class="contact-item mb-2">
+                                <i class="fas fa-envelope me-2 text-muted"></i>
+                                <span>christopher.rafaile@utp.edu.pe</span>
+                            </div>
+                            <div class="contact-item mb-2">
+                                <i class="fas fa-university me-2 text-muted"></i>
+                                <span>Universidad Tecnológica del Perú</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-graduation-cap me-2 text-muted"></i>
+                                <span>Análisis y Diseño de Sistemas</span>
+                            </div>
+                        </div>
+
+                        <!-- Información del Proyecto -->
+                        <div class="contact-card bg-light p-4 rounded mb-4">
+                            <h5 class="fw-bold mb-3">
+                                <i class="fas fa-project-diagram text-success me-2"></i>
+                                Información del Proyecto
+                            </h5>
+                            <div class="contact-item mb-2">
+                                <i class="fas fa-calendar me-2 text-muted"></i>
+                                <span>Ciclo 2025-I</span>
+                            </div>
+                            <div class="contact-item mb-2">
+                                <i class="fas fa-code me-2 text-muted"></i>
+                                <span>Sistema de Inventario</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-tag me-2 text-muted"></i>
+                                <span>Versión 2.1.0</span>
+                            </div>
+                        </div>
+
+                        <!-- Enlaces Útiles -->
+                        <div class="contact-card bg-light p-4 rounded">
+                            <h5 class="fw-bold mb-3">
+                                <i class="fas fa-link text-info me-2"></i>
+                                Enlaces Útiles
+                            </h5>
+                            <div class="useful-links">
+                                <a th:href="@{/help}" class="btn btn-outline-primary btn-sm mb-2 w-100">
+                                    <i class="fas fa-question-circle me-2"></i>Centro de Ayuda
+                                </a>
+                                <a th:href="@{/demo}" class="btn btn-outline-success btn-sm mb-2 w-100">
+                                    <i class="fas fa-play me-2"></i>Ver Demo
+                                </a>
+                                <a th:href="@{/about}" class="btn btn-outline-info btn-sm w-100">
+                                    <i class="fas fa-info-circle me-2"></i>Acerca del Sistema
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Rápido -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="fw-bold">Preguntas Frecuentes</h2>
+                    <p class="text-muted">Respuestas rápidas a consultas comunes</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="faq-card text-center p-4 bg-white rounded shadow-sm">
+                        <div class="faq-icon bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 60px; height: 60px;">
+                            <i class="fas fa-clock fa-2x text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold">¿Cuánto tarda la respuesta?</h5>
+                        <p class="text-muted">
+                            Normalmente respondemos en un plazo de 24-48 horas durante días laborables.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="faq-card text-center p-4 bg-white rounded shadow-sm">
+                        <div class="faq-icon bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 60px; height: 60px;">
+                            <i class="fas fa-headset fa-2x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold">¿Hay soporte 24/7?</h5>
+                        <p class="text-muted">
+                            Este es un proyecto académico, por lo que el soporte está disponible en horarios académicos.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="faq-card text-center p-4 bg-white rounded shadow-sm">
+                        <div class="faq-icon bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 60px; height: 60px;">
+                            <i class="fas fa-language fa-2x text-info"></i>
+                        </div>
+                        <h5 class="fw-bold">¿En qué idiomas?</h5>
+                        <p class="text-muted">
+                            Proporcionamos soporte en español e inglés para todas las consultas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h3 class="fw-bold mb-4">¿Prefieres otras formas de contacto?</h3>
+                    <p class="lead text-muted mb-4">
+                        También puedes consultar nuestra documentación o explorar el sistema.
+                    </p>
+                    <div class="contact-alternatives">
+                        <a th:href="@{/help}" class="btn btn-outline-primary btn-lg me-3 shadow-hover">
+                            <i class="fas fa-book me-2"></i>Documentación
+                        </a>
+                        <a th:href="@{/demo}" class="btn btn-saga-primary btn-lg shadow-hover">
+                            <i class="fas fa-play me-2"></i>Explorar Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script th:replace="~{fragments/scripts :: scripts}"></script>
+
+    <!-- Script específico para contacto -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            
+            // Simulación de envío de formulario
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validación básica
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value.trim();
+                const privacy = document.getElementById('privacy').checked;
+
+                if (!firstName || !lastName || !email || !subject || !message || !privacy) {
+                    alert('Por favor, completa todos los campos obligatorios.');
+                    return;
+                }
+
+                // Simular envío exitoso
+                const button = this.querySelector('button[type="submit"]');
+                const originalText = button.innerHTML;
+                
+                button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Enviando...';
+                button.disabled = true;
+
+                setTimeout(() => {
+                    alert('¡Mensaje enviado correctamente! Te responderemos pronto.');
+                    this.reset();
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }, 2000);
+            });
+
+            // Animaciones para las tarjetas
+            const cards = document.querySelectorAll('.contact-card, .faq-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+
+            // Validación en tiempo real del email
+            const emailInput = document.getElementById('email');
+            emailInput.addEventListener('blur', function() {
+                const email = this.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (email && !emailRegex.test(email)) {
+                    this.classList.add('is-invalid');
+                    if (!this.nextElementSibling || !this.nextElementSibling.classList.contains('invalid-feedback')) {
+                        const feedback = document.createElement('div');
+                        feedback.className = 'invalid-feedback';
+                        feedback.textContent = 'Por favor, introduce un email válido.';
+                        this.parentNode.appendChild(feedback);
+                    }
+                } else {
+                    this.classList.remove('is-invalid');
+                    const feedback = this.parentNode.querySelector('.invalid-feedback');
+                    if (feedback) {
+                        feedback.remove();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

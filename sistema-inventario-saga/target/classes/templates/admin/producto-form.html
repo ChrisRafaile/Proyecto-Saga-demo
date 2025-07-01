@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head('Formulario de Producto')}"></div>
+    <title th:text="${producto.idproducto != null ? 'Editar Producto' : 'Nuevo Producto'} + ' - Sistema Saga Falabella'">Formulario Producto</title>
+    <style>
+        .form-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-section {
+            border-left: 4px solid #28a745;
+            padding-left: 20px;
+            margin-bottom: 30px;
+        }
+        .form-section h5 {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .stock-indicator {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .stock-normal { background-color: #d4edda; color: #155724; }
+        .stock-bajo { background-color: #fff3cd; color: #856404; }
+        .stock-agotado { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container-fluid mt-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/portal">Portal Admin</a></li>
+                <li class="breadcrumb-item"><a href="/admin/productos">Productos</a></li>
+                <li class="breadcrumb-item active" th:text="${producto.idproducto != null ? 'Editar' : 'Nuevo'}">Formulario</li>
+            </ol>
+        </nav>
+        
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2>
+                    <i class="fas fa-box me-2 text-success"></i>
+                    <span th:text="${producto.idproducto != null ? 'Editar Producto' : 'Nuevo Producto'}">Formulario Producto</span>
+                </h2>
+            </div>
+        </div>
+        
+        <!-- Mensajes de Error -->
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}">Error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <!-- Formulario -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card form-card">
+                    <div class="card-body">
+                        <form th:action="@{/admin/productos/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data">
+                            <!-- ID oculto para edición -->
+                            <input type="hidden" th:field="*{idproducto}" />
+                            
+                            <!-- Información Básica -->
+                            <div class="form-section">
+                                <h5><i class="fas fa-info-circle me-2"></i>Información Básica</h5>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="nombre" class="form-label">Nombre del Producto *</label>
+                                            <input type="text" class="form-control" th:field="*{nombre}" 
+                                                   required maxlength="100" placeholder="Nombre del producto">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="codigoProducto" class="form-label">Código del Producto *</label>
+                                            <input type="text" class="form-control" th:field="*{codigoProducto}" 
+                                                   required maxlength="50" placeholder="SKU o código único">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">                                            <label for="categoria" class="form-label">Categoría</label>
+                                            <select class="form-select" th:field="*{categoria}">
+                                                <option value="">Seleccionar categoría</option>
+                                                <option th:each="categoria : ${categorias}" 
+                                                        th:value="${categoria}" 
+                                                        th:text="${categoria}">Categoría</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="marca" class="form-label">Marca</label>
+                                            <input type="text" class="form-control" th:field="*{marca}" 
+                                                   maxlength="50" placeholder="Marca del producto">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="precio" class="form-label">Precio *</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">S/</span>
+                                                <input type="number" class="form-control" th:field="*{precio}" 
+                                                       required step="0.01" min="0" placeholder="0.00">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                  <div class="mb-3">
+                                    <label for="descripcion" class="form-label">Descripción</label>
+                                    <textarea class="form-control" th:field="*{descripcion}" rows="3" 
+                                              maxlength="255" placeholder="Descripción detallada del producto"></textarea>
+                                </div>
+                                
+                                <!-- Campo para imagen del producto -->
+                                <div class="mb-3">
+                                    <label for="imagen" class="form-label">Imagen del Producto</label>
+                                    <input type="file" class="form-control" id="imagen" name="imagen" 
+                                           accept="image/*" onchange="previewImage(this)">
+                                    <div class="form-text">
+                                        Formatos permitidos: JPG, JPEG, PNG, GIF, WEBP. Tamaño máximo: 5MB
+                                    </div>
+                                    
+                                    <!-- Preview de la imagen actual -->
+                                    <div th:if="${producto.imagenUrl}" class="mt-2">
+                                        <label class="form-label">Imagen actual:</label>
+                                        <div class="d-flex align-items-center">
+                                            <img th:src="${producto.imagenUrl}" alt="Imagen del producto" 
+                                                 class="img-thumbnail me-3" style="max-width: 100px; max-height: 100px;">
+                                            <small class="text-muted" th:text="${producto.imagenNombre}">nombre-imagen.jpg</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Preview de la nueva imagen -->
+                                    <div id="imagePreview" class="mt-2" style="display: none;">
+                                        <label class="form-label">Vista previa:</label>
+                                        <div>
+                                            <img id="previewImg" src="#" alt="Vista previa" 
+                                                 class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gestión de Stock -->
+                            <div class="form-section">
+                                <h5><i class="fas fa-warehouse me-2"></i>Gestión de Stock</h5>
+                                
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="stockActual" class="form-label">Stock Actual *</label>
+                                            <input type="number" class="form-control" th:field="*{stockActual}" 
+                                                   required min="0" placeholder="0" onchange="updateStockIndicator()">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="stockMinimo" class="form-label">Stock Mínimo *</label>
+                                            <input type="number" class="form-control" th:field="*{stockMinimo}" 
+                                                   required min="0" placeholder="0" onchange="updateStockIndicator()">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="ubicacionAlmacen" class="form-label">Ubicación en Almacén</label>
+                                            <input type="text" class="form-control" th:field="*{ubicacionAlmacen}" 
+                                                   maxlength="100" placeholder="Ej: A-01-B">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Indicador de Stock -->
+                                <div id="stockIndicator" class="stock-indicator stock-normal">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <span id="stockMessage">Stock normal</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Información Adicional -->
+                            <div class="form-section">
+                                <h5><i class="fas fa-cog me-2"></i>Información Adicional</h5>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="fechavencimiento" class="form-label">Fecha de Vencimiento</label>
+                                            <input type="date" class="form-control" th:field="*{fechavencimiento}">
+                                            <div class="form-text">Solo para productos perecederos</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Estado</label>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" th:field="*{activo}" 
+                                                       id="activo" checked>
+                                                <label class="form-check-label" for="activo">
+                                                    Producto Activo
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Botones -->
+                            <div class="d-flex justify-content-between">
+                                <a href="/admin/productos" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-2"></i>
+                                    <span th:text="${producto.idproducto != null ? 'Actualizar' : 'Guardar'} + ' Producto'">Guardar Producto</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Panel Lateral -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Consejos</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Use códigos únicos para cada producto
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Establezca un stock mínimo adecuado
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Mantenga descripciones claras y detalladas
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Revise regularmente los precios
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Use ubicaciones específicas en almacén
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateStockIndicator() {
+            const stockActual = parseInt(document.querySelector('input[name="stockActual"]').value) || 0;
+            const stockMinimo = parseInt(document.querySelector('input[name="stockMinimo"]').value) || 0;
+            
+            const indicator = document.getElementById('stockIndicator');
+            const message = document.getElementById('stockMessage');
+            
+            if (stockActual === 0) {
+                indicator.className = 'stock-indicator stock-agotado';
+                message.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Producto agotado';
+            } else if (stockActual <= stockMinimo) {
+                indicator.className = 'stock-indicator stock-bajo';
+                message.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Stock bajo - requiere reabastecimiento';
+            } else {
+                indicator.className = 'stock-indicator stock-normal';
+                message.innerHTML = '<i class="fas fa-check-circle me-2"></i>Stock normal';
+            }
+        }
+          // Inicializar indicador al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStockIndicator();
+        });
+        
+        // Función para vista previa de imagen
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- Título dinámico -->
+    <title th:text="${titulo != null ? titulo + ' - Sistema Saga Falabella' : 'Sistema de Inventario - Saga Falabella'}">Sistema de Inventario - Saga Falabella</title>
+    
+    <!-- Meta description -->
+    <meta name="description" content="Sistema de gestión de inventario para optimizar el control de stock y trazabilidad de productos en Saga Falabella">
+    <meta name="keywords" content="inventario, saga falabella, gestión, productos, stock">
+    <meta name="author" content="Christopher Lincoln Rafaile Naupay">
+    
+    <!-- CSRF Token para seguridad -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+      <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      <!-- Bootstrap 5 JavaScript Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- CSS personalizado -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    
+    <!-- JavaScript personalizado -->
+    <script th:src="@{/js/saga-system.js}" defer></script>
+    <!-- <link th:href="@{/inventario/css/saga-theme.css(v=${#temporals.format(#temporals.createNow(), 'yyyyMMddHHmmss')})}" rel="stylesheet"> -->
+    
+    <!-- CSS específico por página -->
+    <th:block th:if="${cssFiles != null}">
+        <link th:each="cssFile : ${cssFiles}" th:href="@{'/inventario/css/' + ${cssFile}}" rel="stylesheet">
+    </th:block>
+    
+    <!-- Variables CSS para temas -->
+    <style>
+        :root {
+            --saga-primary: #e31e24;
+            --saga-secondary: #ff6b35;
+            --saga-dark: #2c3e50;
+            --saga-light: #ecf0f1;
+            --saga-success: #27ae60;
+            --saga-warning: #f39c12;
+            --saga-danger: #e74c3c;
+            --saga-info: #3498db;
+            --font-primary: 'Inter', sans-serif;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background-color: #f8f9fa;
+        }
+        
+        .btn-saga-primary {
+            background-color: var(--saga-primary);
+            border-color: var(--saga-primary);
+            color: white;
+        }
+        
+        .btn-saga-primary:hover {
+            background-color: #c41e24;
+            border-color: #c41e24;
+            color: white;
+        }
+        
+        .navbar-saga {
+            background: linear-gradient(135deg, var(--saga-primary) 0%, var(--saga-secondary) 100%);
+        }
+        
+        .card-saga {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+</html>

@@ -1,0 +1,51 @@
+codigo,nombre,categoria,marca,precio,stock_actual,stock_minimo,descripcion,ubicacion
+TECH-LAP-001,Laptop HP Pavilion Gaming 15.6,Tecnologia,HP,2899.99,12,3,"Laptop HP Pavilion Gaming 15.6 pulgadas, Intel Core i7-11370H, 16GB RAM, 512GB SSD",A1-15
+TECH-CEL-002,iPhone 14 Pro 256GB Space Black,Tecnologia,Apple,4299.99,15,5,"Smartphone Apple iPhone 14 Pro 256GB, Camara 48MP, Chip A16 Bionic, Color Titanio Negro",A3-12
+TECH-TAB-003,iPad Air 5ta Gen 256GB WiFi,Tecnologia,Apple,2199.99,20,4,"Tablet Apple iPad Air 10.9 pulgadas, Chip M1, 256GB WiFi, Touch ID",A2-08
+TECH-AUD-004,Audifonos Sony WH-1000XM5 Negro,Tecnologia,Sony,899.99,18,5,"Audifonos Sony WH-1000XM5, Cancelacion de ruido activa, Bluetooth 5.2, 30h bateria",A4-12
+TECH-MON-005,Monitor Gaming ASUS ROG 27 240Hz,Tecnologia,ASUS,1899.99,10,3,"Monitor Gaming ASUS ROG 27 pulgadas, 240Hz refresh rate, G-Sync Compatible, IPS QHD",A5-08
+ELEC-TV-006,Smart TV Samsung 65 QLED 4K,Electrodomesticos,Samsung,4299.99,6,2,"Smart TV Samsung 65 pulgadas QLED 4K, HDR10+, Tizen OS, Quantum Dot Technology",B2-05
+ELEC-REF-007,Refrigerador Samsung French Door 28p,Electrodomesticos,Samsung,3299.99,8,2,"Refrigerador Samsung 28 pies cubicos, French Door, No Frost, Dispensador agua y hielo",C1-04
+ELEC-LAV-008,Lavadora LG AI TurboWash 22kg,Electrodomesticos,LG,2199.99,12,3,"Lavadora LG 22kg, AI TurboWash 360, Inverter Direct Drive, Smart Diagnosis",C2-06
+ELEC-MIC-009,Microondas Panasonic Inverter 32L,Electrodomesticos,Panasonic,599.99,18,5,"Microondas Panasonic 32 litros, Tecnologia Inverter, Grill, 10 niveles de potencia",B1-12
+ELEC-COC-010,Cocina Indurama Florencia 6 Hornillas,Electrodomesticos,Indurama,1599.99,7,2,"Cocina Indurama Florencia 6 hornillas a gas, Horno grande, Encendido electronico",C3-09
+ROPA-POL-011,Polo Ralph Lauren Clasico Azul,Ropa,Ralph Lauren,159.99,50,15,"Polo Ralph Lauren clasico azul marino, 100% algodon, Logo bordado, Tallas S-XXL",D1-20
+ROPA-JEA-012,Jeans Levis 501 Original Azul,Ropa,Levis,199.99,35,10,"Jeans Levis 501 Original, Corte clasico, 100% algodon denim, Color azul clasico",D1-21
+ROPA-ZAP-013,Zapatillas Nike Air Max 270 Blancas,Ropa,Nike,399.99,25,8,"Zapatillas Nike Air Max 270, Tecnologia Air Max, Suela Eva, Color blanco con detalles",D2-15
+ROPA-CAS-014,Casaca North Face ThermoBall,Ropa,The North Face,549.99,20,5,"Casaca North Face ThermoBall Eco, Relleno sintetico, Resistente al agua, Compactable",D3-08
+ROPA-CAM-015,Camisa Tommy Hilfiger Rayas,Ropa,Tommy Hilfiger,179.99,30,8,"Camisa Tommy Hilfiger a rayas azul y blanco, Corte slim fit, 100% algodon",D1-25
+HOGAR-SAB-016,Juego Sabanas Algodon 300 Hilos,Hogar,Cannon,249.99,40,12,"Juego de sabanas 100% algodon 300 hilos, King size, Color blanco, Incluye fundas",E1-10
+HOGAR-TOA-017,Juego Toallas Bambu Premium,Hogar,Bambu Home,189.99,35,10,"Set 6 toallas de bambu organico, Super absorbentes, Antibacteriales, Colores variados",E1-11
+HOGAR-ALM-018,Almohada Memory Foam Cervical,Hogar,Tempur,299.99,25,8,"Almohada Memory Foam con soporte cervical, Funda lavable, Antialergica",E2-08
+HOGAR-COL-019,Colchon Paraiso Platinum Queen,Hogar,Paraiso,1899.99,15,4,"Colchon Paraiso Platinum Queen size, Resortes independientes, Pillow top, 10 años garantia",E3-05
+HOGAR-COR-020,Cortinas Blackout Termicas Beige,Hogar,Home Collection,149.99,50,15,"Cortinas blackout termicas color beige, 140x220cm, Bloquean 99% luz, Con argollas",E1-15
+UTENS-OLL-021,Olla Arrocera Oster 20 Tazas,Utensilios,Oster,199.99,30,8,"Olla arrocera Oster 20 tazas, Antiadherente, Vaporizador incluido, Mantiene caliente",F1-12
+UTENS-LIC-022,Licuadora Oster Beehive 1200W,Utensilios,Oster,259.99,25,6,"Licuadora Oster Beehive 1200W, Vaso vidrio 1.5L, 8 velocidades, Cuchillas todo uso",F1-13
+UTENS-SAR-023,Sarten Ceramico Tramontina 28cm,Utensilios,Tramontina,159.99,40,10,"Sarten ceramico Tramontina 28cm, Antiadherente, Libre de PFOA, Mango ergonomico",F2-08
+UTENS-CUC-024,Set Cuchillos Chef Zwilling 5 Piezas,Utensilios,Zwilling,449.99,15,4,"Set 5 cuchillos Zwilling Professional S, Acero inoxidable, Taco de madera incluido",F2-05
+UTENS-TAB-025,Tabla Cortar Bambu Antibacterial,Utensilios,Bamboo Pro,89.99,60,18,"Tabla de cortar bambu antibacterial, 35x25cm, Ranura para jugos, Ecologica",F3-10
+DEPO-ZAP-026,Zapatillas Adidas Ultraboost 22,Deportes,Adidas,349.99,30,10,"Zapatillas Adidas Ultraboost 22 running, Tecnologia Boost, Primeknit superior, Negro",G1-20
+DEPO-RON-027,Camiseta Peru Seleccion 2024,Deportes,Umbro,199.99,50,15,"Camiseta oficial Seleccion Peruana 2024, Tela Dri-FIT, Escudo bordado, Tallas S-XXL",G2-15
+DEPO-BAL-028,Balon Nike Premier League Oficial,Deportes,Nike,149.99,40,12,"Balon oficial Nike Premier League 2024, Cuero sintetico premium, Tamaño 5 reglamentario",G3-08
+DEPO-RAQ-029,Raqueta Wilson Pro Staff RF97,Deportes,Wilson,899.99,8,2,"Raqueta tenis Wilson Pro Staff RF97 Autograph, Peso 340g, Grip 4 3/8, Edicion limitada",G4-05
+DEPO-BIC-030,Bicicleta Giant TCR Advanced Pro,Deportes,Giant,2499.99,12,3,"Bicicleta Giant TCR Advanced Pro carbono, Cambios Shimano 105, Ruedas aleacion",G5-12
+BELL-PERF-031,Perfume Chanel No 5 EDP 100ml,Belleza,Chanel,899.99,15,4,"Perfume Chanel No 5 Eau de Parfum 100ml, Fragancia clasica femenina atemporal",H1-10
+BELL-COSM-032,Base Maquillaje MAC Studio Fix,Belleza,MAC,149.99,35,10,"Base de maquillaje MAC Studio Fix Fluid SPF 15, Cobertura media a completa, 24 tonos",H2-08
+BELL-CHAM-033,Shampoo Loreal Elvive Reparacion,Belleza,Loreal,45.99,80,25,"Shampoo Loreal Elvive Reparacion Total 5, Para cabello dañado, Con ceramidas, 400ml",H3-15
+BELL-CREM-034,Crema Facial Nivea Cellular Expert,Belleza,Nivea,129.99,25,8,"Crema facial Nivea Cellular Expert Lift anti-edad, Con acido hialuronico, 50ml",H3-05
+BELL-PROT-035,Protector Solar Eucerin 60 FPS,Belleza,Eucerin,89.99,45,15,"Protector solar Eucerin Sun Face 60 FPS, Piel grasa, Base maquillaje, 60ml",H4-12
+MASCO-COM-036,Comida Royal Canin Adulto 15kg,Mascotas,Royal Canin,189.99,20,5,"Comida Royal Canin Adult perros medianos, 15kg, Nutricion balanceada, Edad 1-7 años",I1-08
+MASCO-JUG-037,Juguete Kong Classic Rojo M,Mascotas,Kong,45.99,50,15,"Juguete Kong Classic tamaño M, Caucho natural resistente, Rellenable con premios",I2-12
+MASCO-CAM-038,Cama Ortopedica Perro Grande,Mascotas,Pet Comfort,299.99,15,4,"Cama ortopedica para perros grandes, Memory foam, Funda lavable, Antideslizante",I3-06
+MASCO-COL-039,Collar GPS Garmin Alpha 100,Mascotas,Garmin,899.99,8,2,"Collar GPS Garmin Alpha 100 para perros, Rastreo tiempo real, Resistente al agua",I4-03
+MASCO-ARE-040,Arena Sanitaria Cats Best 20L,Mascotas,Cats Best,79.99,60,18,"Arena sanitaria Cats Best Original 20L, Fibra vegetal, Biodegradable, Control olores",I1-15
+LIBR-NOV-041,Libro Cien Años Soledad Tapa Dura,Libros,Sudamericana,89.99,25,8,"Libro Cien Años de Soledad de Gabriel Garcia Marquez, Edicion tapa dura, 432 paginas",J1-20
+LIBR-CUE-042,Cuaderno Moleskine Classic A5,Libros,Moleskine,129.99,40,12,"Cuaderno Moleskine Classic A5, Tapa dura negra, 240 paginas rayadas, Banda elastica",J2-15
+LIBR-REV-043,Revista National Geographic Año,Libros,National Geographic,299.99,30,8,"Suscripcion anual revista National Geographic, 12 ediciones, Incluye acceso digital",J1-25
+LIBR-DIC-044,Diccionario RAE Esencial,Libros,RAE,159.99,20,6,"Diccionario Real Academia Española Esencial, Ultima edicion, 70000 entradas, Tapa dura",J3-10
+LIBR-MAN-045,Manual Cocina Peruana Gastón,Libros,Planeta,199.99,15,4,"Manual de cocina peruana por Gaston Acurio, 500 recetas tradicionales, Fotos a color",J2-08
+JARD-MAC-046,Maceta Ceramica Decorativa 30cm,Jardin,Garden Home,79.99,35,10,"Maceta ceramica decorativa 30cm diametro, Color terracota, Con plato, Para interior",K1-12
+JARD-TIJ-047,Tijera Poda Profesional Fiskars,Jardin,Fiskars,159.99,25,6,"Tijera de poda Fiskars profesional, Hoja acero carbono, Mango ergonomico, Garantia 25 años",K2-08
+JARD-MAN-048,Manguera Jardin Extensible 30m,Jardin,Karcher,189.99,20,5,"Manguera jardin Karcher extensible 30m, Latex interior, Pistola 7 funciones incluida",K3-06
+JARD-FER-049,Fertilizante Organico Universal 5kg,Jardin,Eco Green,89.99,40,12,"Fertilizante organico universal 5kg, NPK balanceado, Para todo tipo plantas, Ecologico",K1-18
+JARD-SEM-050,Semillas Cesped Bermuda Premium,Jardin,Grass Pro,129.99,30,8,"Semillas cesped Bermuda premium 1kg, Resistente sequia, Crecimiento rapido, Para 100m2",K4-10

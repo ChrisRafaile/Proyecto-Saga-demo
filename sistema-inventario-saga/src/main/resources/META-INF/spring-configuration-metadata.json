@@ -1,0 +1,22 @@
+{
+  "properties": [
+    {
+      "name": "app.upload.dir",
+      "type": "java.lang.String",
+      "description": "Directorio donde se almacenan las imágenes de productos subidas",
+      "defaultValue": "${user.home}/saga-uploads"
+    }
+  ],
+  "groups": [
+    {
+      "name": "app",
+      "type": "com.sagafalabella.inventario.config.AppProperties",
+      "description": "Propiedades de configuración de la aplicación Saga Falabella"
+    },
+    {
+      "name": "app.upload",
+      "type": "com.sagafalabella.inventario.config.AppProperties$Upload",
+      "description": "Configuración de subida de archivos"
+    }
+  ]
+}

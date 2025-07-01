@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Formulario de Alerta - Admin')}"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/portal}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/usuarios}">
+                                <i class="fas fa-users"></i>
+                                Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/productos}">
+                                <i class="fas fa-box"></i>
+                                Productos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/proveedores}">
+                                <i class="fas fa-truck"></i>
+                                Proveedores
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/pedidos}">
+                                <i class="fas fa-shopping-cart"></i>
+                                Pedidos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/reportes}">
+                                <i class="fas fa-chart-bar"></i>
+                                Reportes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/admin/alertas}">
+                                <i class="fas fa-bell"></i>
+                                Alertas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/actividad}">
+                                <i class="fas fa-history"></i>
+                                Actividad
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/configuracion}">
+                                <i class="fas fa-cog"></i>
+                                Configuración
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/respaldos}">
+                                <i class="fas fa-database"></i>
+                                Respaldos
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        <i class="fas fa-bell me-2"></i>
+                        <span th:text="${alerta.idAlerta != null ? 'Editar Alerta' : 'Nueva Alerta'}">Nueva Alerta</span>
+                    </h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a th:href="@{/admin/alertas}" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver a Alertas
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Alertas de estado -->
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Formulario de Alerta -->
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-edit me-2"></i>
+                            Información de la Alerta
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="${alerta.idAlerta != null ? '/admin/alertas/editar/' + alerta.idAlerta : '/admin/alertas/nueva'}" 
+                              th:object="${alerta}" method="post">
+                            
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="titulo" class="form-label">
+                                            <i class="fas fa-heading me-2"></i>Título *
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="titulo" 
+                                               th:field="*{titulo}"
+                                               th:class="${#fields.hasErrors('titulo')} ? 'form-control is-invalid' : 'form-control'"
+                                               placeholder="Título de la alerta"
+                                               required>
+                                        <div th:if="${#fields.hasErrors('titulo')}" class="invalid-feedback">
+                                            <span th:errors="*{titulo}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="tipo" class="form-label">
+                                            <i class="fas fa-tag me-2"></i>Tipo *
+                                        </label>
+                                        <select class="form-select" 
+                                                id="tipo" 
+                                                th:field="*{tipo}"
+                                                th:class="${#fields.hasErrors('tipo')} ? 'form-select is-invalid' : 'form-select'"
+                                                required>
+                                            <option value="">Seleccionar tipo...</option>
+                                            <option value="SISTEMA">Sistema</option>
+                                            <option value="INVENTARIO">Inventario</option>
+                                            <option value="USUARIO">Usuario</option>
+                                            <option value="PEDIDO">Pedido</option>
+                                            <option value="PROVEEDOR">Proveedor</option>
+                                            <option value="PRODUCTO">Producto</option>
+                                            <option value="SEGURIDAD">Seguridad</option>
+                                            <option value="MANTENIMIENTO">Mantenimiento</option>
+                                        </select>
+                                        <div th:if="${#fields.hasErrors('tipo')}" class="invalid-feedback">
+                                            <span th:errors="*{tipo}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="nivel" class="form-label">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>Nivel de Prioridad *
+                                        </label>
+                                        <select class="form-select" 
+                                                id="nivel" 
+                                                th:field="*{nivel}"
+                                                th:class="${#fields.hasErrors('nivel')} ? 'form-select is-invalid' : 'form-select'"
+                                                required>
+                                            <option value="">Seleccionar nivel...</option>
+                                            <option value="INFO" class="text-info">Información</option>
+                                            <option value="ADVERTENCIA" class="text-warning">Advertencia</option>
+                                            <option value="ERROR" class="text-danger">Error</option>
+                                            <option value="CRITICO" class="text-danger fw-bold">Crítico</option>
+                                        </select>
+                                        <div th:if="${#fields.hasErrors('nivel')}" class="invalid-feedback">
+                                            <span th:errors="*{nivel}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="estado" class="form-label">
+                                            <i class="fas fa-circle me-2"></i>Estado
+                                        </label>
+                                        <select class="form-select" 
+                                                id="estado" 
+                                                th:field="*{estado}">
+                                            <option value="NO_LEIDA">No Leída</option>
+                                            <option value="LEIDA">Leída</option>
+                                            <option value="EN_PROCESO">En Proceso</option>
+                                            <option value="RESUELTA">Resuelta</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">
+                                    <i class="fas fa-align-left me-2"></i>Descripción *
+                                </label>
+                                <textarea class="form-control" 
+                                          id="descripcion" 
+                                          th:field="*{descripcion}"
+                                          th:class="${#fields.hasErrors('descripcion')} ? 'form-control is-invalid' : 'form-control'"
+                                          rows="4" 
+                                          placeholder="Descripción detallada de la alerta"
+                                          required></textarea>
+                                <div th:if="${#fields.hasErrors('descripcion')}" class="invalid-feedback">
+                                    <span th:errors="*{descripcion}"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="origen" class="form-label">
+                                            <i class="fas fa-map-marker-alt me-2"></i>Origen
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="origen" 
+                                               th:field="*{origen}"
+                                               placeholder="Origen de la alerta">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="usuarioAsignado" class="form-label">
+                                            <i class="fas fa-user me-2"></i>Usuario Asignado
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="usuarioAsignado" 
+                                               th:field="*{usuarioAsignado}"
+                                               placeholder="Usuario responsable">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="fechaExpiracion" class="form-label">
+                                            <i class="fas fa-calendar-alt me-2"></i>Fecha de Expiración
+                                        </label>
+                                        <input type="datetime-local" 
+                                               class="form-control" 
+                                               id="fechaExpiracion" 
+                                               th:field="*{fechaExpiracion}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="url" class="form-label">
+                                            <i class="fas fa-link me-2"></i>URL Relacionada
+                                        </label>
+                                        <input type="url" 
+                                               class="form-control" 
+                                               id="url" 
+                                               th:field="*{url}"
+                                               placeholder="https://...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="metadatos" class="form-label">
+                                    <i class="fas fa-database me-2"></i>Metadatos (JSON)
+                                </label>
+                                <textarea class="form-control" 
+                                          id="metadatos" 
+                                          th:field="*{metadatos}"
+                                          rows="3" 
+                                          placeholder='{"key": "value", "info": "adicional"}'></textarea>
+                                <div class="form-text">Información adicional en formato JSON</div>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/admin/alertas}" class="btn btn-secondary">
+                                    <i class="fas fa-times me-2"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>
+                                    <span th:text="${alerta.idAlerta != null ? 'Actualizar' : 'Crear'} + ' Alerta'">Crear Alerta</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script para validación adicional -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Validación de JSON en metadatos
+            const metadatosInput = document.getElementById('metadatos');
+            if (metadatosInput) {
+                metadatosInput.addEventListener('blur', function() {
+                    const value = this.value.trim();
+                    if (value && value !== '') {
+                        try {
+                            JSON.parse(value);
+                            this.classList.remove('is-invalid');
+                            this.classList.add('is-valid');
+                        } catch (e) {
+                            this.classList.remove('is-valid');
+                            this.classList.add('is-invalid');
+                        }
+                    } else {
+                        this.classList.remove('is-invalid', 'is-valid');
+                    }
+                });
+            }
+
+            // Actualizar color del nivel de prioridad
+            const nivelSelect = document.getElementById('nivel');
+            if (nivelSelect) {
+                function updateNivelColor() {
+                    const value = nivelSelect.value;
+                    nivelSelect.className = 'form-select';
+                    
+                    if (value === 'INFO') {
+                        nivelSelect.classList.add('text-info');
+                    } else if (value === 'ADVERTENCIA') {
+                        nivelSelect.classList.add('text-warning');
+                    } else if (value === 'ERROR') {
+                        nivelSelect.classList.add('text-danger');
+                    } else if (value === 'CRITICO') {
+                        nivelSelect.classList.add('text-danger', 'fw-bold');
+                    }
+                }
+                
+                nivelSelect.addEventListener('change', updateNivelColor);
+                updateNivelColor(); // Ejecutar al cargar
+            }
+        });
+    </script>
+</body>
+</html>

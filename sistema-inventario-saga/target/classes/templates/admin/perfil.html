@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head('Mi Perfil')}"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Contenido principal -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Breadcrumb -->
+            <div class="col-12 mb-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Mi Perfil</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Información del perfil -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card card-saga h-100">
+                    <div class="card-body text-center">
+                        <div class="profile-avatar mb-4">
+                            <div class="avatar-circle mx-auto mb-3">
+                                <i class="fas fa-user-circle fa-6x text-saga-primary"></i>
+                            </div>
+                            <h4 class="card-title" th:text="${nombreCompleto}">Nombre Completo</h4>
+                            <p class="text-muted mb-3">
+                                <i class="fas fa-shield-alt me-2"></i>
+                                <span th:text="${usuario.rol.name()}">ROL</span>
+                            </p>
+                            <div class="d-grid gap-2">
+                                <a th:href="@{/admin/perfil/editar}" class="btn btn-saga-primary">
+                                    <i class="fas fa-edit me-2"></i>Editar Perfil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información detallada -->
+            <div class="col-lg-8 col-md-6 mb-4">
+                <div class="card card-saga h-100">
+                    <div class="card-header bg-saga-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-info-circle me-2"></i>Información Personal
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Nombre de Usuario:</label>
+                                <p class="form-control-plaintext" th:text="${usuario.username}">username</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Correo Electrónico:</label>
+                                <p class="form-control-plaintext" th:text="${usuario.email}">email@example.com</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Teléfono:</label>
+                                <p class="form-control-plaintext" th:text="${usuario.telefono ?: 'No especificado'}">teléfono</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">DNI:</label>
+                                <p class="form-control-plaintext" th:text="${usuario.dni ?: 'No especificado'}">DNI</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Fecha de Registro:</label>
+                                <p class="form-control-plaintext" th:text="${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy HH:mm')}">fecha</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Último Acceso:</label>
+                                <p class="form-control-plaintext" th:text="${#temporals.format(fechaUltimoAcceso, 'dd/MM/yyyy HH:mm')}">fecha</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas de actividad -->
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card card-saga text-center">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock fa-3x text-saga-info mb-3"></i>
+                        </div>
+                        <h5 class="card-title">Total de Sesiones</h5>
+                        <h2 class="text-saga-primary" th:text="${totalSesiones}">0</h2>
+                        <p class="text-muted">Desde el registro</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card card-saga text-center">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-tasks fa-3x text-saga-success mb-3"></i>
+                        </div>
+                        <h5 class="card-title">Acciones Realizadas</h5>
+                        <h2 class="text-saga-primary" th:text="${accionesRealizadas}">0</h2>
+                        <p class="text-muted">Total de operaciones</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card card-saga text-center">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt fa-3x text-saga-warning mb-3"></i>
+                        </div>
+                        <h5 class="card-title">Nivel de Acceso</h5>
+                        <h2 class="text-saga-primary">Admin</h2>
+                        <p class="text-muted">Privilegios completos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-saga">
+                    <div class="card-header bg-saga-secondary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-bolt me-2"></i>Acciones Rápidas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <a th:href="@{/admin/perfil/editar}" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-user-edit fa-2x d-block mb-2"></i>
+                                    Editar Información
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <a th:href="@{/admin/configuracion}" class="btn btn-outline-secondary w-100">
+                                    <i class="fas fa-cog fa-2x d-block mb-2"></i>
+                                    Configuración
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <a th:href="@{/admin/actividad}" class="btn btn-outline-info w-100">
+                                    <i class="fas fa-history fa-2x d-block mb-2"></i>
+                                    Mi Actividad
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <a th:href="@{/admin/dashboard}" class="btn btn-outline-success w-100">
+                                    <i class="fas fa-tachometer-alt fa-2x d-block mb-2"></i>
+                                    Ir al Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertas -->
+    <div th:if="${success}" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <div class="toast show" role="alert">
+            <div class="toast-header bg-success text-white">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong class="me-auto">Éxito</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" th:text="${success}">Mensaje de éxito</div>
+        </div>
+    </div>
+
+    <!-- CSS adicional -->
+    <style>
+        .avatar-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--saga-primary), var(--saga-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar-circle i {
+            color: white !important;
+        }
+
+        .feature-icon {
+            margin-bottom: 1rem;
+        }
+
+        .card-saga {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-saga:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .bg-saga-primary {
+            background: linear-gradient(135deg, var(--saga-primary), var(--saga-secondary)) !important;
+        }
+
+        .bg-saga-secondary {
+            background: linear-gradient(135deg, var(--saga-secondary), var(--saga-warning)) !important;
+        }
+
+        .text-saga-primary {
+            color: var(--saga-primary) !important;
+        }
+
+        .text-saga-info {
+            color: var(--saga-info) !important;
+        }
+
+        .text-saga-success {
+            color: var(--saga-success) !important;
+        }
+
+        .text-saga-warning {
+            color: var(--saga-warning) !important;
+        }
+    </style>
+
+    <!-- Scripts -->
+    <script>
+        // Auto-hide toast after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const toasts = document.querySelectorAll('.toast');
+            toasts.forEach(toast => {
+                setTimeout(() => {
+                    const bsToast = new bootstrap.Toast(toast);
+                    bsToast.hide();
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

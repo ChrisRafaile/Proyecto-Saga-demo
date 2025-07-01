@@ -1,0 +1,538 @@
+/* ==========================================================
+   ESTILOS PRINCIPALES DEL SISTEMA SAGA FALABELLA
+   ========================================================== */
+
+/* Variables CSS personalizadas */
+:root {
+    --saga-primary: #e31e24;
+    --saga-secondary: #ff6b35;
+    --saga-dark: #2c3e50;
+    --saga-light: #ecf0f1;
+    --saga-success: #27ae60;
+    --saga-warning: #f39c12;
+    --saga-danger: #e74c3c;
+    --saga-info: #3498db;
+    --font-primary: 'Inter', sans-serif;
+    --border-radius: 10px;
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* Estilos generales */
+body {
+    font-family: var(--font-primary);
+    background-color: #f8f9fa;
+    line-height: 1.6;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--saga-primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #c41e24;
+}
+
+/* Botones personalizados Saga */
+.btn-saga-primary {
+    background-color: var(--saga-primary);
+    border-color: var(--saga-primary);
+    color: white;
+    font-weight: 500;
+    transition: var(--transition);
+    border-radius: var(--border-radius);
+}
+
+.btn-saga-primary:hover,
+.btn-saga-primary:focus {
+    background-color: #c41e24;
+    border-color: #c41e24;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(227, 30, 36, 0.3);
+}
+
+.btn-saga-secondary {
+    background-color: var(--saga-secondary);
+    border-color: var(--saga-secondary);
+    color: white;
+    font-weight: 500;
+    transition: var(--transition);
+    border-radius: var(--border-radius);
+}
+
+.btn-saga-secondary:hover,
+.btn-saga-secondary:focus {
+    background-color: #e55a2b;
+    border-color: #e55a2b;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+}
+
+/* Cards personalizadas */
+.card-saga {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.card-saga:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header-saga {
+    background: linear-gradient(135deg, var(--saga-primary), var(--saga-secondary));
+    color: white;
+    border: none;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+/* Navbar personalizada */
+.navbar-saga {
+    background: linear-gradient(135deg, var(--saga-primary), var(--saga-secondary));
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-saga .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-saga .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.navbar-saga .nav-link:hover {
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+/* Dropdowns del navbar */
+.navbar-saga .dropdown-menu {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    margin-top: 0.5rem;
+    animation: fadeInDown 0.3s ease;
+}
+
+.navbar-saga .dropdown-item {
+    padding: 0.75rem 1.25rem;
+    transition: var(--transition);
+    border-radius: 6px;
+    margin: 0.125rem 0.5rem;
+}
+
+.navbar-saga .dropdown-item:hover {
+    background-color: var(--saga-primary);
+    color: white;
+    transform: translateX(5px);
+}
+
+.navbar-saga .dropdown-item i {
+    width: 20px;
+    text-align: center;
+}
+
+.navbar-saga .dropdown-divider {
+    margin: 0.5rem 0;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Animación para dropdowns */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Badge de notificaciones */
+.notification-count, .cart-count {
+    font-size: 0.7rem;
+    min-width: 18px;
+    height: 18px;
+    line-height: 1;
+    padding: 2px 4px;
+}
+
+/* Formularios */
+.form-control:focus {
+    border-color: var(--saga-primary);
+    box-shadow: 0 0 0 0.2rem rgba(227, 30, 36, 0.25);
+}
+
+.form-floating > label {
+    color: #6c757d;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--saga-primary);
+}
+
+/* Alertas personalizadas */
+.alert-saga {
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.alert-saga.alert-success {
+    background-color: rgba(39, 174, 96, 0.1);
+    color: var(--saga-success);
+    border-left: 4px solid var(--saga-success);
+}
+
+.alert-saga.alert-danger {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--saga-danger);
+    border-left: 4px solid var(--saga-danger);
+}
+
+.alert-saga.alert-warning {
+    background-color: rgba(243, 156, 18, 0.1);
+    color: var(--saga-warning);
+    border-left: 4px solid var(--saga-warning);
+}
+
+.alert-saga.alert-info {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: var(--saga-info);
+    border-left: 4px solid var(--saga-info);
+}
+
+.alert-saga-primary {
+    background-color: rgba(227, 30, 36, 0.1);
+    border-color: var(--saga-primary);
+    color: var(--saga-primary);
+}
+
+.alert-saga-secondary {
+    background-color: rgba(255, 107, 53, 0.1);
+    border-color: var(--saga-secondary);
+    color: var(--saga-secondary);
+}
+
+/* Badges */
+.badge-saga {
+    font-weight: 500;
+    font-size: 0.75rem;
+    padding: 0.5em 0.75em;
+    border-radius: 6px;
+}
+
+.badge-saga-primary {
+    background-color: var(--saga-primary);
+}
+
+.badge-saga-secondary {
+    background-color: var(--saga-secondary);
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+footer .text-muted {
+    color: #adb5bd !important;
+}
+
+footer a:hover {
+    color: var(--saga-primary) !important;
+    transition: color 0.3s ease;
+}
+
+/* Footer Styles */
+footer.bg-dark {
+    position: relative;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+    border-top: 3px solid var(--saga-primary);
+    overflow: hidden;
+}
+
+footer.bg-dark::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(227, 30, 36, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(52, 152, 219, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+footer .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Logo del footer */
+.logo-saga {
+    filter: brightness(0) invert(1);
+    transition: var(--transition);
+}
+
+.logo-saga:hover {
+    filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(227, 30, 36, 0.5));
+}
+
+/* Enlaces del footer */
+footer a {
+    color: #adb5bd !important;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+footer a:hover,
+footer a.hover-primary:hover {
+    color: var(--saga-primary) !important;
+    transform: translateX(5px);
+}
+
+/* Social links */
+.social-links a {
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    background: var(--saga-primary);
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 5px 15px rgba(227, 30, 36, 0.3);
+}
+
+/* Newsletter input */
+footer .input-group input:focus {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: var(--saga-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(227, 30, 36, 0.25) !important;
+    color: white !important;
+}
+
+footer .input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Animaciones para el footer */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+footer .col-lg-4,
+footer .col-lg-2,
+footer .col-lg-3 {
+    animation: slideInUp 0.6s ease forwards;
+}
+
+footer .col-lg-4:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+footer .col-lg-2:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+footer .col-lg-3:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+footer .col-lg-3:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+/* Responsive footer */
+@media (max-width: 768px) {
+    footer .col-lg-4,
+    footer .col-lg-2,
+    footer .col-lg-3 {
+        text-align: center !important;
+        margin-bottom: 2rem;
+    }
+    
+    footer .social-links {
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    footer a:hover {
+        transform: none;
+    }
+}
+
+/* Hero Background Fix */
+.hero-section {
+    position: relative;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.05;
+    z-index: 0;
+    background-image: url('/inventario/images/hero-background.svg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed !important;
+    animation: float 8s ease-in-out infinite;
+}
+
+/* Animación del fondo hero */
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0px) scale(1);
+    }
+    50% { 
+        transform: translateY(-10px) scale(1.02);
+    }
+}
+
+/* Mejora de la visibilidad del background */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(227,30,36,0.03) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Asegurar que el contenido esté por encima */
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* ==========================================================
+   MEJORAS PARA TESTIMONIALES Y AVATARES
+   ========================================================== */
+
+/* Avatar mejorado */
+.avatar {
+    transition: var(--transition);
+}
+
+.avatar:hover {
+    transform: scale(1.05);
+}
+
+.avatar i {
+    font-size: 1.5rem !important;
+}
+
+/* Cards de testimoniales mejoradas */
+.card.shadow-hover {
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.card.shadow-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Estadísticas mejoradas */
+.stat-card {
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.stat-icon i {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Animación de contadores */
+@keyframes counterUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.counter {
+    animation: counterUp 0.6s ease-out;
+}
+
+/* Mejoras visuales para iconos */
+.fas, .far, .fab {
+    vertical-align: middle;
+}
+
+/* Efectos hover para elementos interactivos */
+.shadow-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shadow-hover:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Texto con gradiente para títulos */
+.gradient-text {
+    background: linear-gradient(135deg, var(--saga-primary), var(--saga-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+/* ==========================================================
+   FIN MEJORAS TESTIMONIALES Y AVATARES
+   ========================================================== */

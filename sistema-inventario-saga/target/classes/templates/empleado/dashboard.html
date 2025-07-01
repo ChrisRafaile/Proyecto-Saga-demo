@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head}"></div>
+    <title>Dashboard Empleado - Sistema Saga Falabella</title>
+    <style>
+        .dashboard-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .quick-action-btn {
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+        }
+        .welcome-section {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .task-item {
+            padding: 15px;
+            border-left: 4px solid #4ecdc4;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .priority-high { border-left-color: #e74c3c; }
+        .priority-medium { border-left-color: #f39c12; }
+        .priority-low { border-left-color: #27ae60; }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container-fluid px-4 py-4">
+        <!-- Sección de Bienvenida -->
+        <div class="welcome-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold mb-2">
+                        <i class="fas fa-user-tie me-3"></i>Panel de Empleado
+                    </h1>
+                    <p class="lead mb-0">
+                        Bienvenido, <span th:text="${empleadoNombre ?: 'Empleado'}">Empleado</span>
+                    </p>
+                    <small class="text-white-50">
+                        Rol: <span th:text="${empleadoRol ?: 'Empleado'}">Empleado</span>
+                    </small>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="text-white-50">
+                        <i class="fas fa-calendar me-2"></i>
+                        <span id="currentDate"></span>
+                    </div>
+                    <div class="text-white-50">
+                        <i class="fas fa-clock me-2"></i>
+                        <span id="currentTime"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas Rápidas -->
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="card-body text-center">
+                        <div class="card-icon text-primary">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-number text-primary" th:text="${totalProductos ?: 0}">0</div>
+                        <h6 class="text-muted">Productos en Sistema</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="card-body text-center">
+                        <div class="card-icon text-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-number text-warning" th:text="${productosStockBajo ?: 0}">0</div>
+                        <h6 class="text-muted">Stock Bajo</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="card-body text-center">
+                        <div class="card-icon text-info">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-number text-info" th:text="${tareasAsignadas ?: 0}">0</div>
+                        <h6 class="text-muted">Tareas Asignadas</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="card-body text-center">
+                        <div class="card-icon text-success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-number text-success">0</div>
+                        <h6 class="text-muted">Tareas Completadas</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-8">
+                <div class="dashboard-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            <i class="fas fa-bolt me-2 text-warning"></i>Acciones Rápidas
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6" sec:authorize="hasAnyRole('EMPLEADO_ALMACEN', 'ADMIN_INVENTARIO')">
+                                <a href="/inventario/productos" class="btn btn-outline-primary quick-action-btn w-100">
+                                    <i class="fas fa-cubes me-2"></i>Gestionar Productos
+                                </a>
+                            </div>
+                            <div class="col-md-6" sec:authorize="hasAnyRole('EMPLEADO_ALMACEN', 'ADMIN_INVENTARIO')">
+                                <a href="/inventario/dashboard" class="btn btn-outline-success quick-action-btn w-100">
+                                    <i class="fas fa-warehouse me-2"></i>Ver Inventario
+                                </a>
+                            </div>
+                            <div class="col-md-6" sec:authorize="hasAnyRole('EMPLEADO_VENTAS', 'ADMIN_VENTAS')">
+                                <a href="/ventas/pedidos" class="btn btn-outline-info quick-action-btn w-100">
+                                    <i class="fas fa-shopping-cart me-2"></i>Gestionar Pedidos
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="/reportes/mi-actividad" class="btn btn-outline-secondary quick-action-btn w-100">
+                                    <i class="fas fa-chart-line me-2"></i>Mi Actividad
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dashboard-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            <i class="fas fa-user-circle me-2 text-info"></i>Mi Perfil
+                        </h5>
+                        <div class="text-center">
+                            <div class="avatar-placeholder mb-3">
+                                <i class="fas fa-user-circle fa-4x text-muted"></i>
+                            </div>
+                            <h6 th:text="${empleadoNombre ?: 'Empleado'}">Empleado</h6>
+                            <small class="text-muted" th:text="${empleadoRol ?: 'Rol no definido'}">Rol</small>
+                            <hr>
+                            <a href="/perfil/editar" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit me-1"></i>Editar Perfil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tareas Pendientes y Actividad Reciente -->
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="dashboard-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            <i class="fas fa-clipboard-list me-2 text-warning"></i>Tareas Pendientes
+                        </h5>
+                        <div id="pending-tasks">
+                            <div class="task-item priority-high">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Revisar stock bajo</strong>
+                                        <br><small class="text-muted">23 productos requieren atención</small>
+                                    </div>
+                                    <span class="badge bg-danger">Alta</span>
+                                </div>
+                            </div>
+                            <div class="task-item priority-medium">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Actualizar precios</strong>
+                                        <br><small class="text-muted">Revisar lista de precios trimestral</small>
+                                    </div>
+                                    <span class="badge bg-warning">Media</span>
+                                </div>
+                            </div>
+                            <div class="task-item priority-low">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Generar reporte mensual</strong>
+                                        <br><small class="text-muted">Reporte de actividad del mes</small>
+                                    </div>
+                                    <span class="badge bg-success">Baja</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="/tareas/todas" class="btn btn-sm btn-outline-primary">
+                                Ver todas las tareas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="dashboard-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            <i class="fas fa-history me-2 text-info"></i>Actividad Reciente
+                        </h5>
+                        <div class="timeline">
+                            <div class="timeline-item mb-3">
+                                <div class="timeline-marker bg-success"></div>
+                                <div class="timeline-content">
+                                    <strong>Stock actualizado</strong>
+                                    <br><small class="text-muted">Laptop Dell XPS - hace 30 min</small>
+                                </div>
+                            </div>
+                            <div class="timeline-item mb-3">
+                                <div class="timeline-marker bg-info"></div>
+                                <div class="timeline-content">
+                                    <strong>Producto añadido</strong>
+                                    <br><small class="text-muted">Mouse Logitech - hace 1 hora</small>
+                                </div>
+                            </div>
+                            <div class="timeline-item mb-3">
+                                <div class="timeline-marker bg-warning"></div>
+                                <div class="timeline-content">
+                                    <strong>Alerta de stock</strong>
+                                    <br><small class="text-muted">Teclado mecánico - hace 2 horas</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="/actividad/completa" class="btn btn-sm btn-outline-info">
+                                Ver actividad completa
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificaciones y Alertas -->
+        <div class="row g-4 mt-4">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            <i class="fas fa-bell me-2 text-warning"></i>Notificaciones y Alertas
+                        </h5>
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Atención:</strong> 5 productos están por debajo del stock mínimo.
+                            <a href="/inventario/stock-bajo" class="alert-link">Ver productos</a>
+                        </div>
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Recordatorio:</strong> Reunión de equipo programada para mañana a las 10:00 AM.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Scripts -->
+    <div th:replace="~{fragments/footer :: scripts}"></div>
+
+    <script>
+        // Actualizar fecha y hora en tiempo real
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const timeOptions = { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            
+            document.getElementById('currentDate').textContent = 
+                now.toLocaleDateString('es-ES', dateOptions);
+            document.getElementById('currentTime').textContent = 
+                now.toLocaleTimeString('es-ES', timeOptions);
+        }
+
+        // Actualizar cada segundo
+        setInterval(updateDateTime, 1000);
+        updateDateTime(); // Llamada inicial
+
+        // Animaciones de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.dashboard-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+
+    <style>
+        .timeline {
+            position: relative;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+        }
+        .timeline-marker {
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .avatar-placeholder {
+            color: #6c757d;
+        }
+    </style>
+
+</body>
+</html>

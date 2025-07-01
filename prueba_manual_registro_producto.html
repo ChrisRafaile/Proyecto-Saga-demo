@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Prueba Manual - Registro de Producto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-left: 4px solid #3498db;
+            border-radius: 5px;
+        }
+        .step h3 {
+            color: #2980b9;
+            margin-top: 0;
+        }
+        .credentials {
+            background-color: #ffe6e6;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ff9999;
+        }
+        .test-data {
+            background-color: #e6ffe6;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #99ff99;
+        }
+        .link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        code {
+            background-color: #f8f8f8;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Prueba Manual - Registro de Producto</h1>
+        <h2>Sistema de Inventario Saga Falabella</h2>
+        
+        <div class="credentials">
+            <h3>🔑 Credenciales de Acceso</h3>
+            <p><strong>Usuario:</strong> admin</p>
+            <p><strong>Contraseña:</strong> admin123</p>
+        </div>
+
+        <div class="step">
+            <h3>Paso 1: Acceder al Sistema</h3>
+            <p>1. Ir a: <a href="http://localhost:8080/inventario/admin/login" class="link" target="_blank">http://localhost:8080/inventario/admin/login</a></p>
+            <p>2. Introducir las credenciales mostradas arriba</p>
+            <p>3. Hacer clic en "Iniciar Sesión"</p>
+        </div>
+
+        <div class="step">
+            <h3>Paso 2: Navegar a Administración de Productos</h3>
+            <p>1. Una vez logueado, ir a: <a href="http://localhost:8080/inventario/admin/productos" class="link" target="_blank">http://localhost:8080/inventario/admin/productos</a></p>
+            <p>2. Verificar que aparece la lista de productos existentes</p>
+            <p>3. Buscar el botón "Agregar Nuevo Producto" o "Nuevo Producto"</p>
+        </div>
+
+        <div class="test-data">
+            <h3>📝 Datos de Prueba para el Nuevo Producto</h3>
+            <p><strong>Nombre:</strong> Laptop HP Pavilion Test</p>
+            <p><strong>Descripción:</strong> Laptop de prueba para verificar funcionalidad del sistema</p>
+            <p><strong>Precio:</strong> 1299.99</p>
+            <p><strong>Stock:</strong> 15</p>
+            <p><strong>Categoría:</strong> Tecnología / Electrónicos</p>
+            <p><strong>SKU:</strong> TEST-HP-LAP-001</p>
+        </div>
+
+        <div class="step">
+            <h3>Paso 3: Registrar Nuevo Producto</h3>
+            <p>1. Hacer clic en "Agregar Nuevo Producto"</p>
+            <p>2. Completar el formulario con los datos de prueba mostrados arriba</p>
+            <p>3. Hacer clic en "Guardar" o "Crear Producto"</p>
+            <p>4. Verificar que aparece un mensaje de confirmación</p>
+        </div>
+
+        <div class="step">
+            <h3>Paso 4: Verificar que el Producto se Guardó</h3>
+            <p>1. Regresar a la lista de productos: <a href="http://localhost:8080/inventario/admin/productos" class="link" target="_blank">http://localhost:8080/inventario/admin/productos</a></p>
+            <p>2. Buscar el producto "Laptop HP Pavilion Test" en la lista</p>
+            <p>3. Verificar que todos los datos se muestran correctamente</p>
+            <p>4. Opcionalmente, hacer clic en "Ver" o "Editar" para verificar los detalles</p>
+        </div>
+
+        <div class="step">
+            <h3>Paso 5: Verificación Adicional (Opcional)</h3>
+            <p>1. Si hay una función de búsqueda, buscar por "TEST-HP-LAP-001"</p>
+            <p>2. Verificar que el producto aparece en la página principal del inventario</p>
+            <p>3. Probar editar algún campo del producto para verificar la funcionalidad de actualización</p>
+        </div>
+
+        <div style="margin-top: 30px; padding: 15px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px;">
+            <h3 style="color: #155724; margin-top: 0;">✅ Criterios de Éxito</h3>
+            <ul style="color: #155724;">
+                <li>El producto se crea sin errores</li>
+                <li>Aparece en la lista de productos</li>
+                <li>Todos los datos se muestran correctamente</li>
+                <li>Es posible editar el producto creado</li>
+                <li>El sistema mantiene la sesión durante toda la prueba</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center; color: #7f8c8d;">
+            <p><em>Esta prueba verifica la funcionalidad completa del CRUD de productos en el sistema de inventario.</em></p>
+        </div>
+    </div>
+</body>
+</html>

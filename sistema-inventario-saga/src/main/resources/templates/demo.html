@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head('Demo del Sistema')}"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Hero Section de Demo -->
+    <section class="hero-section bg-gradient-saga text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-play-circle me-3"></i>Demo del Sistema
+                    </h1>
+                    <p class="lead mb-4">
+                        Explora las funcionalidades principales de nuestro Sistema de Gestión de Inventario
+                    </p>
+                    <div class="hero-buttons">
+                        <a th:href="@{/auth/login}" class="btn btn-light btn-lg me-3 shadow-hover">
+                            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                        </a>
+                        <a th:href="@{/}" class="btn btn-outline-light btn-lg shadow-hover">
+                            <i class="fas fa-arrow-left me-2"></i>Volver al Inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Características de Demo -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="fw-bold">Funcionalidades Principales</h2>
+                    <p class="text-muted">Descubre lo que puedes hacer con nuestro sistema</p>
+                </div>
+            </div>
+
+            <!-- Grid de Funcionalidades -->
+            <div class="row g-4">
+                <!-- Dashboard -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fas fa-tachometer-alt fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">Dashboard Interactivo</h5>
+                            <p class="card-text text-muted">
+                                Panel de control completo con métricas en tiempo real, 
+                                gráficos y alertas personalizables.
+                            </p>
+                            <div class="demo-preview bg-light p-3 rounded">
+                                <small class="text-muted">
+                                    ✅ Métricas en tiempo real<br>
+                                    ✅ Gráficos interactivos<br>
+                                    ✅ Alertas automáticas
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gestión de Inventario -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fas fa-boxes fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">Gestión de Inventario</h5>
+                            <p class="card-text text-muted">
+                                Control completo del stock, movimientos, 
+                                entradas, salidas y ajustes de inventario.
+                            </p>
+                            <div class="demo-preview bg-light p-3 rounded">
+                                <small class="text-muted">
+                                    ✅ Control de stock<br>
+                                    ✅ Movimientos de inventario<br>
+                                    ✅ Alertas de stock mínimo
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reportes -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fas fa-chart-line fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">Reportes Avanzados</h5>
+                            <p class="card-text text-muted">
+                                Genera reportes detallados y exporta 
+                                información en múltiples formatos.
+                            </p>
+                            <div class="demo-preview bg-light p-3 rounded">
+                                <small class="text-muted">
+                                    ✅ Reportes personalizables<br>
+                                    ✅ Exportación PDF/Excel<br>
+                                    ✅ Análisis predictivo
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gestión de Productos -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fas fa-cube fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">Catálogo de Productos</h5>
+                            <p class="card-text text-muted">
+                                Administra productos, categorías, precios 
+                                y características de forma centralizada.
+                            </p>
+                            <div class="demo-preview bg-light p-3 rounded">
+                                <small class="text-muted">
+                                    ✅ Gestión de categorías<br>
+                                    ✅ Control de precios<br>
+                                    ✅ Imágenes y descripciones
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Usuarios y Roles -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fas fa-users-cog fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">Gestión de Usuarios</h5>
+                            <p class="card-text text-muted">
+                                Sistema de roles y permisos granular 
+                                para diferentes niveles de acceso.
+                            </p>
+                            <div class="demo-preview bg-light p-3 rounded">
+                                <small class="text-muted">
+                                    ✅ Roles personalizables<br>
+                                    ✅ Permisos granulares<br>
+                                    ✅ Auditoría de accesos
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seguridad -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fas fa-shield-alt fa-2x"></i>
+                            </div>
+                            <h5 class="card-title">Seguridad Avanzada</h5>
+                            <p class="card-text text-muted">
+                                Protección de datos con cifrado, 
+                                autenticación multifactor y logs de auditoría.
+                            </p>
+                            <div class="demo-preview bg-light p-3 rounded">
+                                <small class="text-muted">
+                                    ✅ Cifrado de datos<br>
+                                    ✅ Autenticación 2FA<br>
+                                    ✅ Logs de auditoría
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h3 class="fw-bold mb-4">¿Listo para empezar?</h3>
+                    <p class="lead text-muted mb-4">
+                        Únete a cientos de empresas que ya utilizan nuestro sistema 
+                        para optimizar su gestión de inventario.
+                    </p>
+                    <div class="demo-buttons">
+                        <a th:href="@{/register/cliente}" class="btn btn-saga-primary btn-lg me-3 shadow-hover">
+                            <i class="fas fa-user-plus me-2"></i>Registrarse Gratis
+                        </a>
+                        <a th:href="@{/auth/login}" class="btn btn-outline-primary btn-lg shadow-hover">
+                            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script th:replace="~{fragments/scripts :: scripts}"></script>
+    
+    <!-- Demo específico -->
+    <script>
+        // Animaciones para las tarjetas de demo
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const cardObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease-out';
+                cardObserver.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

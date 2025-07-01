@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head('Formulario de Usuario')}"></div>
+    <title th:text="${usuario.id != null ? 'Editar Usuario' : 'Nuevo Usuario'} + ' - Sistema Saga Falabella'">Formulario Usuario</title>
+    <style>
+        .form-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-section {
+            border-left: 4px solid #007bff;
+            padding-left: 20px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container-fluid mt-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/portal">Portal Admin</a></li>
+                <li class="breadcrumb-item"><a href="/admin/usuarios">Usuarios</a></li>
+                <li class="breadcrumb-item active" th:text="${usuario.id != null ? 'Editar' : 'Nuevo'}">Formulario</li>
+            </ol>
+        </nav>
+        
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2>
+                    <i class="fas fa-user-edit me-2 text-primary"></i>
+                    <span th:text="${usuario.id != null ? 'Editar Usuario' : 'Nuevo Usuario'}">Formulario Usuario</span>
+                </h2>
+            </div>
+        </div>
+        
+        <!-- Mensajes de Error -->
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}">Error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <!-- Formulario -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card form-card">
+                    <div class="card-body p-4">
+                        <form th:action="@{/admin/usuarios/guardar}" th:object="${usuario}" method="post">
+                            <!-- ID oculto para edición -->
+                            <input type="hidden" th:field="*{id}" />
+                            
+                            <!-- Información Personal -->
+                            <div class="form-section">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-user me-2"></i>Información Personal
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="nombre" class="form-label">Nombre *</label>
+                                            <input type="text" class="form-control" th:field="*{nombre}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="apellido" class="form-label">Apellido *</label>
+                                            <input type="text" class="form-control" th:field="*{apellido}" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email *</label>
+                                            <input type="email" class="form-control" th:field="*{email}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="telefono" class="form-label">Teléfono</label>
+                                            <input type="tel" class="form-control" th:field="*{telefono}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Información de Cuenta -->
+                            <div class="form-section">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-key me-2"></i>Información de Cuenta
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">Usuario *</label>
+                                            <input type="text" class="form-control" th:field="*{username}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="password" class="form-label">
+                                                <span th:text="${usuario.id != null ? 'Nueva Contraseña (dejar vacío para mantener)' : 'Contraseña *'}">Contraseña</span>
+                                            </label>
+                                            <input type="password" class="form-control" th:field="*{password}" 
+                                                   th:required="${usuario.id == null}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Configuración de Rol -->
+                            <div class="form-section">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-shield-alt me-2"></i>Configuración de Rol
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="rol" class="form-label">Rol *</label>
+                                            <select class="form-select" th:field="*{rol}" required>
+                                                <option value="">Seleccionar rol...</option>
+                                                <option th:each="rolOption : ${roles}" 
+                                                        th:value="${rolOption}" 
+                                                        th:text="${rolOption.descripcion}"
+                                                        th:selected="${usuario.rol == rolOption}">Rol</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="tipoUsuario" class="form-label">Tipo de Usuario *</label>
+                                            <select class="form-select" th:field="*{tipoUsuario}" required>
+                                                <option value="">Seleccionar tipo...</option>
+                                                <option value="INTERNO">Interno (Empleado)</option>
+                                                <option value="EXTERNO">Externo (Cliente)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Estado -->
+                            <div class="form-section">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-toggle-on me-2"></i>Estado
+                                </h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:field="*{activo}" id="activo">
+                                    <label class="form-check-label" for="activo">
+                                        Usuario Activo
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Botones -->
+                            <div class="d-flex justify-content-between">
+                                <a href="/admin/usuarios" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Volver
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>
+                                    <span th:text="${usuario.id != null ? 'Actualizar' : 'Crear'} + ' Usuario'">Guardar Usuario</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-generar username basado en nombre y apellido
+        document.addEventListener('DOMContentLoaded', function() {
+            const nombreField = document.getElementById('nombre');
+            const apellidoField = document.getElementById('apellido');
+            const usernameField = document.getElementById('username');
+            
+            function updateUsername() {
+                if (usernameField.value === '' || usernameField.dataset.autoGenerated === 'true') {
+                    const nombre = nombreField.value.toLowerCase().replace(/\s+/g, '');
+                    const apellido = apellidoField.value.toLowerCase().replace(/\s+/g, '');
+                    if (nombre && apellido) {
+                        usernameField.value = nombre + '.' + apellido;
+                        usernameField.dataset.autoGenerated = 'true';
+                    }
+                }
+            }
+            
+            nombreField.addEventListener('input', updateUsername);
+            apellidoField.addEventListener('input', updateUsername);
+            
+            usernameField.addEventListener('input', function() {
+                this.dataset.autoGenerated = 'false';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="500" height="400">
+  <defs>
+    <linearGradient id="stockGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#047857;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Warehouse building -->
+  <rect x="100" y="200" width="300" height="150" fill="#f3f4f6" stroke="#d1d5db" stroke-width="2"/>
+  <polygon points="100,200 250,120 400,200" fill="url(#stockGrad)"/>
+  
+  <!-- Boxes/packages -->
+  <rect x="130" y="240" width="40" height="40" fill="#fbbf24" stroke="#f59e0b" stroke-width="1"/>
+  <rect x="180" y="240" width="40" height="40" fill="#34d399" stroke="#10b981" stroke-width="1"/>
+  <rect x="230" y="240" width="40" height="40" fill="#60a5fa" stroke="#3b82f6" stroke-width="1"/>
+  <rect x="280" y="240" width="40" height="40" fill="#a78bfa" stroke="#8b5cf6" stroke-width="1"/>
+  <rect x="330" y="240" width="40" height="40" fill="#fb7185" stroke="#ef4444" stroke-width="1"/>
+  
+  <!-- Second row -->
+  <rect x="130" y="290" width="40" height="40" fill="#fb7185" stroke="#ef4444" stroke-width="1"/>
+  <rect x="180" y="290" width="40" height="40" fill="#60a5fa" stroke="#3b82f6" stroke-width="1"/>
+  <rect x="230" y="290" width="40" height="40" fill="#fbbf24" stroke="#f59e0b" stroke-width="1"/>
+  <rect x="280" y="290" width="40" height="40" fill="#34d399" stroke="#10b981" stroke-width="1"/>
+  <rect x="330" y="290" width="40" height="40" fill="#a78bfa" stroke="#8b5cf6" stroke-width="1"/>
+  
+  <!-- Inventory tags -->
+  <circle cx="80" cy="160" r="25" fill="#10b981"/>
+  <text x="80" y="166" text-anchor="middle" fill="white" font-size="12" font-weight="bold">✓</text>
+  
+  <circle cx="420" cy="160" r="25" fill="#f59e0b"/>
+  <text x="420" y="166" text-anchor="middle" fill="white" font-size="12" font-weight="bold">!</text>
+  
+  <!-- Forklift -->
+  <rect x="50" y="320" width="60" height="30" rx="5" fill="#6b7280"/>
+  <circle cx="65" cy="355" r="8" fill="#374151"/>
+  <circle cx="95" cy="355" r="8" fill="#374151"/>
+  <rect x="45" y="310" width="10" height="40" fill="#374151"/>
+</svg>

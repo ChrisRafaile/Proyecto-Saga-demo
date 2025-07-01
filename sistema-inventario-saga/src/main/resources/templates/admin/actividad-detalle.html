@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head('Detalle de Actividad - Admin')}"></head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/admin/dashboard}" class="text-decoration-none">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/admin/actividad}" class="text-decoration-none">
+                                <i class="fas fa-history"></i> Actividad
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <i class="fas fa-eye"></i> Detalle
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h1 class="h3 mb-1">
+                            <i class="fas fa-eye text-primary"></i>
+                            Detalle de Actividad
+                        </h1>
+                        <p class="text-muted mb-0">
+                            Información detallada de la actividad registrada en el sistema
+                        </p>
+                    </div>
+                    <div>
+                        <a th:href="@{/admin/actividad}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mensajes de alerta -->
+                <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${mensaje}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Contenido principal -->
+                <div class="row">
+                    <!-- Información principal -->
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-info-circle"></i>
+                                    Información de la Actividad
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- ID -->
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label fw-bold text-muted">ID de Actividad:</label>
+                                        <p class="form-control-plaintext" th:text="${actividad.id}">123</p>
+                                    </div>
+
+                                    <!-- Tipo de Actividad -->
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label fw-bold text-muted">Tipo de Actividad:</label>
+                                        <p class="form-control-plaintext">
+                                            <span class="badge" 
+                                                  th:classappend="${actividad.tipoActividad.name() == 'CREACION'} ? 'bg-success' : 
+                                                                 ${actividad.tipoActividad.name() == 'ACTUALIZACION'} ? 'bg-warning text-dark' : 
+                                                                 ${actividad.tipoActividad.name() == 'ELIMINACION'} ? 'bg-danger' : 
+                                                                 ${actividad.tipoActividad.name() == 'CONSULTA'} ? 'bg-info' : 
+                                                                 ${actividad.tipoActividad.name() == 'LOGIN'} ? 'bg-primary' : 
+                                                                 ${actividad.tipoActividad.name() == 'LOGOUT'} ? 'bg-secondary' : 'bg-dark'"
+                                                  th:text="${#strings.capitalize(#strings.toLowerCase(actividad.tipoActividad.name()))}">
+                                                Creación
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                    <!-- Nivel -->
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label fw-bold text-muted">Nivel:</label>
+                                        <p class="form-control-plaintext">
+                                            <span class="badge" 
+                                                  th:classappend="${actividad.nivel.name() == 'INFO'} ? 'bg-info' : 
+                                                                 ${actividad.nivel.name() == 'WARNING'} ? 'bg-warning text-dark' : 
+                                                                 ${actividad.nivel.name() == 'ERROR'} ? 'bg-danger' : 
+                                                                 ${actividad.nivel.name() == 'DEBUG'} ? 'bg-secondary' : 'bg-primary'"
+                                                  th:text="${#strings.capitalize(#strings.toLowerCase(actividad.nivel.name()))}">
+                                                Info
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                    <!-- Usuario -->
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label fw-bold text-muted">Usuario:</label>
+                                        <p class="form-control-plaintext">
+                                            <i class="fas fa-user text-primary me-2"></i>
+                                            <span th:text="${actividad.usuario?.username ?: 'Sistema'}">admin</span>
+                                            <small class="text-muted" th:if="${actividad.usuario}">
+                                                (<span th:text="${actividad.usuario.email}">admin@saga.com</span>)
+                                            </small>
+                                        </p>
+                                    </div>
+
+                                    <!-- Entidad afectada -->
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label fw-bold text-muted">Entidad:</label>
+                                        <p class="form-control-plaintext">
+                                            <i class="fas fa-database text-warning me-2"></i>
+                                            <span th:text="${actividad.entidad}">Producto</span>
+                                        </p>
+                                    </div>
+
+                                    <!-- ID de Entidad -->
+                                    <div class="col-sm-6 mb-3" th:if="${actividad.entidadId}">
+                                        <label class="form-label fw-bold text-muted">ID de Entidad:</label>
+                                        <p class="form-control-plaintext">
+                                            <i class="fas fa-hashtag text-info me-2"></i>
+                                            <span th:text="${actividad.entidadId}">456</span>
+                                        </p>
+                                    </div>
+
+                                    <!-- Fecha de Actividad -->
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label fw-bold text-muted">Fecha y Hora:</label>
+                                        <p class="form-control-plaintext">
+                                            <i class="fas fa-clock text-primary me-2"></i>
+                                            <span th:text="${#temporals.format(actividad.fechaActividad, 'dd/MM/yyyy HH:mm:ss')}">
+                                                01/12/2024 14:30:25
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                    <!-- IP del usuario -->
+                                    <div class="col-sm-6 mb-3" th:if="${actividad.ip}">
+                                        <label class="form-label fw-bold text-muted">Dirección IP:</label>
+                                        <p class="form-control-plaintext">
+                                            <i class="fas fa-network-wired text-info me-2"></i>
+                                            <code th:text="${actividad.ip}">192.168.1.100</code>
+                                        </p>
+                                    </div>
+
+                                    <!-- User Agent -->
+                                    <div class="col-12 mb-3" th:if="${actividad.userAgent}">
+                                        <label class="form-label fw-bold text-muted">Navegador/Cliente:</label>
+                                        <p class="form-control-plaintext">
+                                            <i class="fas fa-browser text-secondary me-2"></i>
+                                            <small class="text-monospace" th:text="${actividad.userAgent}">
+                                                Mozilla/5.0 (Windows NT 10.0; Win64; x64)...
+                                            </small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-comment-alt"></i>
+                                    Descripción de la Actividad
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-floating">
+                                    <textarea class="form-control" 
+                                              style="height: 120px; resize: none;" 
+                                              readonly
+                                              th:text="${actividad.descripcion}">
+                                        El usuario admin creó un nuevo producto con ID 123
+                                    </textarea>
+                                    <label>Descripción detallada</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detalles adicionales (si existen) -->
+                        <div class="card shadow-sm border-0 mb-4" th:if="${actividad.detalles}">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-list-alt"></i>
+                                    Detalles Técnicos
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <pre class="bg-light p-3 rounded border" 
+                                     style="max-height: 300px; overflow-y: auto; font-size: 0.875rem;"
+                                     th:text="${actividad.detalles}">
+{
+  "campo_modificado": "nombre",
+  "valor_anterior": "Producto Antiguo",
+  "valor_nuevo": "Producto Nuevo",
+  "timestamp": "2024-12-01T14:30:25"
+}
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel lateral -->
+                    <div class="col-lg-4">
+                        <!-- Resumen rápido -->
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-dark text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    Resumen Rápido
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                        <span><i class="fas fa-calendar text-primary me-2"></i>Hace:</span>
+                                        <span class="text-muted" th:text="${#temporals.formatDiff(actividad.fechaActividad, #temporals.createNow(), 'es')}">
+                                            2 horas
+                                        </span>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                        <span><i class="fas fa-tag text-success me-2"></i>Categoría:</span>
+                                        <span class="text-muted" th:text="${actividad.entidad}">Producto</span>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0" th:if="${actividad.usuario}">
+                                        <span><i class="fas fa-user-tag text-warning me-2"></i>Rol:</span>
+                                        <span class="text-muted" th:text="${actividad.usuario.role}">ADMIN</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actividades relacionadas -->
+                        <div class="card shadow-sm border-0 mb-4" th:if="${actividadesRelacionadas} and ${not #lists.isEmpty(actividadesRelacionadas)}">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-history"></i>
+                                    Actividades Relacionadas
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <div th:each="actRel : ${actividadesRelacionadas}" 
+                                         class="list-group-item border-0 px-0 py-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <span class="badge bg-secondary rounded-pill" 
+                                                      th:text="${actRel.tipoActividad.name()}">CONSULTA</span>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <p class="mb-1 small" th:text="${actRel.descripcion}">
+                                                    Actividad relacionada
+                                                </p>
+                                                <small class="text-muted" 
+                                                       th:text="${#temporals.format(actRel.fechaActividad, 'dd/MM HH:mm')}">
+                                                    01/12 14:25
+                                                </small>
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                <a th:href="@{/admin/actividad/detalle/{id}(id=${actRel.id})}" 
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Acciones -->
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-secondary text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-tools"></i>
+                                    Acciones
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <!-- Exportar detalles -->
+                                    <a th:href="@{/admin/actividad/exportar/pdf(id=${actividad.id})}" 
+                                       class="btn btn-outline-danger">
+                                        <i class="fas fa-file-pdf"></i> Exportar PDF
+                                    </a>
+                                    
+                                    <!-- Ver actividades del usuario -->
+                                    <a th:if="${actividad.usuario}" 
+                                       th:href="@{/admin/actividad(usuario=${actividad.usuario.id})}" 
+                                       class="btn btn-outline-info">
+                                        <i class="fas fa-user-clock"></i> Actividades del Usuario
+                                    </a>
+                                    
+                                    <!-- Ver actividades de la entidad -->
+                                    <a th:if="${actividad.entidadId}" 
+                                       th:href="@{/admin/actividad(entidad=${actividad.entidad},entidadId=${actividad.entidadId})}" 
+                                       class="btn btn-outline-warning">
+                                        <i class="fas fa-search"></i> Actividades de la Entidad
+                                    </a>
+                                    
+                                    <!-- Volver a la lista -->
+                                    <a th:href="@{/admin/actividad}" class="btn btn-secondary">
+                                        <i class="fas fa-list"></i> Volver a la Lista
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

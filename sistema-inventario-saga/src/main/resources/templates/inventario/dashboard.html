@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head}"></div>
+    <title>Dashboard de Inventario - Saga Falabella</title>
+    <style>
+        /* Estilos específicos para el dashboard de inventario */
+        .inventory-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .inventory-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .inventory-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: none;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+        
+        .stat-card.success {
+            background: linear-gradient(135deg, #26de81, #20bf6b);
+            box-shadow: 0 10px 30px rgba(38, 222, 129, 0.3);
+        }
+        
+        .stat-card.warning {
+            background: linear-gradient(135deg, #fed330, #f7b731);
+            box-shadow: 0 10px 30px rgba(254, 211, 48, 0.3);
+        }
+        
+        .stat-card.info {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            box-shadow: 0 10px 30px rgba(116, 185, 255, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 1rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+        }
+        
+        .product-image {
+            height: 200px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #6c757d;
+        }
+        
+        .product-details {
+            padding: 1.5rem;
+        }
+        
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 0.5rem 0;
+        }
+        
+        .stock-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .stock-high {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .stock-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .stock-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .search-input {
+            border-radius: 25px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .alert-card {
+            background: linear-gradient(135deg, #ff9ff3, #f368e0);
+            color: white;
+            border-radius: 15px;
+            border: none;
+        }
+        
+        .filter-tabs {
+            background: white;
+            border-radius: 15px;
+            padding: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .filter-tab {
+            border: none;
+            background: transparent;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .filter-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .action-button {
+            border-radius: 10px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .inventory-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .inventory-header {
+                padding: 1rem 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Header del Dashboard de Inventario -->
+    <div class="inventory-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold mb-3">
+                        <i class="fas fa-warehouse me-3"></i>Dashboard de Inventario
+                    </h1>
+                    <p class="lead mb-0">
+                        Control total de tu inventario en tiempo real
+                    </p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="d-flex align-items-center justify-content-md-end">
+                        <div class="me-3">
+                            <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                                <i class="fas fa-clock me-1"></i>
+                                <span id="current-time"></span>
+                            </span>
+                        </div>
+                        <div sec:authorize="isAuthenticated()">
+                            <span class="text-white-50">Bienvenido,</span>
+                            <span class="fw-bold" th:text="${nombreCompleto ?: 'Usuario'}">Usuario</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-4">
+        
+        <!-- Métricas del Inventario -->
+        <div class="inventory-metrics">
+            <div class="card stat-card success">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="text-white-50 mb-2">Total Productos</h6>
+                            <div class="stat-number" th:text="${totalProductos ?: 0}">0</div>
+                            <small class="text-white-50">
+                                <i class="fas fa-arrow-up me-1"></i>Activos en inventario
+                            </small>
+                        </div>
+                        <div class="text-white" style="font-size: 3rem;">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card stat-card warning">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="text-white-50 mb-2">Stock Bajo</h6>
+                            <div class="stat-number" th:text="${productosStockBajo ?: 0}">0</div>
+                            <small class="text-white-50">
+                                <i class="fas fa-exclamation-triangle me-1"></i>Requieren atención
+                            </small>
+                        </div>
+                        <div class="text-white" style="font-size: 3rem;">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card stat-card info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="text-white-50 mb-2">Valor Total</h6>
+                            <div class="stat-number">S/ 458K</div>
+                            <small class="text-white-50">
+                                <i class="fas fa-chart-line me-1"></i>Estimado en inventario
+                            </small>
+                        </div>
+                        <div class="text-white" style="font-size: 3rem;">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="text-white-50 mb-2">Movimientos Hoy</h6>
+                            <div class="stat-number">142</div>
+                            <small class="text-white-50">
+                                <i class="fas fa-sync me-1"></i>Entradas y salidas
+                            </small>
+                        </div>
+                        <div class="text-white" style="font-size: 3rem;">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Búsqueda y Filtros -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card inventory-card">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="search-container">
+                                    <form method="get" th:action="@{/inventario/}">
+                                        <input type="text" 
+                                               name="search" 
+                                               th:value="${searchQuery}"
+                                               class="form-control search-input" 
+                                               placeholder="🔍 Buscar productos por nombre, código o categoría..."
+                                               autocomplete="off">
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <div class="d-flex gap-2 justify-content-md-end">
+                                    <a href="/inventario/productos" class="btn action-button btn-primary-custom">
+                                        <i class="fas fa-list me-2"></i>Ver Todos
+                                    </a>
+                                    <button class="btn action-button btn-outline-secondary" onclick="refreshData()">
+                                        <i class="fas fa-sync-alt me-2"></i>Actualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alertas de Stock Bajo -->
+        <div class="row mb-4" th:if="${productosStockBajo > 0}">
+            <div class="col-12">
+                <div class="card alert-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h5 class="text-white mb-2">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Alerta: Productos con Stock Bajo
+                                </h5>
+                                <p class="text-white-50 mb-0">
+                                    <span th:text="${productosStockBajo}">0</span> productos necesitan reposición urgente
+                                </p>
+                            </div>
+                            <button class="btn btn-light" onclick="showStockAlerts()">
+                                <i class="fas fa-eye me-2"></i>Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid de Productos -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card inventory-card">
+                    <div class="card-header bg-white border-0 p-4">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h4 class="mb-0 fw-bold text-dark">
+                                <i class="fas fa-cube me-2 text-primary"></i>
+                                Productos Disponibles
+                            </h4>
+                            <span class="badge bg-primary fs-6 px-3 py-2">
+                                <span th:text="${#lists.size(productos)}">0</span> productos
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        
+                        <!-- Lista de Productos -->
+                        <div class="product-grid" th:if="${#lists.size(productos) > 0}">
+                            <div class="product-card" th:each="producto : ${productos}">
+                                <div class="product-image">
+                                    <i class="fas fa-box text-secondary"></i>
+                                </div>
+                                <div class="product-details">
+                                    <div class="product-name" th:text="${producto.nombre}">Nombre del Producto</div>
+                                    <p class="text-muted small mb-2" th:text="${producto.descripcion}">Descripción del producto</p>
+                                    <div class="product-price">S/ <span th:text="${#numbers.formatDecimal(producto.precio, 0, 2)}">0.00</span></div>
+                                    
+                                    <div class="d-flex align-items-center justify-content-between mt-3">
+                                        <span class="stock-badge"
+                                              th:classappend="${producto.cantidadStock > 50} ? 'stock-high' : (${producto.cantidadStock > 20} ? 'stock-medium' : 'stock-low')">
+                                            Stock: <span th:text="${producto.cantidadStock}">0</span>
+                                        </span>
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" 
+                                                    type="button" 
+                                                    data-bs-toggle="dropdown">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Ver Detalles</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Editar</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-plus me-2"></i>Añadir Stock</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado Vacío -->
+                        <div class="text-center py-5" th:if="${#lists.size(productos) == 0}">
+                            <div class="mb-4" style="font-size: 4rem; color: #dee2e6;">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <h4 class="text-muted mb-3">No se encontraron productos</h4>
+                            <p class="text-muted mb-4">
+                                <span th:if="${searchQuery != null and !searchQuery.isEmpty()}">
+                                    No hay productos que coincidan con "<span th:text="${searchQuery}"></span>"
+                                </span>
+                                <span th:unless="${searchQuery != null and !searchQuery.isEmpty()}">
+                                    Aún no hay productos registrados en el inventario
+                                </span>
+                            </p>
+                            <div>
+                                <a href="/admin/productos" class="btn btn-primary action-button btn-primary-custom me-2">
+                                    <i class="fas fa-plus me-2"></i>Agregar Primer Producto
+                                </a>
+                                <button class="btn btn-outline-secondary action-button" onclick="location.reload()">
+                                    <i class="fas fa-sync me-2"></i>Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card inventory-card">
+                    <div class="card-header bg-white border-0 p-4">
+                        <h4 class="mb-0 fw-bold text-dark">
+                            <i class="fas fa-bolt me-2 text-warning"></i>
+                            Acciones Rápidas
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <a href="/admin/productos" class="btn action-button btn-primary-custom w-100 py-3">
+                                    <i class="fas fa-plus d-block mb-2" style="font-size: 1.5rem;"></i>
+                                    <span class="fw-bold">Nuevo Producto</span>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn action-button btn-outline-success w-100 py-3" onclick="showStockMovements()">
+                                    <i class="fas fa-exchange-alt d-block mb-2" style="font-size: 1.5rem;"></i>
+                                    <span class="fw-bold">Movimiento Stock</span>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn action-button btn-outline-info w-100 py-3" onclick="generateReport()">
+                                    <i class="fas fa-chart-bar d-block mb-2" style="font-size: 1.5rem;"></i>
+                                    <span class="fw-bold">Generar Reporte</span>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn action-button btn-outline-warning w-100 py-3" onclick="exportData()">
+                                    <i class="fas fa-download d-block mb-2" style="font-size: 1.5rem;"></i>
+                                    <span class="fw-bold">Exportar Datos</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Scripts -->
+    <div th:replace="~{fragments/footer :: scripts}"></div>
+
+    <!-- Script específico del dashboard de inventario -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Actualizar hora en tiempo real
+            function updateTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('es-ES', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                const timeElement = document.getElementById('current-time');
+                if (timeElement) {
+                    timeElement.textContent = timeString;
+                }
+            }
+            
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            // Animaciones de entrada para las tarjetas
+            const cards = document.querySelectorAll('.inventory-card, .stat-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Auto-completado para búsqueda
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                let searchTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        if (this.value.length >= 2) {
+                            // Aquí se podría implementar búsqueda en tiempo real
+                            console.log('Buscando:', this.value);
+                        }
+                    }, 300);
+                });
+            }
+
+            // Tooltips para elementos con títulos
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
+        // Funciones para las acciones rápidas
+        function refreshData() {
+            // Mostrar indicador de carga
+            const button = event.target;
+            const originalHtml = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando...';
+            button.disabled = true;
+            
+            // Simular actualización
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        }
+
+        function showStockAlerts() {
+            // Mostrar modal o navegar a página de alertas
+            alert('Funcionalidad en desarrollo: Ver alertas de stock bajo');
+        }
+
+        function showStockMovements() {
+            alert('Funcionalidad en desarrollo: Registrar movimientos de stock');
+        }
+
+        function generateReport() {
+            alert('Funcionalidad en desarrollo: Generar reportes de inventario');
+        }
+
+        function exportData() {
+            alert('Funcionalidad en desarrollo: Exportar datos del inventario');
+        }
+
+        // Función para filtrar productos por categoría (futura implementación)
+        function filterByCategory(category) {
+            console.log('Filtrar por categoría:', category);
+        }
+
+        // Función para mostrar detalles del producto
+        function showProductDetails(productId) {
+            console.log('Mostrar detalles del producto:', productId);
+        }
+    </script>
+
+</body>
+</html>

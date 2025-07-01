@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Carga Masiva de Productos')}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0">
+                <div class="bg-dark sidebar vh-100">
+                    <div class="text-white p-3">
+                        <h5>Panel Admin</h5>
+                        <hr class="text-white">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link text-white" th:href="@{/admin/portal}">
+                                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" th:href="@{/admin/productos}">
+                                    <i class="fas fa-box"></i> Productos
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white active" th:href="@{/admin/carga-masiva}">
+                                    <i class="fas fa-upload"></i> Carga Masiva
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" th:href="@{/admin/usuarios}">
+                                    <i class="fas fa-users"></i> Usuarios
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" th:href="@{/admin/reportes}">
+                                    <i class="fas fa-chart-bar"></i> Reportes
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <div class="container-fluid p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-upload text-primary"></i> Carga Masiva de Productos</h2>
+                        <a th:href="@{/admin/productos}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver a Productos
+                        </a>
+                    </div>
+                    
+                    <!-- Mensajes de feedback -->
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle"></i> <span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <div th:if="${warning}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle"></i> <span th:text="${warning}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    
+                    <!-- Descripción Principal -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Centro de Carga Masiva - Saga Falabella</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="lead mb-3">
+                                        Bienvenido al sistema de carga masiva de productos. Puede elegir entre dos opciones para 
+                                        agregar productos al inventario de manera eficiente y profesional.
+                                    </p>
+                                    <div class="row text-center">
+                                        <div class="col-md-6">
+                                            <div class="text-primary">
+                                                <i class="fas fa-magic fa-3x mb-2"></i>
+                                                <h6>Generación Automática</h6>
+                                                <small class="text-muted">Productos de ejemplo listos para usar</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="text-success">
+                                                <i class="fas fa-file-csv fa-3x mb-2"></i>
+                                                <h6>Carga desde CSV</h6>
+                                                <small class="text-muted">Importar desde archivo personalizado</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Opciones de carga -->
+                    <div class="row">
+                        <!-- Opción 1: Carga Automática -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-magic"></i> Opción 1: Generación Automática</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        Genera automáticamente productos de ejemplo para Saga Falabella con datos realistas 
+                                        de diferentes categorías comerciales.
+                                    </p>
+                                    
+                                    <div class="alert alert-info mb-3">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <strong>Se crearán aproximadamente 25+ productos</strong> incluyendo:
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <ul class="list-unstyled">
+                                                <li><i class="fas fa-mobile-alt text-primary"></i> Tecnología</li>
+                                                <li><i class="fas fa-tshirt text-info"></i> Ropa Hombre</li>
+                                                <li><i class="fas fa-female text-danger"></i> Ropa Mujer</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-6">
+                                            <ul class="list-unstyled">
+                                                <li><i class="fas fa-home text-success"></i> Hogar</li>
+                                                <li><i class="fas fa-running text-warning"></i> Deportes</li>
+                                                <li><i class="fas fa-heart text-pink"></i> Belleza</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <form th:action="@{/admin/productos/generar-ejemplos}" method="post">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-2" 
+                                                    onclick="return confirm('¿Generar productos de ejemplo? Se crearán nuevos productos en el inventario.')">
+                                                <i class="fas fa-magic"></i> Generar Productos Automáticamente
+                                            </button>
+                                        </form>
+                                        
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a th:href="@{/admin/productos/debug}" class="btn btn-outline-info btn-sm w-100">
+                                                    <i class="fas fa-bug"></i> Ver Estado BD
+                                                </a>
+                                            </div>
+                                            <div class="col-6">
+                                                <form th:action="@{/admin/productos/limpiar-ejemplos}" method="post" 
+                                                      onsubmit="return confirm('¿Eliminar todos los productos de ejemplo?')">
+                                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                    <button type="submit" class="btn btn-outline-warning btn-sm w-100">
+                                                        <i class="fas fa-trash"></i> Limpiar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Opción 2: Carga CSV -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0"><i class="fas fa-file-csv"></i> Opción 2: Carga desde CSV</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        Importe productos desde un archivo CSV personalizado con el formato estándar 
+                                        de Saga Falabella.
+                                    </p>
+                                      <div class="alert alert-success mb-3">
+                                        <i class="fas fa-check-circle"></i>
+                                        <strong>Formatos soportados:</strong><br>
+                                        📄 <strong>CSV:</strong> <code class="text-dark">codigo,nombre,categoria,marca,precio,stock_actual,stock_minimo,descripcion,ubicacion</code><br>
+                                        📊 <strong>Excel:</strong> Las mismas columnas en archivo .xlsx o .xls
+                                    </div>
+                                    
+                                    <form th:action="@{/admin/productos/cargar-csv}" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                          <div class="mb-3">
+                                            <label for="csvFile" class="form-label fw-bold">
+                                                <i class="fas fa-upload"></i> Seleccionar archivo CSV o Excel
+                                            </label>
+                                            <input type="file" class="form-control form-control-lg" id="csvFile" 
+                                                   name="archivo" accept=".csv,.xlsx,.xls" required>
+                                            <div class="form-text">
+                                                <i class="fas fa-info-circle"></i> 
+                                                Formatos permitidos: CSV (.csv), Excel (.xlsx, .xls) - Máximo 10MB
+                                            </div>
+                                        </div>
+                                          <button type="submit" class="btn btn-success btn-lg w-100">
+                                            <i class="fas fa-upload"></i> Cargar Productos desde Archivo
+                                        </button>
+                                    </form>
+                                    
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            <i class="fas fa-shield-alt"></i> 
+                                            Los productos duplicados (mismo código) no se importarán
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información adicional -->
+                    <div class="row">
+                        <!-- Categorías Disponibles -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0"><i class="fas fa-tags"></i> Categorías Disponibles</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row" th:if="${categorias}">
+                                        <div class="col-12" th:each="categoria : ${categorias}">
+                                            <span class="badge bg-secondary me-1 mb-1" th:text="${categoria}"></span>
+                                        </div>
+                                    </div>
+                                    <div th:unless="${categorias}">
+                                        <p class="text-muted mb-0">No hay categorías configuradas</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Instrucciones Rápidas -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header bg-warning text-dark">
+                                    <h6 class="mb-0"><i class="fas fa-lightbulb"></i> Instrucciones Rápidas</h6>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="text-success"><i class="fas fa-check"></i> Antes de cargar:</h6>
+                                    <ul class="small mb-2">
+                                        <li>Verifique que no haya códigos duplicados</li>
+                                        <li>Confirme permisos de administrador</li>
+                                    </ul>
+                                    
+                                    <h6 class="text-info"><i class="fas fa-info"></i> Después de cargar:</h6>
+                                    <ul class="small mb-0">
+                                        <li>Revise los productos en la lista</li>
+                                        <li>Ajuste stock si es necesario</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animaciones y feedback visual
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animación para botón de generación automática
+            const submitBtn = document.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.addEventListener('click', function() {
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando productos...';
+                        this.disabled = true;
+                    }, 100);
+                });
+            }
+              // Validación para archivo CSV/Excel
+            const csvInput = document.getElementById('csvFile');
+            if (csvInput) {
+                csvInput.addEventListener('change', function() {
+                    const fileName = this.files[0]?.name.toLowerCase();
+                    if (fileName && !fileName.endsWith('.csv') && !fileName.endsWith('.xlsx') && !fileName.endsWith('.xls')) {
+                        alert('Por favor seleccione un archivo CSV (.csv) o Excel (.xlsx, .xls)');
+                        this.value = '';
+                    } else if (this.files[0]?.size > 10 * 1024 * 1024) {
+                        alert('El archivo es demasiado grande. Máximo 10MB permitido.');
+                        this.value = '';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head('Editar Perfil')}"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Contenido principal -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Breadcrumb -->
+            <div class="col-12 mb-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/admin/perfil}">Mi Perfil</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Perfil</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card card-saga">
+                    <div class="card-header bg-saga-primary text-white">
+                        <h4 class="card-title mb-0">
+                            <i class="fas fa-user-edit me-2"></i>Editar Mi Perfil
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Alertas -->
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span th:text="${error}">Error</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <form th:action="@{/admin/perfil/guardar}" th:object="${usuario}" method="post" novalidate>
+                            <!-- Información Personal -->
+                            <div class="row">
+                                <div class="col-12 mb-4">
+                                    <h5 class="border-bottom pb-2">
+                                        <i class="fas fa-user me-2 text-saga-primary"></i>Información Personal
+                                    </h5>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" th:field="*{nombre}" 
+                                               id="nombre" placeholder="Nombre" required>
+                                        <label for="nombre">
+                                            <i class="fas fa-user me-2"></i>Nombre *
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Por favor ingrese su nombre.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" th:field="*{apellido}" 
+                                               id="apellido" placeholder="Apellido" required>
+                                        <label for="apellido">
+                                            <i class="fas fa-user me-2"></i>Apellido *
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Por favor ingrese su apellido.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" th:field="*{email}" 
+                                               id="email" placeholder="Email" required>
+                                        <label for="email">
+                                            <i class="fas fa-envelope me-2"></i>Correo Electrónico *
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Por favor ingrese un correo válido.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="tel" class="form-control" th:field="*{telefono}" 
+                                               id="telefono" placeholder="Teléfono">
+                                        <label for="telefono">
+                                            <i class="fas fa-phone me-2"></i>Teléfono
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Información de solo lectura -->
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" th:value="${usuario.username}" 
+                                               id="username" placeholder="Username" readonly>
+                                        <label for="username">
+                                            <i class="fas fa-at me-2"></i>Nombre de Usuario
+                                        </label>
+                                        <div class="form-text">Este campo no se puede modificar</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" th:value="${usuario.rol.name()}" 
+                                               id="rol" placeholder="Rol" readonly>
+                                        <label for="rol">
+                                            <i class="fas fa-shield-alt me-2"></i>Rol
+                                        </label>
+                                        <div class="form-text">Este campo no se puede modificar</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cambio de Contraseña -->
+                            <div class="row">
+                                <div class="col-12 mb-4">
+                                    <h5 class="border-bottom pb-2">
+                                        <i class="fas fa-lock me-2 text-saga-warning"></i>Cambiar Contraseña (Opcional)
+                                    </h5>
+                                    <p class="text-muted">Deje estos campos vacíos si no desea cambiar su contraseña.</p>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" name="passwordActual" 
+                                               id="passwordActual" placeholder="Contraseña Actual">
+                                        <label for="passwordActual">
+                                            <i class="fas fa-key me-2"></i>Contraseña Actual
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" name="passwordNuevo" 
+                                               id="passwordNuevo" placeholder="Nueva Contraseña" minlength="6">
+                                        <label for="passwordNuevo">
+                                            <i class="fas fa-lock me-2"></i>Nueva Contraseña
+                                        </label>
+                                        <div class="form-text">Mínimo 6 caracteres</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" name="confirmarPassword" 
+                                               id="confirmarPassword" placeholder="Confirmar Contraseña">
+                                        <label for="confirmarPassword">
+                                            <i class="fas fa-lock me-2"></i>Confirmar Contraseña
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Las contraseñas no coinciden.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <a th:href="@{/admin/perfil}" class="btn btn-secondary me-md-2">
+                                            <i class="fas fa-times me-2"></i>Cancelar
+                                        </a>
+                                        <button type="submit" class="btn btn-saga-primary">
+                                            <i class="fas fa-save me-2"></i>Guardar Cambios
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSS adicional -->
+    <style>
+        .bg-saga-primary {
+            background: linear-gradient(135deg, var(--saga-primary), var(--saga-secondary)) !important;
+        }
+
+        .text-saga-primary {
+            color: var(--saga-primary) !important;
+        }
+
+        .text-saga-warning {
+            color: var(--saga-warning) !important;
+        }
+
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            color: var(--saga-primary);
+        }
+
+        .card-saga {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 15px;
+        }
+
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .invalid-feedback {
+            display: none;
+        }
+
+        .was-validated .form-control:invalid ~ .invalid-feedback {
+            display: block;
+        }
+
+        .password-strength {
+            height: 4px;
+            margin-top: 5px;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .strength-weak { background-color: #dc3545; }
+        .strength-fair { background-color: #ffc107; }
+        .strength-good { background-color: #17a2b8; }
+        .strength-strong { background-color: #28a745; }
+    </style>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const passwordNuevo = document.getElementById('passwordNuevo');
+            const confirmarPassword = document.getElementById('confirmarPassword');
+            const passwordActual = document.getElementById('passwordActual');
+
+            // Validación de formulario
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                // Validar contraseñas si se intenta cambiar
+                if (passwordNuevo.value.trim() !== '') {
+                    if (passwordActual.value.trim() === '') {
+                        event.preventDefault();
+                        passwordActual.classList.add('is-invalid');
+                        passwordActual.focus();
+                        return;
+                    }
+
+                    if (passwordNuevo.value !== confirmarPassword.value) {
+                        event.preventDefault();
+                        confirmarPassword.classList.add('is-invalid');
+                        confirmarPassword.focus();
+                        return;
+                    }
+
+                    if (passwordNuevo.value.length < 6) {
+                        event.preventDefault();
+                        passwordNuevo.classList.add('is-invalid');
+                        passwordNuevo.focus();
+                        return;
+                    }
+                }
+
+                form.classList.add('was-validated');
+            });
+
+            // Validación en tiempo real de confirmación de contraseña
+            confirmarPassword.addEventListener('input', function() {
+                if (this.value !== passwordNuevo.value) {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                }
+            });
+
+            // Limpiar validación al escribir
+            passwordActual.addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+            });
+
+            passwordNuevo.addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+                // Reevaluar confirmación
+                if (confirmarPassword.value !== '' && confirmarPassword.value !== this.value) {
+                    confirmarPassword.classList.add('is-invalid');
+                } else {
+                    confirmarPassword.classList.remove('is-invalid');
+                }
+            });
+
+            // Focus en primer campo
+            document.getElementById('nombre').focus();
+        });
+    </script>
+</body>
+</html>

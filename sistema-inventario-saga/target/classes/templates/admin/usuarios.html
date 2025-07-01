@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head('Gestión de Usuarios')}"></div>
+    <title>Gestión de Usuarios - Sistema Saga Falabella</title>
+    <style>
+        .admin-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .table-custom {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .btn-action {
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .status-active { background-color: #d4edda; color: #155724; }
+        .status-inactive { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container-fluid mt-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard Admin</a></li>
+                <li class="breadcrumb-item active">Gestión de Usuarios</li>
+            </ol>
+        </nav>
+        
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2>
+                    <i class="fas fa-users me-2 text-primary"></i>
+                    Gestión de Usuarios
+                </h2>
+                <p class="text-muted">Administra todos los usuarios del sistema</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="/admin/usuarios/nuevo" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nuevo Usuario
+                </a>
+            </div>
+        </div>
+        
+        <!-- Mensajes -->
+        <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${param.success}">Mensaje de éxito</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${param.error}">Mensaje de error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <!-- Estadísticas -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card admin-card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h3 class="card-title" th:text="${totalUsuarios}">0</h3>
+                        <p class="card-text">Usuarios Totales</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card admin-card bg-success text-white">
+                    <div class="card-body text-center">
+                        <h3 class="card-title" th:text="${#lists.size(usuarios)}">0</h3>
+                        <p class="card-text">En Lista</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabla de Usuarios -->
+        <div class="card admin-card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Lista de Usuarios
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-custom">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Nombre Completo</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th>Fecha Creación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="usuario : ${usuarios}">
+                                <td th:text="${usuario.id}">1</td>
+                                <td>
+                                    <strong th:text="${usuario.username}">username</strong>
+                                </td>
+                                <td th:text="${usuario.nombreCompleto}">Nombre Apellido</td>
+                                <td th:text="${usuario.email}">email@example.com</td>
+                                <td>
+                                    <span class="badge bg-info" th:text="${usuario.rol.descripcion}">Rol</span>
+                                </td>
+                                <td>
+                                    <span th:class="${usuario.activo} ? 'status-badge status-active' : 'status-badge status-inactive'"
+                                          th:text="${usuario.activo} ? 'Activo' : 'Inactivo'">Estado</span>
+                                </td>
+                                <td th:text="${#temporals.format(usuario.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>                                <td>
+                                    <a th:href="@{/admin/usuarios/editar/{id}(id=${usuario.id})}" 
+                                       class="btn btn-sm btn-outline-primary btn-action"
+                                       title="Editar usuario">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <button th:if="${usuario.activo}" 
+                                            type="button" 
+                                            class="btn btn-sm btn-outline-warning btn-action"
+                                            onclick="confirmarDesactivar(this)"
+                                            th:data-id="${usuario.id}"
+                                            th:data-nombre="${usuario.nombreCompleto}"
+                                            title="Desactivar usuario">
+                                        <i class="fas fa-pause"></i> Desactivar
+                                    </button>
+                                    <button th:unless="${usuario.activo}" 
+                                            type="button" 
+                                            class="btn btn-sm btn-outline-success btn-action"
+                                            onclick="confirmarActivar(this)"
+                                            th:data-id="${usuario.id}"
+                                            th:data-nombre="${usuario.nombreCompleto}"
+                                            title="Activar usuario">
+                                        <i class="fas fa-play"></i> Activar
+                                    </button>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-danger btn-action"
+                                            onclick="confirmarEliminar(this)"
+                                            th:data-id="${usuario.id}"
+                                            th:data-nombre="${usuario.nombreCompleto}"
+                                            title="Eliminar usuario">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(usuarios)}">
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    <i class="fas fa-users fa-3x mb-3 d-block"></i>
+                                    No hay usuarios registrados
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmación -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Acción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="confirmMessage">
+                    ¿Estás seguro de realizar esta acción?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form id="confirmForm" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-primary" id="confirmBtn">Confirmar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>    <script>
+        function confirmarDesactivar(button) {
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            
+            document.getElementById('confirmMessage').innerHTML = 
+                `¿Estás seguro de desactivar al usuario <strong>${nombre}</strong>?`;
+            document.getElementById('confirmForm').action = `/admin/usuarios/eliminar/${id}`;
+            document.getElementById('confirmBtn').className = 'btn btn-warning';
+            document.getElementById('confirmBtn').textContent = 'Desactivar';
+            
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+          function confirmarActivar(button) {
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            
+            document.getElementById('confirmMessage').innerHTML = 
+                `¿Estás seguro de activar al usuario <strong>${nombre}</strong>?`;
+            document.getElementById('confirmForm').action = `/admin/usuarios/activar/${id}`;
+            document.getElementById('confirmBtn').className = 'btn btn-success';
+            document.getElementById('confirmBtn').textContent = 'Activar';
+            
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+          function confirmarEliminar(button) {
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            
+            document.getElementById('confirmMessage').innerHTML = 
+                `¿Estás seguro de <strong>eliminar permanentemente</strong> al usuario <strong>${nombre}</strong>?<br>
+                <small class="text-danger">Esta acción no se puede deshacer.</small>`;
+            document.getElementById('confirmForm').action = `/admin/usuarios/eliminar/${id}`;
+            document.getElementById('confirmBtn').className = 'btn btn-danger';
+            document.getElementById('confirmBtn').textContent = 'Eliminar';
+            
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+    </script>
+</body>
+</html>

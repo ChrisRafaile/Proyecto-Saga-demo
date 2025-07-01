@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/head :: head('Editar Proveedor - Admin')}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h1 class="h3 mb-0 text-gray-800">
+                            <i class="fas fa-edit mr-2"></i>Editar Proveedor
+                        </h1>
+                        <p class="text-muted">Modifica la información del proveedor</p>
+                    </div>
+                    <div>
+                        <a href="/admin/proveedores" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left mr-2"></i>Volver
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Formulario -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <i class="fas fa-edit mr-2"></i>Información del Proveedor
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/admin/proveedores/editar/{id}(id=${proveedor.id})}" method="post" th:object="${proveedor}">
+                                    
+                                    <!-- Campo oculto para el ID -->
+                                    <input type="hidden" th:field="*{id}">
+                                    
+                                    <!-- Mensajes de validación -->
+                                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('*')}">
+                                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                                        <strong>Por favor corrige los siguientes errores:</strong>
+                                        <ul class="mb-0 mt-2">
+                                            <li th:each="error : ${#fields.allErrors()}" th:text="${error}"></li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Información básica -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="ruc">
+                                                    <i class="fas fa-id-card mr-1"></i>RUC *
+                                                </label>
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       th:field="*{ruc}"
+                                                       th:class="${#fields.hasErrors('ruc')} ? 'form-control is-invalid' : 'form-control'"
+                                                       placeholder="Ej: 20123456789"
+                                                       maxlength="11"
+                                                       required>
+                                                <div class="invalid-feedback" th:if="${#fields.hasErrors('ruc')}" th:errors="*{ruc}"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="contactoPrincipal">
+                                                    <i class="fas fa-user mr-1"></i>Contacto Principal
+                                                </label>
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       th:field="*{contactoPrincipal}"
+                                                       th:class="${#fields.hasErrors('contactoPrincipal')} ? 'form-control is-invalid' : 'form-control'"
+                                                       placeholder="Nombre del contacto">
+                                                <div class="invalid-feedback" th:if="${#fields.hasErrors('contactoPrincipal')}" th:errors="*{contactoPrincipal}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="razonSocial">
+                                            <i class="fas fa-building mr-1"></i>Razón Social *
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               th:field="*{razonSocial}"
+                                               th:class="${#fields.hasErrors('razonSocial')} ? 'form-control is-invalid' : 'form-control'"
+                                               placeholder="Nombre legal de la empresa"
+                                               required>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('razonSocial')}" th:errors="*{razonSocial}"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="nombreComercial">
+                                            <i class="fas fa-store mr-1"></i>Nombre Comercial
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               th:field="*{nombreComercial}"
+                                               th:class="${#fields.hasErrors('nombreComercial')} ? 'form-control is-invalid' : 'form-control'"
+                                               placeholder="Nombre comercial (opcional)">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nombreComercial')}" th:errors="*{nombreComercial}"></div>
+                                    </div>
+
+                                    <!-- Información de contacto -->
+                                    <hr class="my-4">
+                                    <h6 class="text-primary mb-3">
+                                        <i class="fas fa-address-book mr-2"></i>Información de Contacto
+                                    </h6>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="email">
+                                                    <i class="fas fa-envelope mr-1"></i>Email
+                                                </label>
+                                                <input type="email" 
+                                                       class="form-control" 
+                                                       th:field="*{email}"
+                                                       th:class="${#fields.hasErrors('email')} ? 'form-control is-invalid' : 'form-control'"
+                                                       placeholder="correo@empresa.com">
+                                                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="telefono">
+                                                    <i class="fas fa-phone mr-1"></i>Teléfono
+                                                </label>
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       th:field="*{telefono}"
+                                                       th:class="${#fields.hasErrors('telefono')} ? 'form-control is-invalid' : 'form-control'"
+                                                       placeholder="Ej: +51 999 999 999">
+                                                <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="direccion">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>Dirección
+                                        </label>
+                                        <textarea class="form-control" 
+                                                  th:field="*{direccion}"
+                                                  th:class="${#fields.hasErrors('direccion')} ? 'form-control is-invalid' : 'form-control'"
+                                                  rows="3"
+                                                  placeholder="Dirección completa de la empresa"></textarea>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
+                                    </div>
+
+                                    <!-- Información comercial -->
+                                    <hr class="my-4">
+                                    <h6 class="text-primary mb-3">
+                                        <i class="fas fa-handshake mr-2"></i>Información Comercial
+                                    </h6>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="condicionesPago">
+                                                    <i class="fas fa-credit-card mr-1"></i>Condiciones de Pago
+                                                </label>
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       th:field="*{condicionesPago}"
+                                                       th:class="${#fields.hasErrors('condicionesPago')} ? 'form-control is-invalid' : 'form-control'"
+                                                       placeholder="Ej: 30 días, contado, etc.">
+                                                <div class="invalid-feedback" th:if="${#fields.hasErrors('condicionesPago')}" th:errors="*{condicionesPago}"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="calificacion">
+                                                    <i class="fas fa-star mr-1"></i>Calificación (1-5)
+                                                </label>
+                                                <select class="form-control" 
+                                                        th:field="*{calificacion}"
+                                                        th:class="${#fields.hasErrors('calificacion')} ? 'form-control is-invalid' : 'form-control'">
+                                                    <option value="">Seleccionar calificación</option>
+                                                    <option value="1">1 - Muy Bajo</option>
+                                                    <option value="2">2 - Bajo</option>
+                                                    <option value="3">3 - Regular</option>
+                                                    <option value="4">4 - Bueno</option>
+                                                    <option value="5">5 - Excelente</option>
+                                                </select>
+                                                <div class="invalid-feedback" th:if="${#fields.hasErrors('calificacion')}" th:errors="*{calificacion}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" 
+                                                   class="custom-control-input" 
+                                                   th:field="*{activo}"
+                                                   id="activo">
+                                            <label class="custom-control-label" for="activo">
+                                                <i class="fas fa-check-circle mr-1"></i>Proveedor activo
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones -->
+                                    <div class="form-group text-right">
+                                        <a href="/admin/proveedores" class="btn btn-secondary mr-2">
+                                            <i class="fas fa-times mr-2"></i>Cancelar
+                                        </a>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save mr-2"></i>Actualizar Proveedor
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Panel de información -->
+                    <div class="col-lg-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <i class="fas fa-info-circle mr-2"></i>Información del Proveedor
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <h6 class="text-dark">ID del Proveedor</h6>
+                                    <small class="text-muted" th:text="${proveedor.id}">-</small>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h6 class="text-dark">Fecha de Registro</h6>
+                                    <small class="text-muted" th:text="${#temporals.format(proveedor.fechaRegistro, 'dd/MM/yyyy HH:mm')}">-</small>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h6 class="text-dark">Última Actualización</h6>
+                                    <small class="text-muted" th:text="${#temporals.format(proveedor.fechaActualizacion, 'dd/MM/yyyy HH:mm')}">-</small>
+                                </div>
+                                
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                                    <strong>Importante:</strong> Los cambios en el RUC pueden afectar las relaciones con productos existentes.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Productos relacionados -->
+                        <div class="card shadow mb-4" th:if="${proveedor.productos != null && !#lists.isEmpty(proveedor.productos)}">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <i class="fas fa-boxes mr-2"></i>Productos Relacionados
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    Este proveedor tiene <strong th:text="${#lists.size(proveedor.productos)}">0</strong> productos asociados.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

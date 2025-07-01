@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Login</title>
+</head>
+<body>
+    <h2>Test Login Saga Falabella</h2>
+    
+    <h3>Login como Admin</h3>
+    <form action="http://localhost:8080/auth/login" method="post">
+        <input type="text" name="username" value="admin" placeholder="Username"><br><br>
+        <input type="password" name="password" value="admin123" placeholder="Password"><br><br>
+        <input type="submit" value="Login como Admin">
+    </form>
+    
+    <h3>Login como Cliente</h3>
+    <form action="http://localhost:8080/auth/login" method="post">
+        <input type="text" name="username" value="cliente_demo" placeholder="Username"><br><br>
+        <input type="password" name="password" value="cliente123" placeholder="Password"><br><br>
+        <input type="submit" value="Login como Cliente">
+    </form>
+    
+    <hr>
+    <h3>Links de acceso directo</h3>
+    <a href="http://localhost:8080/" target="_blank">Página Principal</a><br>
+    <a href="http://localhost:8080/auth/login" target="_blank">Página de Login</a><br>
+    <a href="http://localhost:8080/test/hash?password=admin123" target="_blank">Generar Hash Admin</a><br>
+    <a href="http://localhost:8080/test/hash?password=cliente123" target="_blank">Generar Hash Cliente</a><br>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Dashboard</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Test Login para Dashboard</h1>
+    
+    <form id="loginForm" action="http://localhost:8080/auth/login" method="POST">
+        <label for="username">Usuario:</label>
+        <input type="text" id="username" name="username" value="superadmin" required><br><br>
+        
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" value="admin123" required><br><br>
+        
+        <input type="hidden" name="_csrf" id="csrfToken" value="">
+        
+        <button type="submit">Iniciar Sesión</button>
+    </form>
+    
+    <br>
+    <button onclick="testDashboard()">Probar Dashboard Directo</button>
+    
+    <div id="result"></div>
+    
+    <script>
+        // Obtener token CSRF primero
+        fetch('http://localhost:8080/auth/login')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const csrfToken = doc.querySelector('input[name="_csrf"]').value;
+                document.getElementById('csrfToken').value = csrfToken;
+            });
+        
+        function testDashboard() {
+            fetch('http://localhost:8080/dashboard', {
+                credentials: 'include'
+            })
+            .then(response => {
+                document.getElementById('result').innerHTML = 
+                    `<h3>Respuesta del Dashboard:</h3>
+                     <p>Status: ${response.status}</p>
+                     <p>URL: ${response.url}</p>`;
+                return response.text();
+            })
+            .then(html => {
+                if (html.includes('Dashboard Administrador')) {
+                    document.getElementById('result').innerHTML += '<p style="color: green;">✓ Dashboard cargado correctamente</p>';
+                } else if (html.includes('Whitelabel Error')) {
+                    document.getElementById('result').innerHTML += '<p style="color: red;">✗ Error 500 en el Dashboard</p>';
+                } else if (html.includes('Iniciar Sesión')) {
+                    document.getElementById('result').innerHTML += '<p style="color: orange;">→ Redirigido al login (no autenticado)</p>';
+                } else {
+                    document.getElementById('result').innerHTML += '<p style="color: blue;">? Respuesta inesperada</p>';
+                }
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML += `<p style="color: red;">Error: ${error}</p>`;
+            });
+        }
+    </script>
+</body>
+</html>

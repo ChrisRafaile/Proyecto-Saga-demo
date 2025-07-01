@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head('Ayuda')}"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-gradient-saga text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-question-circle me-3"></i>Centro de Ayuda
+                    </h1>
+                    <p class="lead mb-4">
+                        Encuentra respuestas rápidas y documentación completa del sistema
+                    </p>
+                    <div class="search-box mt-4">
+                        <div class="input-group input-group-lg">
+                            <input type="text" class="form-control" placeholder="¿Qué necesitas saber?" id="helpSearch">
+                            <button class="btn btn-light" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navegación de Ayuda -->
+    <section class="py-4 bg-light border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="help-nav">
+                        <div class="nav nav-pills justify-content-center" id="help-tabs" role="tablist">
+                            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#getting-started" type="button" role="tab">
+                                <i class="fas fa-rocket me-2"></i>Primeros Pasos
+                            </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#user-guide" type="button" role="tab">
+                                <i class="fas fa-book me-2"></i>Guía de Usuario
+                            </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#faq" type="button" role="tab">
+                                <i class="fas fa-question me-2"></i>Preguntas Frecuentes
+                            </button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#troubleshooting" type="button" role="tab">
+                                <i class="fas fa-wrench me-2"></i>Solución de Problemas
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenido de Ayuda -->
+    <section class="py-5">
+        <div class="container">
+            <div class="tab-content" id="help-content">
+                <!-- Primeros Pasos -->
+                <div class="tab-pane fade show active" id="getting-started" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12 mb-5">
+                            <h2 class="fw-bold text-center mb-4">Primeros Pasos</h2>
+                            <p class="text-center text-muted">Comienza a utilizar el sistema siguiendo estos pasos simples</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-lg-4">
+                            <div class="step-card text-center p-4 h-100">
+                                <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                     style="width: 60px; height: 60px;">
+                                    <span class="fw-bold fs-4">1</span>
+                                </div>
+                                <h5 class="fw-bold">Crear Cuenta</h5>
+                                <p class="text-muted mb-3">
+                                    Regístrate en el sistema como cliente o solicita acceso como empleado/administrador.
+                                </p>
+                                <a th:href="@{/register/cliente}" class="btn btn-outline-primary">
+                                    <i class="fas fa-user-plus me-1"></i>Registrarse
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="step-card text-center p-4 h-100">
+                                <div class="step-number bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                     style="width: 60px; height: 60px;">
+                                    <span class="fw-bold fs-4">2</span>
+                                </div>
+                                <h5 class="fw-bold">Iniciar Sesión</h5>
+                                <p class="text-muted mb-3">
+                                    Accede al sistema con tus credenciales para comenzar a utilizar las funcionalidades.
+                                </p>
+                                <a th:href="@{/auth/login}" class="btn btn-outline-success">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Iniciar Sesión
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="step-card text-center p-4 h-100">
+                                <div class="step-number bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                     style="width: 60px; height: 60px;">
+                                    <span class="fw-bold fs-4">3</span>
+                                </div>
+                                <h5 class="fw-bold">Explorar Dashboard</h5>
+                                <p class="text-muted mb-3">
+                                    Familiarízate con el panel principal y las diferentes secciones disponibles.
+                                </p>
+                                <a th:href="@{/demo}" class="btn btn-outline-info">
+                                    <i class="fas fa-play me-1"></i>Ver Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guía de Usuario -->
+                <div class="tab-pane fade" id="user-guide" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12 mb-5">
+                            <h2 class="fw-bold text-center mb-4">Guía de Usuario</h2>
+                            <p class="text-center text-muted">Documentación detallada de todas las funcionalidades</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="guide-section">
+                                <h4 class="fw-bold mb-3">
+                                    <i class="fas fa-tachometer-alt text-primary me-2"></i>
+                                    Dashboard Principal
+                                </h4>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Visualización de métricas principales
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Gráficos de rendimiento en tiempo real
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Alertas y notificaciones importantes
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Accesos rápidos a funciones principales
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="guide-section">
+                                <h4 class="fw-bold mb-3">
+                                    <i class="fas fa-boxes text-success me-2"></i>
+                                    Gestión de Inventario
+                                </h4>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Control de stock y productos
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Registro de entradas y salidas
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Búsqueda y filtrado avanzado
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Alertas de stock mínimo
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="guide-section">
+                                <h4 class="fw-bold mb-3">
+                                    <i class="fas fa-users text-warning me-2"></i>
+                                    Gestión de Usuarios
+                                </h4>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Roles y permisos diferenciados
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Administración de cuentas
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Configuración de perfil
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Historial de actividades
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="guide-section">
+                                <h4 class="fw-bold mb-3">
+                                    <i class="fas fa-chart-line text-info me-2"></i>
+                                    Reportes y Análisis
+                                </h4>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Generación de reportes personalizados
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Exportación en múltiples formatos
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Análisis de tendencias
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Métricas de rendimiento
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preguntas Frecuentes -->
+                <div class="tab-pane fade" id="faq" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12 mb-5">
+                            <h2 class="fw-bold text-center mb-4">Preguntas Frecuentes</h2>
+                            <p class="text-center text-muted">Respuestas a las consultas más comunes</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto">
+                            <div class="accordion" id="faqAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                            ¿Cómo puedo restablecer mi contraseña?
+                                        </button>
+                                    </h2>
+                                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Para restablecer tu contraseña, ve a la página de inicio de sesión y haz clic en "¿Olvidaste tu contraseña?". 
+                                            Introduce tu email y recibirás instrucciones para crear una nueva contraseña.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                            ¿Qué navegadores son compatibles?
+                                        </button>
+                                    </h2>
+                                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            El sistema es compatible con las versiones más recientes de Chrome, Firefox, Safari y Edge. 
+                                            Recomendamos mantener tu navegador actualizado para la mejor experiencia.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                            ¿Cómo puedo exportar reportes?
+                                        </button>
+                                    </h2>
+                                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Los reportes pueden exportarse desde la sección de reportes en formatos PDF, Excel y CSV. 
+                                            Simplemente selecciona el reporte deseado y haz clic en el botón de exportar.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                            ¿Puedo acceder desde dispositivos móviles?
+                                        </button>
+                                    </h2>
+                                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Sí, el sistema está completamente optimizado para dispositivos móviles. 
+                                            Puedes acceder desde cualquier smartphone o tablet con un navegador web moderno.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                            ¿Cómo solicito permisos adicionales?
+                                        </button>
+                                    </h2>
+                                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Para solicitar permisos adicionales, contacta con tu administrador del sistema o 
+                                            utiliza la función de solicitud de permisos disponible en tu perfil de usuario.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solución de Problemas -->
+                <div class="tab-pane fade" id="troubleshooting" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12 mb-5">
+                            <h2 class="fw-bold text-center mb-4">Solución de Problemas</h2>
+                            <p class="text-center text-muted">Guías para resolver problemas comunes</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="troubleshoot-card p-4 border rounded">
+                                <h5 class="fw-bold text-danger mb-3">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Problemas de Inicio de Sesión
+                                </h5>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">• Verifica que tu usuario y contraseña sean correctos</li>
+                                    <li class="mb-2">• Asegúrate de que las mayúsculas y minúsculas coincidan</li>
+                                    <li class="mb-2">• Intenta limpiar la caché de tu navegador</li>
+                                    <li class="mb-2">• Verifica tu conexión a internet</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="troubleshoot-card p-4 border rounded">
+                                <h5 class="fw-bold text-warning mb-3">
+                                    <i class="fas fa-clock me-2"></i>
+                                    Problemas de Rendimiento
+                                </h5>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">• Cierra otras pestañas del navegador</li>
+                                    <li class="mb-2">• Verifica la velocidad de tu conexión</li>
+                                    <li class="mb-2">• Actualiza tu navegador a la última versión</li>
+                                    <li class="mb-2">• Desactiva extensiones innecesarias</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="troubleshoot-card p-4 border rounded">
+                                <h5 class="fw-bold text-info mb-3">
+                                    <i class="fas fa-mobile-alt me-2"></i>
+                                    Problemas en Móviles
+                                </h5>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">• Rota el dispositivo para mejor visualización</li>
+                                    <li class="mb-2">• Aumenta el zoom si el texto es pequeño</li>
+                                    <li class="mb-2">• Usa el navegador nativo del dispositivo</li>
+                                    <li class="mb-2">• Verifica que JavaScript esté habilitado</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="troubleshoot-card p-4 border rounded">
+                                <h5 class="fw-bold text-success mb-3">
+                                    <i class="fas fa-life-ring me-2"></i>
+                                    ¿Necesitas más ayuda?
+                                </h5>
+                                <p class="text-muted mb-3">Si no encuentras la solución a tu problema, puedes:</p>
+                                <div class="help-actions">
+                                    <a th:href="@{/contact}" class="btn btn-outline-primary me-2">
+                                        <i class="fas fa-envelope me-1"></i>Contactar Soporte
+                                    </a>
+                                    <a th:href="@{/demo}" class="btn btn-outline-success">
+                                        <i class="fas fa-video me-1"></i>Ver Tutorial
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script th:replace="~{fragments/scripts :: scripts}"></script>
+
+    <!-- Script específico para ayuda -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Búsqueda en tiempo real
+            const searchInput = document.getElementById('helpSearch');
+            const allContent = document.querySelectorAll('.tab-pane');
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    // Mostrar todo el contenido
+                    allContent.forEach(content => {
+                        content.style.display = 'block';
+                    });
+                    return;
+                }
+
+                // Filtrar contenido
+                allContent.forEach(content => {
+                    const text = content.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        content.style.display = 'block';
+                    } else {
+                        content.style.display = 'none';
+                    }
+                });
+            });
+
+            // Animaciones para las tarjetas
+            const cards = document.querySelectorAll('.step-card, .guide-section, .troubleshoot-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

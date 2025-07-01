@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pedidos - Sistema Inventario Saga Falabella</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        .sidebar {
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.85);
+            padding: 12px 20px;
+            margin: 2px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .stats-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-pendiente { background-color: #ffc107; color: #856404; }
+        .status-confirmado { background-color: #17a2b8; color: white; }
+        .status-en-preparacion { background-color: #fd7e14; color: white; }
+        .status-listo-para-envio { background-color: #6f42c1; color: white; }
+        .status-en-transito { background-color: #0d6efd; color: white; }
+        .status-entregado { background-color: #198754; color: white; }
+        .status-cancelado { background-color: #dc3545; color: white; }
+        .status-devuelto { background-color: #6c757d; color: white; }
+        
+        .filter-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .page-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 sidebar">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <h5 class="text-white">
+                            <i class="fas fa-user-shield me-2"></i>
+                            Panel Admin
+                        </h5>
+                        <small class="text-white-50" th:text="'Bienvenido, ' + ${nombreCompleto}">Administrador</small>
+                    </div>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/dashboard}">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/usuarios}">
+                                <i class="fas fa-users"></i> Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/productos}">
+                                <i class="fas fa-box"></i> Productos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/proveedores}">
+                                <i class="fas fa-truck"></i> Proveedores
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/admin/pedidos}">
+                                <i class="fas fa-shopping-cart"></i> Pedidos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/actividad}">
+                                <i class="fas fa-history"></i> Actividad
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/reportes}">
+                                <i class="fas fa-chart-bar"></i> Reportes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/respaldos}">
+                                <i class="fas fa-database"></i> Respaldos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/configuracion}">
+                                <i class="fas fa-cog"></i> Configuración
+                            </a>
+                        </li>
+                        <li class="nav-item mt-4">
+                            <a class="nav-link" th:href="@{/admin/perfil}">
+                                <i class="fas fa-user"></i> Mi Perfil
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/auth/logout}">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <div class="pt-3 pb-2">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                        <h1 class="page-title">
+                            <i class="fas fa-shopping-cart me-3"></i>
+                            Gestión de Pedidos
+                        </h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group me-2">
+                                <a th:href="@{/admin/pedidos/nuevo}" class="btn btn-primary">
+                                    <i class="fas fa-plus me-1"></i> Nuevo Pedido
+                                </a>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-download me-1"></i> Exportar
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" th:href="@{/admin/pedidos/exportar/excel}">
+                                            <i class="fas fa-file-excel me-2"></i> Excel
+                                        </a></li>
+                                        <li><a class="dropdown-item" th:href="@{/admin/pedidos/exportar/pdf}">
+                                            <i class="fas fa-file-pdf me-2"></i> PDF
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alerts -->
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <!-- Filter Section -->
+                    <div class="filter-section">
+                        <h5 class="mb-3"><i class="fas fa-filter me-2"></i>Filtros de Búsqueda</h5>
+                        <form th:action="@{/admin/pedidos}" method="get" class="row g-3">
+                            <div class="col-md-3">
+                                <label for="numeroPedido" class="form-label">Número de Pedido</label>
+                                <input type="text" class="form-control" id="numeroPedido" name="numeroPedido" 
+                                       th:value="${numeroPedido}" placeholder="Ej: PED-20231201-000001">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select class="form-select" id="estado" name="estado">
+                                    <option value="">Todos</option>
+                                    <option th:each="est : ${estados}" th:value="${est}" 
+                                            th:selected="${est.toString() == estado}" th:text="${est}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="tipoEntrega" class="form-label">Tipo Entrega</label>
+                                <select class="form-select" id="tipoEntrega" name="tipoEntrega">
+                                    <option value="">Todos</option>
+                                    <option th:each="tipo : ${tiposEntrega}" th:value="${tipo}" 
+                                            th:selected="${tipo.toString() == tipoEntrega}" th:text="${tipo}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="fechaDesde" class="form-label">Desde</label>
+                                <input type="date" class="form-control" id="fechaDesde" name="fechaDesde" 
+                                       th:value="${fechaDesde}">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="fechaHasta" class="form-label">Hasta</label>
+                                <input type="date" class="form-control" id="fechaHasta" name="fechaHasta" 
+                                       th:value="${fechaHasta}">
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card stats-card border-primary">
+                                <div class="card-body text-center">
+                                    <h3 class="text-primary" th:text="${totalElements ?: 0}">0</h3>
+                                    <p class="text-muted mb-0">Total Pedidos</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card border-warning">
+                                <div class="card-body text-center">
+                                    <h3 class="text-warning">-</h3>
+                                    <p class="text-muted mb-0">Pendientes</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card border-success">
+                                <div class="card-body text-center">
+                                    <h3 class="text-success">-</h3>
+                                    <p class="text-muted mb-0">Entregados</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card border-info">
+                                <div class="card-body text-center">
+                                    <h3 class="text-info" th:text="${currentPage + 1} + '/' + ${totalPages}">1/1</h3>
+                                    <p class="text-muted mb-0">Página Actual</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-container">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Número</th>
+                                        <th>Fecha</th>
+                                        <th>Estado</th>
+                                        <th>Tipo Entrega</th>
+                                        <th>Total</th>
+                                        <th>Cliente</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${pedidos.empty}">
+                                        <td colspan="7" class="text-center py-4">
+                                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                                            <p class="text-muted">No se encontraron pedidos</p>
+                                        </td>
+                                    </tr>
+                                    <tr th:each="pedido : ${pedidos.content}">
+                                        <td>
+                                            <strong th:text="${pedido.numeroPedido}">PED-001</strong>
+                                        </td>
+                                        <td th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">01/12/2023 10:30</td>
+                                        <td>
+                                            <span class="status-badge" 
+                                                  th:classappend="'status-' + ${#strings.toLowerCase(#strings.replace(pedido.estado.toString(), '_', '-'))}"
+                                                  th:text="${pedido.estado}">PENDIENTE</span>
+                                        </td>
+                                        <td th:text="${pedido.tipoEntrega}">DOMICILIO</td>
+                                        <td>
+                                            <strong th:text="'S/ ' + ${#numbers.formatDecimal(pedido.total ?: 0, 1, 2)}">S/ 0.00</strong>
+                                        </td>
+                                        <td th:text="${pedido.cliente?.nombreCompleto ?: 'Cliente no asignado'}">Cliente Test</td>
+                                        <td class="text-center">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a th:href="@{/admin/pedidos/editar/{id}(id=${pedido.id})}" 
+                                                   class="btn btn-outline-primary" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-outline-info dropdown-toggle" 
+                                                            data-bs-toggle="dropdown" title="Cambiar Estado" aria-expanded="false">
+                                                        <i class="fas fa-exchange-alt"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">                                                        <li th:each="estado : ${estados}">
+                                                            <a class="dropdown-item" href="#" 
+                                                               th:onclick="|cambiarEstado(${pedido.id}, '${estado}')|">
+                                                                <span th:text="${estado}"></span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>                                                  <button type="button" class="btn btn-outline-danger" 
+                                                        th:onclick="|confirmarEliminacion(${pedido.id}, '${pedido.numeroPedido}')|" 
+                                                        title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav th:if="${totalPages > 1}" class="d-flex justify-content-center py-3">
+                            <ul class="pagination">
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/admin/pedidos(page=0, size=${pedidos.size})}">Primera</a>
+                                </li>
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/admin/pedidos(page=${currentPage - 1}, size=${pedidos.size})}">Anterior</a>
+                                </li>
+                                
+                                <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" 
+                                    th:if="${pageNum >= currentPage - 2 and pageNum <= currentPage + 2}"
+                                    class="page-item" th:classappend="${pageNum == currentPage} ? 'active'">
+                                    <a class="page-link" th:href="@{/admin/pedidos(page=${pageNum}, size=${pedidos.size})}" 
+                                       th:text="${pageNum + 1}">1</a>
+                                </li>
+                                
+                                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/admin/pedidos(page=${currentPage + 1}, size=${pedidos.size})}">Siguiente</a>
+                                </li>
+                                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/admin/pedidos(page=${totalPages - 1}, size=${pedidos.size})}">Última</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        // Función para cambiar estado del pedido
+        function cambiarEstado(pedidoId, nuevoEstado) {
+            if (confirm('¿Está seguro de cambiar el estado del pedido a ' + nuevoEstado + '?')) {
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.action = '/admin/pedidos/cambiar-estado/' + pedidoId;
+                
+                const estadoInput = document.createElement('input');
+                estadoInput.type = 'hidden';
+                estadoInput.name = 'nuevoEstado';
+                estadoInput.value = nuevoEstado;
+                
+                form.appendChild(estadoInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        // Función para confirmar eliminación
+        function confirmarEliminacion(pedidoId, numeroPedido) {
+            if (confirm('¿Está seguro de eliminar el pedido ' + numeroPedido + '?\n\nEsta acción no se puede deshacer.')) {
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.action = '/admin/pedidos/eliminar/' + pedidoId;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        // Auto-dismiss alerts
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+
+        // Verificar que Bootstrap está cargado
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof bootstrap === 'undefined') {
+                console.error('Bootstrap no está cargado correctamente');
+            } else {
+                console.log('Bootstrap cargado correctamente');
+            }
+        });
+    </script>
+</body>
+</html>

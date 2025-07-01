@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Registro de Actividad - Admin')}"></head>
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/portal}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/usuarios}">
+                                <i class="fas fa-users"></i>
+                                Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/productos}">
+                                <i class="fas fa-box"></i>
+                                Productos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/proveedores}">
+                                <i class="fas fa-truck"></i>
+                                Proveedores
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/pedidos}">
+                                <i class="fas fa-shopping-cart"></i>
+                                Pedidos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/reportes}">
+                                <i class="fas fa-chart-bar"></i>
+                                Reportes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/alertas}">
+                                <i class="fas fa-bell"></i>
+                                Alertas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/admin/actividad}">
+                                <i class="fas fa-history"></i>
+                                Actividad
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/configuracion}">
+                                <i class="fas fa-cog"></i>
+                                Configuración
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/respaldos}">
+                                <i class="fas fa-database"></i>
+                                Respaldos
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        <i class="fas fa-history me-2"></i>
+                        Registro de Actividad
+                    </h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-sm btn-success dropdown-toggle" 
+                                        data-bs-toggle="dropdown" aria-expanded="false" id="exportarLogDropdown">
+                                    <i class="fas fa-download"></i> Exportar Log
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="exportarLogDropdown">
+                                    <li><a class="dropdown-item" th:href="@{/admin/actividad/exportar/excel}">
+                                        <i class="fas fa-file-excel me-2"></i> Excel
+                                    </a></li>
+                                    <li><a class="dropdown-item" th:href="@{/admin/actividad/exportar/pdf}">
+                                        <i class="fas fa-file-pdf me-2"></i> PDF
+                                    </a></li>
+                                </ul>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#limpiarLogModal">
+                                <i class="fas fa-trash"></i> Limpiar Log
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensaje de desarrollo -->
+                <div class="alert alert-info" role="alert" th:if="${mensaje}">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span th:text="${mensaje}">Funcionalidad en desarrollo</span>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Sesiones Hoy
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-sign-in-alt fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Operaciones Exitosas
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Errores del Sistema
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            Usuarios Activos
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtros -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-filter me-2"></i>
+                            Filtros de Actividad
+                        </h6>
+                    </div>                    <div class="card-body">
+                        <form method="GET" th:action="@{/admin/actividad}" class="row g-3" id="filtroForm">
+                            <div class="col-md-2">
+                                <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+                                <input type="date" class="form-control" name="fechaInicio" id="fechaInicio" 
+                                       th:value="${param.fechaInicio}">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="fechaFin" class="form-label">Fecha Fin</label>
+                                <input type="date" class="form-control" name="fechaFin" id="fechaFin" 
+                                       th:value="${param.fechaFin}">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="tipoActividad" class="form-label">Tipo</label>
+                                <select class="form-select" name="tipoActividad" id="tipoActividad">
+                                    <option value="">Todas</option>
+                                    <option value="LOGIN" th:selected="${param.tipoActividad == 'LOGIN'}">Login</option>
+                                    <option value="LOGOUT" th:selected="${param.tipoActividad == 'LOGOUT'}">Logout</option>
+                                    <option value="CREATE" th:selected="${param.tipoActividad == 'CREATE'}">Crear</option>
+                                    <option value="READ" th:selected="${param.tipoActividad == 'READ'}">Consultar</option>
+                                    <option value="UPDATE" th:selected="${param.tipoActividad == 'UPDATE'}">Actualizar</option>
+                                    <option value="DELETE" th:selected="${param.tipoActividad == 'DELETE'}">Eliminar</option>
+                                    <option value="EXPORT" th:selected="${param.tipoActividad == 'EXPORT'}">Exportar</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="usuario" class="form-label">Usuario</label>
+                                <input type="text" class="form-control" name="usuario" id="usuario" 
+                                       placeholder="Filtrar por usuario" th:value="${param.usuario}">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="nivel" class="form-label">Nivel</label>
+                                <select class="form-select" name="nivel" id="nivel">
+                                    <option value="">Todos</option>
+                                    <option value="INFO" th:selected="${param.nivel == 'INFO'}">Info</option>
+                                    <option value="WARNING" th:selected="${param.nivel == 'WARNING'}">Warning</option>
+                                    <option value="ERROR" th:selected="${param.nivel == 'ERROR'}">Error</option>
+                                    <option value="DEBUG" th:selected="${param.nivel == 'DEBUG'}">Debug</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search"></i> Buscar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Log de Actividad -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-list me-2"></i>
+                            Registro de Actividad
+                        </h6>
+                    </div>                    <div class="card-body">
+                        <!-- Tabla de actividades dinámicas -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="actividadesTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Fecha/Hora</th>
+                                        <th>Usuario</th>
+                                        <th>Tipo</th>
+                                        <th>Descripción</th>
+                                        <th>Entidad</th>
+                                        <th>Nivel</th>
+                                        <th>IP</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                    <tr th:if="${actividades != null and not #lists.isEmpty(actividades.content)}" 
+                                        th:each="actividad : ${actividades.content}" class="actividad-row">
+                                        <td th:text="${actividad.idActividad}">1</td>
+                                        <td th:text="${#temporals.format(actividad.fechaActividad, 'dd/MM/yyyy HH:mm:ss')}">
+                                            01/01/2024 10:30:00
+                                        </td>
+                                        <td>
+                                            <span th:if="${actividad.usuario}" th:text="${actividad.usuario.username}">admin</span>
+                                            <span th:unless="${actividad.usuario}" class="text-muted">Sistema</span>
+                                        </td>
+                                        <td>                                            <span class="badge" 
+                                                  th:classappend="${actividad.tipoActividad.name() == 'LOGIN' ? 'bg-primary' : 
+                                                                   actividad.tipoActividad.name() == 'LOGOUT' ? 'bg-secondary' : 
+                                                                   actividad.tipoActividad.name() == 'CREATE' ? 'bg-success' : 
+                                                                   actividad.tipoActividad.name() == 'READ' ? 'bg-info' : 
+                                                                   actividad.tipoActividad.name() == 'UPDATE' ? 'bg-warning text-dark' : 
+                                                                   actividad.tipoActividad.name() == 'DELETE' ? 'bg-danger' : 
+                                                                   actividad.tipoActividad.name() == 'EXPORT' ? 'bg-dark' : 'bg-light text-dark'}"
+                                                  th:text="${actividad.tipoActividad.name()}">
+                                                LOGIN
+                                            </span>
+                                        </td>
+                                        <td th:text="${actividad.descripcion}" class="text-truncate" style="max-width: 200px;">
+                                            Descripción de la actividad
+                                        </td>
+                                        <td th:text="${actividad.entidad ?: '-'}">Producto</td>
+                                        <td>                                            <span class="badge" 
+                                                  th:classappend="${actividad.nivel.name() == 'INFO' ? 'bg-info' : 
+                                                                   actividad.nivel.name() == 'WARNING' ? 'bg-warning text-dark' : 
+                                                                   actividad.nivel.name() == 'ERROR' ? 'bg-danger' : 
+                                                                   actividad.nivel.name() == 'DEBUG' ? 'bg-secondary' : 'bg-light text-dark'}"
+                                                  th:text="${actividad.nivel.name()}">
+                                                INFO
+                                            </span>
+                                        </td>
+                                        <td th:text="${actividad.direccionIp ?: '-'}" class="text-monospace small">192.168.1.1</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">                                                <a th:href="@{/admin/actividad/detalle/{id}(id=${actividad.idActividad})}" 
+                                                   class="btn btn-outline-primary btn-sm" title="Ver detalle">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${actividades == null or #lists.isEmpty(actividades.content)}">
+                                        <td colspan="9" class="text-center text-muted py-4">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            No se encontraron actividades con los filtros aplicados.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Paginación -->
+                        <nav aria-label="Paginación de actividades" th:if="${actividades != null and actividades.totalPages > 1}">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${!actividades.hasPrevious()} ? 'disabled'">
+                                    <a class="page-link" 
+                                       th:href="@{/admin/actividad(page=${actividades.number - 1}, size=${actividades.size}, fechaInicio=${param.fechaInicio}, fechaFin=${param.fechaFin}, tipoActividad=${param.tipoActividad}, usuario=${param.usuario}, nivel=${param.nivel})}"
+                                       tabindex="-1">Anterior</a>
+                                </li>
+                                
+                                <li class="page-item" th:each="i : ${#numbers.sequence(0, actividades.totalPages - 1)}"
+                                    th:classappend="${i == actividades.number} ? 'active'">
+                                    <a class="page-link" 
+                                       th:href="@{/admin/actividad(page=${i}, size=${actividades.size}, fechaInicio=${param.fechaInicio}, fechaFin=${param.fechaFin}, tipoActividad=${param.tipoActividad}, usuario=${param.usuario}, nivel=${param.nivel})}"
+                                       th:text="${i + 1}">1</a>
+                                </li>
+                                
+                                <li class="page-item" th:classappend="${!actividades.hasNext()} ? 'disabled'">
+                                    <a class="page-link" 
+                                       th:href="@{/admin/actividad(page=${actividades.number + 1}, size=${actividades.size}, fechaInicio=${param.fechaInicio}, fechaFin=${param.fechaFin}, tipoActividad=${param.tipoActividad}, usuario=${param.usuario}, nivel=${param.nivel})}">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+
+                        <!-- Información de paginación -->
+                        <div class="text-center py-3" th:if="${actividades != null}">
+                            <p class="text-muted">
+                                Mostrando <span th:text="${actividades.numberOfElements}">0</span> de 
+                                <span th:text="${actividades.totalElements}">0</span> actividades
+                                (Página <span th:text="${actividades.number + 1}">1</span> de 
+                                <span th:text="${actividades.totalPages}">1</span>)
+                            </p>
+                        </div>
+                    </div>
+                </div>            </main>
+        </div>
+    </div>
+
+    <!-- Modal para limpiar logs -->
+    <div class="modal fade" id="limpiarLogModal" tabindex="-1" aria-labelledby="limpiarLogModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="limpiarLogModalLabel">
+                        <i class="fas fa-trash text-warning me-2"></i>
+                        Limpiar Logs de Actividad
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" th:action="@{/admin/actividad/limpiar}">
+                    <div class="modal-body">
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>¡Atención!</strong> Esta acción eliminará permanentemente los logs de actividad antiguos.
+                        </div>
+                        <div class="mb-3">
+                            <label for="diasAntiguedad" class="form-label">
+                                <i class="fas fa-calendar me-1"></i>
+                                Eliminar logs anteriores a (días):
+                            </label>
+                            <select class="form-select" name="diasAntiguedad" id="diasAntiguedad" required>
+                                <option value="7">7 días</option>
+                                <option value="15">15 días</option>
+                                <option value="30" selected>30 días</option>
+                                <option value="60">60 días</option>
+                                <option value="90">90 días</option>
+                                <option value="180">180 días</option>
+                            </select>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="confirmarLimpieza" required>
+                            <label class="form-check-label" for="confirmarLimpieza">
+                                Confirmo que deseo eliminar los logs antiguos
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-trash me-1"></i> Limpiar Logs
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>    
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>    <script>
+        // Verificar que Bootstrap está cargado y configurar dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM cargado - Página de actividad');
+            
+            if (typeof bootstrap === 'undefined') {
+                console.error('Bootstrap no está cargado correctamente');
+                return;
+            } else {
+                console.log('Bootstrap cargado correctamente:', bootstrap.Tooltip?.VERSION || 'versión desconocida');
+            }
+            
+            // Verificar el dropdown específico
+            const dropdownButton = document.getElementById('exportarLogDropdown');
+            if (dropdownButton) {
+                console.log('Botón dropdown encontrado:', dropdownButton);
+                
+                // Agregar event listener para debugging
+                dropdownButton.addEventListener('click', function(e) {
+                    console.log('Click en dropdown button');
+                    console.log('Atributos del botón:', {
+                        'data-bs-toggle': dropdownButton.getAttribute('data-bs-toggle'),
+                        'aria-expanded': dropdownButton.getAttribute('aria-expanded'),
+                        'id': dropdownButton.id,
+                        'class': dropdownButton.className
+                    });
+                });
+                
+                // Verificar si el dropdown está inicializado correctamente
+                try {
+                    const dropdown = new bootstrap.Dropdown(dropdownButton);
+                    console.log('Dropdown inicializado manualmente:', dropdown);
+                } catch (error) {
+                    console.error('Error inicializando dropdown:', error);
+                }
+                
+                // Eventos del dropdown
+                dropdownButton.addEventListener('shown.bs.dropdown', function () {
+                    console.log('Dropdown mostrado');
+                });
+                
+                dropdownButton.addEventListener('hidden.bs.dropdown', function () {
+                    console.log('Dropdown ocultado');
+                });
+                
+            } else {
+                console.error('Botón dropdown NO encontrado');
+            }
+        });
+    </script>
+</body>
+</html>
