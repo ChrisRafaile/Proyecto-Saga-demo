@@ -125,4 +125,28 @@ public class ClientController {
         
         return "client/perfil";
     }
+      /**
+     * Configuración del cliente
+     */
+    @GetMapping("/configuracion")
+    public String configuracion(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (auth == null || !auth.isAuthenticated()) {
+            return "redirect:/auth/login";
+        }
+        
+        String username = auth.getName();
+        Optional<Usuario> usuarioOpt = usuarioService.buscarPorUsername(username);
+        
+        if (usuarioOpt.isEmpty() || usuarioOpt.get().getRol() != RolUsuario.CLIENTE) {
+            return "redirect:/auth/access-denied";
+        }
+        
+        Usuario usuario = usuarioOpt.get();
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("nombreCompleto", usuario.getNombreCompleto());
+        
+        return "client/configuracion";
+    }
 }

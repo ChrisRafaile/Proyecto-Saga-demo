@@ -209,35 +209,35 @@
                         </h6>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/admin/alertas}" method="get" class="row g-3">
+                        <form th:action="@{/admin/alertas}" method="get" class="row g-3" id="filtrosForm">
                             <div class="col-md-3">
                                 <label for="tipoAlerta" class="form-label">Tipo de Alerta</label>
-                                <select class="form-select" id="tipoAlerta" name="tipoAlerta">
-                                    <option value="todos">Todas las alertas</option>
+                                <select class="form-select" id="tipoAlerta" name="tipoAlerta" onchange="console.log('Tipo seleccionado:', this.value)">
+                                    <option value="">Todas las alertas</option>
                                     <option th:each="tipo : ${tiposAlerta}" 
                                             th:value="${tipo.name()}" 
                                             th:text="${tipo.getDescripcion()}"
-                                            th:selected="${tipoAlertaSelected == tipo.name()}">Tipo</option>
+                                            th:selected="${tipoAlertaSelected != null and tipoAlertaSelected == tipo.name()}">Tipo</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <label for="estado" class="form-label">Estado</label>
-                                <select class="form-select" id="estado" name="estado">
-                                    <option value="todos">Todos los estados</option>
+                                <select class="form-select" id="estado" name="estado" onchange="console.log('Estado seleccionado:', this.value)">
+                                    <option value="">Todos los estados</option>
                                     <option th:each="est : ${estadosAlerta}" 
                                             th:value="${est.name()}" 
                                             th:text="${est.getDescripcion()}"
-                                            th:selected="${estadoSelected == est.name()}">Estado</option>
+                                            th:selected="${estadoSelected != null and estadoSelected == est.name()}">Estado</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
                                 <label for="nivelPrioridad" class="form-label">Prioridad</label>
-                                <select class="form-select" id="nivelPrioridad" name="nivelPrioridad">
-                                    <option value="todos">Todas</option>
+                                <select class="form-select" id="nivelPrioridad" name="nivelPrioridad" onchange="console.log('Prioridad seleccionada:', this.value)">
+                                    <option value="">Todas</option>
                                     <option th:each="nivel : ${nivelesPrioridad}" 
                                             th:value="${nivel.name()}" 
                                             th:text="${nivel.getDescripcion()}"
-                                            th:selected="${nivelPrioridadSelected == nivel.name()}">Nivel</option>
+                                            th:selected="${nivelPrioridadSelected != null and nivelPrioridadSelected == nivel.name()}">Nivel</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -249,12 +249,15 @@
                                 <input type="date" class="form-control" id="fechaHasta" name="fechaHasta" th:value="${fechaHasta}">
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" onclick="console.log('Enviando filtros...'); return true;">
                                     <i class="fas fa-search me-1"></i> Filtrar
                                 </button>
                                 <a th:href="@{/admin/alertas}" class="btn btn-secondary">
                                     <i class="fas fa-times me-1"></i> Limpiar Filtros
                                 </a>
+                                <button type="button" class="btn btn-info btn-sm" onclick="mostrarValoresFiltros()">
+                                    <i class="fas fa-bug me-1"></i> Debug Filtros
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -636,18 +639,52 @@
             modal.show();
         }
         
-        // Auto-refresh de estadísticas cada 30 segundos
+        // Auto-refresh de estadísticas cada 30 segundos (comentado para evitar errores)
+        /*
         setInterval(function() {
             fetch('/admin/alertas/estadisticas')
                 .then(response => response.json())
                 .then(data => {
-                    document.querySelector('[th\\:text="${estadisticas?.alertasCriticas ?: 0}"]').textContent = data.alertasCriticas || 0;
-                    document.querySelector('[th\\:text="${estadisticas?.alertasStockBajo ?: 0}"]').textContent = data.alertasStockBajo || 0;
-                    document.querySelector('[th\\:text="${estadisticas?.alertasNoLeidas ?: 0}"]').textContent = data.alertasNoLeidas || 0;
-                    document.querySelector('[th\\:text="${estadisticas?.totalAlertas ?: 0}"]').textContent = data.totalAlertas || 0;
+                    const critElement = document.querySelector('[th\\:text="${estadisticas?.alertasCriticas ?: 0}"]');
+                    const stockElement = document.querySelector('[th\\:text="${estadisticas?.alertasStockBajo ?: 0}"]');
+                    const noLeidaElement = document.querySelector('[th\\:text="${estadisticas?.alertasNoLeidas ?: 0}"]');
+                    const totalElement = document.querySelector('[th\\:text="${estadisticas?.totalAlertas ?: 0}"]');
+                    
+                    if(critElement) critElement.textContent = data.alertasCriticas || 0;
+                    if(stockElement) stockElement.textContent = data.alertasStockBajo || 0;
+                    if(noLeidaElement) noLeidaElement.textContent = data.alertasNoLeidas || 0;
+                    if(totalElement) totalElement.textContent = data.totalAlertas || 0;
                 })
                 .catch(error => console.log('Error actualizando estadísticas:', error));
         }, 30000);
+        */
+        
+        // Función para mostrar valores de filtros (debug)
+        function mostrarValoresFiltros() {
+            const tipoAlerta = document.getElementById('tipoAlerta').value;
+            const estado = document.getElementById('estado').value;
+            const nivelPrioridad = document.getElementById('nivelPrioridad').value;
+            const fechaDesde = document.getElementById('fechaDesde').value;
+            const fechaHasta = document.getElementById('fechaHasta').value;
+            
+            console.log('=== VALORES DE FILTROS ACTUALES ===');
+            console.log('Tipo Alerta:', "'" + tipoAlerta + "'", '(length:', tipoAlerta.length, ')');
+            console.log('Estado:', "'" + estado + "'", '(length:', estado.length, ')');
+            console.log('Nivel Prioridad:', "'" + nivelPrioridad + "'", '(length:', nivelPrioridad.length, ')');
+            console.log('Fecha Desde:', fechaDesde);
+            console.log('Fecha Hasta:', fechaHasta);
+            
+            alert('Valores de filtros mostrados en consola (F12)');
+        }
+        
+        // Interceptar envío del formulario para debug
+        document.getElementById('filtrosForm').addEventListener('submit', function(e) {
+            console.log('=== FORMULARIO ENVIADO ===');
+            const formData = new FormData(this);
+            for (let [key, value] of formData.entries()) {
+                console.log(key + ':', "'" + value + "'");
+            }
+        });
     </script>
 </body>
 </html>

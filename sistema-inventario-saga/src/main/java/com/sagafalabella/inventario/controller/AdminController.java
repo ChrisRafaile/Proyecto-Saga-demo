@@ -878,43 +878,62 @@ public class AdminController {
         }
         
         try {
-            // Log de parámetros recibidos
-            logger.info("=== FILTROS RECIBIDOS ===");
-            logger.info("tipoAlerta: {}", tipoAlerta);
-            logger.info("estado: {}", estado);
-            logger.info("nivelPrioridad: {}", nivelPrioridad);
-            logger.info("fechaDesde: {}", fechaDesde);
-            logger.info("fechaHasta: {}", fechaHasta);
+            // Log de parámetros recibidos con más detalle
+            logger.info("=== FILTROS RECIBIDOS (DETALLADO) ===");
+            logger.info("tipoAlerta: '{}' (length: {})", tipoAlerta, tipoAlerta != null ? tipoAlerta.length() : "null");
+            logger.info("estado: '{}' (length: {})", estado, estado != null ? estado.length() : "null");
+            logger.info("nivelPrioridad: '{}' (length: {})", nivelPrioridad, nivelPrioridad != null ? nivelPrioridad.length() : "null");
+            logger.info("fechaDesde: '{}'", fechaDesde);
+            logger.info("fechaHasta: '{}'", fechaHasta);
+            logger.info("Valores enum disponibles:");
+            logger.info("- TipoAlerta: {}", java.util.Arrays.toString(com.sagafalabella.inventario.model.Alerta.TipoAlerta.values()));
+            logger.info("- EstadoAlerta: {}", java.util.Arrays.toString(com.sagafalabella.inventario.model.Alerta.EstadoAlerta.values()));
+            logger.info("- NivelPrioridad: {}", java.util.Arrays.toString(com.sagafalabella.inventario.model.Alerta.NivelPrioridad.values()));
             
-            // Convertir parámetros de filtro
+            // Convertir parámetros de filtro con mejor manejo
             com.sagafalabella.inventario.model.Alerta.TipoAlerta tipoEnum = null;
-            if (tipoAlerta != null && !tipoAlerta.isEmpty() && !tipoAlerta.equals("todos")) {
+            if (tipoAlerta != null && !tipoAlerta.trim().isEmpty() && !tipoAlerta.equals("todos")) {
                 try {
-                    tipoEnum = com.sagafalabella.inventario.model.Alerta.TipoAlerta.valueOf(tipoAlerta.toUpperCase());
-                    logger.info("Tipo enum convertido: {}", tipoEnum);
+                    // Usar exactamente el valor que viene del formulario (sin convertir a uppercase)
+                    tipoEnum = com.sagafalabella.inventario.model.Alerta.TipoAlerta.valueOf(tipoAlerta);
+                    logger.info("Tipo enum convertido exitosamente: {}", tipoEnum);
                 } catch (IllegalArgumentException e) {
-                    logger.warn("Tipo de alerta inválido: {}", tipoAlerta);
+                    logger.warn("Tipo de alerta inválido: '{}', valores válidos: {}", tipoAlerta, 
+                               java.util.Arrays.toString(com.sagafalabella.inventario.model.Alerta.TipoAlerta.values()));
+                    tipoEnum = null; // Asegurar que quede null si es inválido
                 }
+            } else {
+                logger.info("Tipo de alerta no especificado, vacío o 'todos', usando todos");
             }
             
             com.sagafalabella.inventario.model.Alerta.EstadoAlerta estadoEnum = null;
-            if (estado != null && !estado.isEmpty() && !estado.equals("todos")) {
+            if (estado != null && !estado.trim().isEmpty() && !estado.equals("todos")) {
                 try {
-                    estadoEnum = com.sagafalabella.inventario.model.Alerta.EstadoAlerta.valueOf(estado.toUpperCase());
-                    logger.info("Estado enum convertido: {}", estadoEnum);
+                    // Usar exactamente el valor que viene del formulario
+                    estadoEnum = com.sagafalabella.inventario.model.Alerta.EstadoAlerta.valueOf(estado);
+                    logger.info("Estado enum convertido exitosamente: {}", estadoEnum);
                 } catch (IllegalArgumentException e) {
-                    logger.warn("Estado de alerta inválido: {}", estado);
+                    logger.warn("Estado de alerta inválido: '{}', valores válidos: {}", estado, 
+                               java.util.Arrays.toString(com.sagafalabella.inventario.model.Alerta.EstadoAlerta.values()));
+                    estadoEnum = null; // Asegurar que quede null si es inválido
                 }
+            } else {
+                logger.info("Estado no especificado, vacío o 'todos', usando todos");
             }
             
             com.sagafalabella.inventario.model.Alerta.NivelPrioridad nivelEnum = null;
-            if (nivelPrioridad != null && !nivelPrioridad.isEmpty() && !nivelPrioridad.equals("todos")) {
+            if (nivelPrioridad != null && !nivelPrioridad.trim().isEmpty() && !nivelPrioridad.equals("todos")) {
                 try {
-                    nivelEnum = com.sagafalabella.inventario.model.Alerta.NivelPrioridad.valueOf(nivelPrioridad.toUpperCase());
-                    logger.info("Prioridad enum convertida: {}", nivelEnum);
+                    // Usar exactamente el valor que viene del formulario
+                    nivelEnum = com.sagafalabella.inventario.model.Alerta.NivelPrioridad.valueOf(nivelPrioridad);
+                    logger.info("Prioridad enum convertida exitosamente: {}", nivelEnum);
                 } catch (IllegalArgumentException e) {
-                    logger.warn("Nivel de prioridad inválido: {}", nivelPrioridad);
+                    logger.warn("Nivel de prioridad inválido: '{}', valores válidos: {}", nivelPrioridad, 
+                               java.util.Arrays.toString(com.sagafalabella.inventario.model.Alerta.NivelPrioridad.values()));
+                    nivelEnum = null; // Asegurar que quede null si es inválido
                 }
+            } else {
+                logger.info("Nivel de prioridad no especificado, vacío o 'todos', usando todos");
             }
             
             // Convertir fechas

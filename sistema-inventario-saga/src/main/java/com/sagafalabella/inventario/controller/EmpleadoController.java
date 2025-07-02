@@ -142,6 +142,56 @@ public class EmpleadoController {
     }
     
     /**
+     * Perfil del empleado
+     */
+    @GetMapping("/perfil")
+    public String perfil(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (auth == null || !auth.isAuthenticated()) {
+            return "redirect:/auth/login";
+        }
+        
+        String username = auth.getName();
+        Optional<Usuario> usuarioOpt = usuarioService.buscarPorUsername(username);
+        
+        if (usuarioOpt.isEmpty() || !esEmpleado(usuarioOpt.get())) {
+            return "redirect:/auth/access-denied";
+        }
+        
+        Usuario usuario = usuarioOpt.get();
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("nombreCompleto", usuario.getNombreCompleto());
+        
+        return "empleado/perfil";
+    }
+    
+    /**
+     * Configuración para empleado
+     */
+    @GetMapping("/configuracion")
+    public String configuracion(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (auth == null || !auth.isAuthenticated()) {
+            return "redirect:/auth/login";
+        }
+        
+        String username = auth.getName();
+        Optional<Usuario> usuarioOpt = usuarioService.buscarPorUsername(username);
+        
+        if (usuarioOpt.isEmpty() || !esEmpleado(usuarioOpt.get())) {
+            return "redirect:/auth/access-denied";
+        }
+        
+        Usuario usuario = usuarioOpt.get();
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("nombreCompleto", usuario.getNombreCompleto());
+        
+        return "empleado/configuracion";
+    }
+
+    /**
      * Verifica si el usuario es empleado
      */
     private boolean esEmpleado(Usuario usuario) {

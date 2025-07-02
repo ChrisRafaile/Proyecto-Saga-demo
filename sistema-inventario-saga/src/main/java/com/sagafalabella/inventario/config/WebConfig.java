@@ -22,22 +22,22 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:" + appProperties.getUpload().getDir() + "/");
         
-        // Configuración para servir recursos estáticos
+        // Configuración para servir recursos estáticos (sin caché durante desarrollo)
         registry.addResourceHandler("/inventario/css/**")
                 .addResourceLocations("classpath:/static/css/")
-                .setCachePeriod(3600);
+                .setCachePeriod(0); // Sin caché para desarrollo
         
         registry.addResourceHandler("/inventario/js/**")
                 .addResourceLocations("classpath:/static/js/")
-                .setCachePeriod(3600);
+                .setCachePeriod(0); // Sin caché para desarrollo
         
         registry.addResourceHandler("/inventario/images/**")
                 .addResourceLocations("classpath:/static/images/")
-                .setCachePeriod(3600);
+                .setCachePeriod(0); // Sin caché para desarrollo
         
         registry.addResourceHandler("/inventario/fonts/**")
                 .addResourceLocations("classpath:/static/fonts/")
-                .setCachePeriod(3600);
+                .setCachePeriod(0); // Sin caché para desarrollo
         
         // Fallback para recursos estáticos sin el prefijo /inventario
         registry.addResourceHandler("/css/**")

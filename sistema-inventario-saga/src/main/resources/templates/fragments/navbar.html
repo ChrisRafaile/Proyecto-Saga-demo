@@ -4,12 +4,24 @@
     <!-- Navbar principal -->
     <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark navbar-saga sticky-top">
         <div class="container-fluid">
-            <!-- Logo y marca -->
-            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
-                <img th:src="@{/images/saga-logo-white.png}" alt="Saga Falabella" height="40" class="me-2 logo-saga" 
-                     onerror="this.style.display='none'">
-                <span class="fw-bold">Sistema de Inventario</span>
-            </a>
+            <!-- Logo y marca - redirige al dashboard apropiado según rol -->
+            <!-- Para administradores: siempre redirige a /admin/dashboard -->
+            <th:block sec:authorize="hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{/admin/dashboard}">
+                    <img th:src="@{/images/saga-logo-white.png}" alt="Saga Falabella" height="40" class="me-2 logo-saga" 
+                         onerror="this.style.display='none'">
+                    <span class="fw-bold">Sistema de Inventario</span>
+                </a>
+            </th:block>
+            <!-- Para otros roles: redirige según autenticación -->
+            <th:block sec:authorize="!hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')">
+                <a class="navbar-brand d-flex align-items-center" 
+                   th:href="@{${#authentication.name != null and #authentication.name != 'anonymousUser'} ? '/dashboard' : '/'}">
+                    <img th:src="@{/images/saga-logo-white.png}" alt="Saga Falabella" height="40" class="me-2 logo-saga" 
+                         onerror="this.style.display='none'">
+                    <span class="fw-bold">Sistema de Inventario</span>
+                </a>
+            </th:block>
             
             <!-- Botón para móvil -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
@@ -215,8 +227,22 @@
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
+                                <!-- Enlaces para notificaciones -->
                                 <li>
-                                    <a class="dropdown-item text-center" th:href="@{/admin/alertas}">
+                                    <a class="dropdown-item text-center" th:href="@{/admin/alertas}"
+                                       sec:authorize="hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')">
+                                        Ver todas las notificaciones
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-center" th:href="@{/client/notificaciones}"
+                                       sec:authorize="hasRole('CLIENTE')">
+                                        Ver todas las notificaciones
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-center" th:href="@{/empleado/notificaciones}"
+                                       sec:authorize="hasAnyRole('EMPLEADO_ALMACEN', 'EMPLEADO_VENTAS')">
                                         Ver todas las notificaciones
                                     </a>
                                 </li>
@@ -228,25 +254,80 @@
                                 <i class="fas fa-user-circle me-2 fs-5"></i>
                                 <span sec:authentication="name">Usuario</span>
                             </a>                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li>
+                                <!-- Mi Dashboard - simplificado por rol -->
+                                <li sec:authorize="hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')">
                                     <a class="dropdown-item" th:href="@{/admin/dashboard}">
                                         <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
                                     </a>
                                 </li>
-                                <li>
+                                <li sec:authorize="hasRole('CLIENTE')">
+                                    <a class="dropdown-item" th:href="@{/client/dashboard}">
+                                        <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+                                    </a>
+                                </li>
+                                <li sec:authorize="hasAnyRole('EMPLEADO_ALMACEN', 'EMPLEADO_VENTAS')">
+                                    <a class="dropdown-item" th:href="@{/empleado/dashboard}">
+                                        <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+                                    </a>
+                                </li>
+                                
+                                <!-- Mi Perfil -->
+                                <li sec:authorize="hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')">
                                     <a class="dropdown-item" th:href="@{/admin/perfil}">
                                         <i class="fas fa-user me-2"></i>Mi Perfil
                                     </a>
                                 </li>
-                                <li>
+                                <li sec:authorize="hasRole('CLIENTE')">
+                                    <a class="dropdown-item" th:href="@{/client/perfil}">
+                                        <i class="fas fa-user me-2"></i>Mi Perfil
+                                    </a>
+                                </li>
+                                <li sec:authorize="hasAnyRole('EMPLEADO_ALMACEN', 'EMPLEADO_VENTAS')">
+                                    <a class="dropdown-item" th:href="@{/empleado/perfil}">
+                                        <i class="fas fa-user me-2"></i>Mi Perfil
+                                    </a>
+                                </li>
+                                
+                                <!-- Configuración -->
+                                <li sec:authorize="hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')">
                                     <a class="dropdown-item" th:href="@{/admin/configuracion}">
                                         <i class="fas fa-cog me-2"></i>Configuración
                                     </a>
                                 </li>
+                                <li sec:authorize="hasRole('CLIENTE')">
+                                    <a class="dropdown-item" th:href="@{/client/configuracion}">
+                                        <i class="fas fa-cog me-2"></i>Configuración
+                                    </a>
+                                </li>
+                                <li sec:authorize="hasAnyRole('EMPLEADO_ALMACEN', 'EMPLEADO_VENTAS')">
+                                    <a class="dropdown-item" th:href="@{/empleado/configuracion}">
+                                        <i class="fas fa-cog me-2"></i>Configuración
+                                    </a>
+                                </li>
+                                
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <a class="dropdown-item text-danger logout-btn" href="#" onclick="showLogoutModal()">
+                                    <!-- Logout con página intermedia - PRINCIPAL -->
+                                    <a class="dropdown-item text-danger" th:href="@{/logout/page}">
                                         <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                                    </a>
+                                    
+                                    <!-- Logout directo sin modal (fallback 1) -->
+                                    <form th:action="@{/logout/process}" method="post" style="display: none;" id="directLogoutForm">
+                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                                        <button type="submit" class="dropdown-item text-warning w-100" style="background: none; border: none; text-align: left;">
+                                            <i class="fas fa-power-off me-2"></i>Logout Directo (POST)
+                                        </button>
+                                    </form>
+                                    
+                                    <!-- Logout GET como fallback de debugging (fallback 2) -->
+                                    <a class="dropdown-item text-info" th:href="@{/logout/direct}" style="display: none;">
+                                        <i class="fas fa-bolt me-2"></i>Logout Directo (GET)
+                                    </a>
+                                    
+                                    <!-- Logout de emergencia (fallback 3) -->
+                                    <a class="dropdown-item text-secondary" th:href="@{/logout/force}" style="display: none;">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>Logout Forzado
                                     </a>
                                 </li>
                             </ul>
@@ -256,43 +337,8 @@
         </div>
     </nav>
     
-    <!-- Modal de Cerrar Sesión -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-saga-primary text-white">
-                    <h5 class="modal-title" id="logoutModalLabel">
-                        <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="mb-4">
-                        <i class="fas fa-user-circle fa-4x text-saga-primary mb-3"></i>
-                        <h5>¿Está seguro que desea cerrar sesión?</h5>
-                        <p class="text-muted">Su sesión se cerrará en <span id="countdown">5</span> segundos automáticamente.</p>
-                    </div>
-                    
-                    <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar bg-saga-primary progress-bar-animated" role="progressbar" 
-                             style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                        <button type="button" class="btn btn-secondary me-md-2" data-bs-dismiss="modal">
-                            <i class="fas fa-times me-2"></i>Cancelar
-                        </button>
-                        <button type="button" class="btn btn-saga-primary" onclick="confirmLogout()">
-                            <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión Ahora
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Form oculto para logout -->
-    <form id="logoutForm" th:action="@{/auth/logout}" method="post" style="display: none;">
+    <!-- Form oculto para logout (actualizado para usar LogoutController) -->
+    <form id="logoutForm" th:action="@{/logout/process}" method="post" style="display: none;">
         <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     </form>
     
@@ -330,93 +376,62 @@
         }
     </style>
     
-    <!-- JavaScript del modal -->
+    <!-- JavaScript simplificado -->
     <script>
-        let logoutTimer;
-        let countdownTimer;
-        let timeLeft = 5;
-        
-        function showLogoutModal() {
-            const modal = new bootstrap.Modal(document.getElementById('logoutModal'));
-            modal.show();
-            startCountdown();
-        }
-        
-        function startCountdown() {
-            timeLeft = 5;
-            updateCountdown();
-            
-            countdownTimer = setInterval(() => {
-                timeLeft--;
-                updateCountdown();
+        // Función simple de confirmación de logout (opcional)
+        function confirmSimpleLogout() {
+            if (confirm('¿Está seguro que desea cerrar sesión?')) {
+                // Crear y enviar formulario de logout usando LogoutController
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/logout/process';
                 
-                if (timeLeft <= 0) {
-                    confirmLogout();
+                // Buscar token CSRF
+                const csrfToken = document.querySelector('input[name="_csrf"]')?.value || 
+                                 document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
+                
+                if (csrfToken) {
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_csrf';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
                 }
-            }, 1000);
-            
-            // Animar progress bar
-            const progressBar = document.querySelector('#logoutModal .progress-bar');
-            progressBar.style.transition = 'width 5s linear';
-            progressBar.style.width = '0%';
+                
+                document.body.appendChild(form);
+                form.submit();
+                return true;
+            }
+            return false;
         }
         
-        function updateCountdown() {
-            const countdownElement = document.getElementById('countdown');
-            if (countdownElement) {
-                countdownElement.textContent = timeLeft;
-            }
-        }
-        
-        function confirmLogout() {
-            // Limpiar timers
-            if (countdownTimer) {
-                clearInterval(countdownTimer);
-            }
+        // Debug simple y mostrar opciones alternativas
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 Sistema de logout con LogoutController cargado');
+            const csrfToken = document.querySelector('input[name="_csrf"]')?.value;
+            console.log('📋 Token CSRF disponible:', !!csrfToken);
             
-            // Cerrar modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('logoutModal'));
-            if (modal) {
-                modal.hide();
-            }
-            
-            // Mostrar mensaje de logout
-            showLogoutMessage();
-            
-            // Enviar form después de 2 segundos
+            // Mostrar opciones de debugging después de 5 segundos si hay problemas
             setTimeout(() => {
-                document.getElementById('logoutForm').submit();
-            }, 2000);
-        }
-        
-        function showLogoutMessage() {
-            // Crear overlay de logout
-            const overlay = document.createElement('div');
-            overlay.innerHTML = `
-                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-                           background: rgba(0, 0, 0, 0.8); z-index: 9999; 
-                           display: flex; align-items: center; justify-content: center;">
-                    <div style="background: white; padding: 2rem; border-radius: 15px; 
-                               text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);">
-                        <i class="fas fa-spinner fa-spin fa-3x text-primary mb-3"></i>
-                        <h4>Cerrando sesión...</h4>
-                        <p class="text-muted">Redirigiendo a la página de inicio...</p>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-        }
-        
-        // Limpiar timers cuando se cierre el modal
-        document.getElementById('logoutModal').addEventListener('hidden.bs.modal', function () {
-            if (countdownTimer) {
-                clearInterval(countdownTimer);
-            }
-            
-            // Resetear progress bar
-            const progressBar = document.querySelector('#logoutModal .progress-bar');
-            progressBar.style.transition = 'none';
-            progressBar.style.width = '100%';
+                const directPost = document.getElementById('directLogoutForm');
+                const directGet = document.querySelector('a[href="/logout/direct"]');
+                const forceLogout = document.querySelector('a[href="/logout/force"]');
+                
+                if (directPost) {
+                    directPost.style.display = 'inline';
+                    console.log('🔧 Formulario POST directo activado');
+                }
+                if (directGet) {
+                    directGet.style.display = 'block';
+                    console.log('🔧 Enlace GET directo activado');
+                }
+                if (forceLogout) {
+                    forceLogout.style.display = 'block';
+                    console.log('🔧 Logout forzado activado');
+                }
+                
+                console.log('🔧 Todas las opciones de debugging del logout activadas');
+            }, 5000);
         });
     </script>
 </body>

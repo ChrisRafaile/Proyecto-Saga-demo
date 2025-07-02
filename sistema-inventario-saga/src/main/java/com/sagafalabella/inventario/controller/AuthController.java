@@ -1,12 +1,12 @@
 package com.sagafalabella.inventario.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Controlador para manejo de autenticación (Login/Logout)
@@ -42,6 +42,31 @@ public class AuthController {
         
         return "auth/login";
     }
+
+    /*
+     * NOTA: Los métodos de logout han sido movidos al LogoutController dedicado
+     * para evitar conflictos de rutas y mejorar la organización del código.
+     * 
+     * @see LogoutController para todas las funcionalidades de logout
+     */
+    
+    /*
+    // Métodos de logout movidos al LogoutController
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // Movido a LogoutController.processLogout()
+    }
+
+    @GetMapping("/logout-page")
+    public String logoutPage() {
+        // Movido a LogoutController.showLogoutPage()
+    }
+
+    @GetMapping("/logout")
+    public String logoutGet(HttpServletRequest request, HttpServletResponse response) {
+        // Movido a LogoutController.directLogout()
+    }
+    */
 
     /**
      * Página de selección de tipo de registro

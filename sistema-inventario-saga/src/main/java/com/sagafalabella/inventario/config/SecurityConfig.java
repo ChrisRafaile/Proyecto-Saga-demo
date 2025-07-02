@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/index*", "/home*").permitAll()
                 .requestMatchers("/about*", "/contact*", "/help*", "/demo*", "/catalogo*").permitAll()
                 .requestMatchers("/auth/**", "/register/**").permitAll()
+                .requestMatchers("/logout/**").permitAll() // Permitir acceso a todas las rutas de logout
                   // Recursos estáticos - Patrón más amplio
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/static/**").permitAll()
                 .requestMatchers("/webjars/**", "/favicon.ico", "/error").permitAll()
@@ -76,11 +77,18 @@ public class SecurityConfig {
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutUrl("/auth/logout")
+                .logoutUrl("/auth/logout") // Mantener para compatibilidad
                 .logoutSuccessUrl("/auth/login?logout=true")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
+                // Usar OrRequestMatcher para múltiples rutas de logout
+                .logoutRequestMatcher(request -> 
+                    request.getRequestURI().equals("/auth/logout") ||
+                    request.getRequestURI().equals("/logout/process") ||
+                    request.getRequestURI().equals("/logout/direct") ||
+                    request.getRequestURI().equals("/logout/force")
+                )
             )
             .exceptionHandling(exceptions -> exceptions
                 .accessDeniedPage("/auth/access-denied")
