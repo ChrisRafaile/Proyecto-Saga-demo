@@ -1567,35 +1567,60 @@ public class AdminController {
      */
     @GetMapping("/perfil")
     public String verPerfil(Model model) {
-        if (!verificarAccesoAdmin(model)) {
-            return "redirect:/auth/access-denied";
-        }
-        
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        Optional<Usuario> usuarioOpt = usuarioService.buscarPorUsername(username);
-        
-        if (usuarioOpt.isPresent()) {
+        try {
+            // Verificación de autenticación más robusta
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            
+            if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+                logger.warn("Usuario no autenticado intentando acceder al perfil");
+                return "redirect:/auth/login";
+            }
+            
+            String username = auth.getName();
+            if (username == null || username.trim().isEmpty()) {
+                logger.warn("Nombre de usuario vacío en autenticación");
+                return "redirect:/auth/login";
+            }
+            
+            Optional<Usuario> usuarioOpt = usuarioService.buscarPorUsername(username);
+            
+            if (usuarioOpt.isEmpty()) {
+                logger.warn("Usuario no encontrado en base de datos: {}", username);
+                return "redirect:/auth/login?error=user_not_found";
+            }
+            
             Usuario usuario = usuarioOpt.get();
+            
+            // Verificar permisos de administrador
+            if (!esAdministrador(usuario)) {
+                logger.warn("Usuario sin permisos de administrador: {}", username);
+                return "redirect:/auth/access-denied";
+            }
+            
+            // Agregar datos del usuario al modelo
             model.addAttribute("usuario", usuario);
             model.addAttribute("nombreCompleto", usuario.getNombreCompleto());
             
-            // Estadísticas del perfil
+            // Estadísticas del perfil con valores por defecto seguros
             try {
                 model.addAttribute("fechaUltimoAcceso", java.time.LocalDateTime.now().minusHours(2));
                 model.addAttribute("totalSesiones", 47);
                 model.addAttribute("accionesRealizadas", 156);
             } catch (Exception e) {
+                logger.warn("Error al cargar estadísticas del perfil", e);
                 // Valores por defecto en caso de error
                 model.addAttribute("fechaUltimoAcceso", java.time.LocalDateTime.now());
                 model.addAttribute("totalSesiones", 0);
                 model.addAttribute("accionesRealizadas", 0);
             }
-        } else {
-            return "redirect:/auth/login?error=user_not_found";
+            
+            logger.info("Perfil cargado exitosamente para usuario: {}", username);
+            return "admin/perfil";
+            
+        } catch (Exception e) {
+            logger.error("Error inesperado al cargar perfil", e);
+            return "redirect:/auth/login?error=system_error";
         }
-        
-        return "admin/perfil";
     }
     
     /**

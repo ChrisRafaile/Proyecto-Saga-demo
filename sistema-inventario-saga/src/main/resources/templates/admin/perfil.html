@@ -28,10 +28,10 @@
                             <div class="avatar-circle mx-auto mb-3">
                                 <i class="fas fa-user-circle fa-6x text-saga-primary"></i>
                             </div>
-                            <h4 class="card-title" th:text="${nombreCompleto}">Nombre Completo</h4>
+                            <h4 class="card-title" th:text="${nombreCompleto ?: 'Usuario'}">Nombre Completo</h4>
                             <p class="text-muted mb-3">
                                 <i class="fas fa-shield-alt me-2"></i>
-                                <span th:text="${usuario.rol.name()}">ROL</span>
+                                <span th:text="${usuario?.rol?.name() ?: 'ROL'}">ROL</span>
                             </p>
                             <div class="d-grid gap-2">
                                 <a th:href="@{/admin/perfil/editar}" class="btn btn-saga-primary">
@@ -55,27 +55,27 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Nombre de Usuario:</label>
-                                <p class="form-control-plaintext" th:text="${usuario.username}">username</p>
+                                <p class="form-control-plaintext" th:text="${usuario?.username ?: 'N/A'}">username</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Correo Electrónico:</label>
-                                <p class="form-control-plaintext" th:text="${usuario.email}">email@example.com</p>
+                                <p class="form-control-plaintext" th:text="${usuario?.email ?: 'N/A'}">email@example.com</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Teléfono:</label>
-                                <p class="form-control-plaintext" th:text="${usuario.telefono ?: 'No especificado'}">teléfono</p>
+                                <p class="form-control-plaintext" th:text="${usuario?.telefono ?: 'No especificado'}">teléfono</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">DNI:</label>
-                                <p class="form-control-plaintext" th:text="${usuario.dni ?: 'No especificado'}">DNI</p>
+                                <p class="form-control-plaintext" th:text="${usuario?.dni ?: 'No especificado'}">DNI</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Fecha de Registro:</label>
-                                <p class="form-control-plaintext" th:text="${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy HH:mm')}">fecha</p>
+                                <p class="form-control-plaintext" th:text="${usuario?.fechaRegistro != null ? #temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy HH:mm') : 'N/A'}">fecha</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Último Acceso:</label>
-                                <p class="form-control-plaintext" th:text="${#temporals.format(fechaUltimoAcceso, 'dd/MM/yyyy HH:mm')}">fecha</p>
+                                <p class="form-control-plaintext" th:text="${fechaUltimoAcceso != null ? #temporals.format(fechaUltimoAcceso, 'dd/MM/yyyy HH:mm') : 'N/A'}">fecha</p>
                             </div>
                         </div>
                     </div>
@@ -245,7 +245,43 @@
                     bsToast.hide();
                 }, 5000);
             });
+            
+            // Verificar que los datos del perfil se cargaron correctamente
+            checkProfileData();
         });
+        
+        function checkProfileData() {
+            const nombreCompleto = document.querySelector('h4.card-title');
+            const username = document.querySelector('.form-control-plaintext');
+            
+            // Si los datos no se cargaron correctamente, mostrar mensaje de error
+            if (!nombreCompleto || nombreCompleto.textContent.trim() === 'Nombre Completo' ||
+                !username || username.textContent.trim() === 'username') {
+                
+                // Crear alerta de error
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-warning alert-dismissible fade show';
+                alertDiv.style.position = 'fixed';
+                alertDiv.style.top = '20px';
+                alertDiv.style.right = '20px';
+                alertDiv.style.zIndex = '9999';
+                alertDiv.innerHTML = `
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Los datos del perfil no se cargaron correctamente. 
+                    <a href="javascript:location.reload()" class="alert-link">Haga clic aquí para recargar la página</a>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                document.body.appendChild(alertDiv);
+                
+                // Auto-ocultar después de 10 segundos
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.parentNode.removeChild(alertDiv);
+                    }
+                }, 10000);
+            }
+        }
     </script>
 </body>
 </html>
