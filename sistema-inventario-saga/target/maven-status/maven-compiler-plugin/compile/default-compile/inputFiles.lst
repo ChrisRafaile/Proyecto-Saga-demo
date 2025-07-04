@@ -1,12 +1,17 @@
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\config\AppProperties.java
+C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\config\FaviconInterceptorConfig.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\config\SecurityConfig.java
+C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\config\StaticResourceConfig.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\config\WebConfig.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\AdminController.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\AuthController.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\ClientController.java
+C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\ClientControllerSimplificado.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\DashboardController.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\DebugActividadController.java
+C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\DiagnosticController.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\EmpleadoController.java
+C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\FaviconController.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\HomeController.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\InventarioController.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\controller\LogoutController.java
@@ -34,6 +39,7 @@ C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Siste
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\service\ActividadService.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\service\AlertaService.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\service\CargaMasivaService.java
+C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\service\CategoriaService.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\service\ClienteService.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\service\ExportService.java
 C:\tareas universitarios\TAREAS U\Tareas Univ\CICLO7\Analisis y Diseño de Sistemas\proyectosagafalabella\sistema-inventario-saga\src\main\java\com\sagafalabella\inventario\service\ImagenService.java

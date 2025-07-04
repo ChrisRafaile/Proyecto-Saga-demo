@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head}"></div>
+    <title>Test Admin Navigation - Sistema Saga Falabella</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <!-- Contenido principal -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Test de Navegación Administrativa
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>✅ Verificaciones de Navegación:</h4>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">🏠 Logo y Marca</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>✅ Logo Saga Falabella:</strong> Debe redirigir a <code>/admin/dashboard</code></p>
+                                        <p><strong>✅ Texto "Sistema de Inventario":</strong> Debe redirigir a <code>/admin/dashboard</code></p>
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Haz click en el logo o texto de la marca para verificar
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card border-warning">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h5 class="mb-0">🔥 Dropdowns</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>✅ Administración:</strong> Debe mostrar menú desplegable</p>
+                                        <p><strong>✅ Campana de notificaciones:</strong> Debe mostrar menú desplegable</p>
+                                        <p><strong>✅ Usuario (admin ▼):</strong> Debe mostrar menú desplegable</p>
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            NO deben navegar a URLs con "#"
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card border-danger">
+                                    <div class="card-header bg-danger text-white">
+                                        <h5 class="mb-0">🚪 Logout</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>✅ Cerrar Sesión:</strong> Debe mostrar página de confirmación de logout</p>
+                                        <p><strong>✅ Experiencia igual para admin y cliente:</strong> Debe usar la misma página de logout</p>
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            Haz click en "Cerrar Sesión" desde el dropdown del usuario para probar
+                                        </div>
+                                        <a href="/logout/page" class="btn btn-outline-danger">
+                                            <i class="fas fa-sign-out-alt me-2"></i>
+                                            Probar Logout Directo
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">🔍 Estado Actual</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Usuario actual:</strong> <span sec:authentication="name" class="badge bg-success">admin</span></p>
+                                        <p><strong>Roles:</strong> <span sec:authentication="authorities" class="badge bg-primary">ADMIN</span></p>
+                                        <p><strong>URL actual:</strong> <code>/test-admin-nav</code></p>
+                                        <p><strong>Fecha/Hora:</strong> <span id="currentTime"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <a href="/admin/dashboard" class="btn btn-success me-2">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Volver al Dashboard
+                            </a>
+                            <button onclick="location.reload()" class="btn btn-outline-secondary">
+                                <i class="fas fa-sync-alt me-2"></i>
+                                Recargar Test
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript para actualizar la hora -->
+    <script>
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleString('es-ES');
+        }
+        
+        // Actualizar cada segundo
+        setInterval(updateTime, 1000);
+        updateTime(); // Llamada inicial
+        
+        // Verificar estado de Bootstrap
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof bootstrap !== 'undefined') {
+                console.log('✅ Bootstrap cargado correctamente para test');
+            } else {
+                console.error('❌ Bootstrap no disponible en test');
+            }
+        });
+    </script>
+</body>
+</html>

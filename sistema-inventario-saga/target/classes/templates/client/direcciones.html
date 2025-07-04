@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Direcciones - Saga Falabella</title>
+    
+    <!-- Favicon -->
+    <th:block th:replace="~{fragments/head :: favicon}"></th:block>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link href="/css/client-theme.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+        .address-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        .address-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .address-badge {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body class="client-page">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container client-container client-fade-in">
+        <!-- Header -->
+        <div class="client-header">
+            <h1>
+                <i class="fas fa-map-marker-alt me-2"></i>
+                📍 Mis Direcciones
+            </h1>
+            <p class="lead">Gestiona tus direcciones de envío</p>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="text-white">
+                        <i class="fas fa-map-marker-alt"></i> Mis Direcciones
+                    </h2>
+                    <a href="/client/dashboard" class="btn btn-outline-light">
+                        <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card content-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-home text-primary"></i> Direcciones Guardadas</h5>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                            <i class="fas fa-plus"></i> Agregar Dirección
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <!-- Dirección 1 -->
+                        <div class="address-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">
+                                            Dirección Principal
+                                            <span class="badge bg-success address-badge">Principal</span>
+                                        </h6>
+                                        <p class="mb-1">Av. Javier Prado Este 4200</p>
+                                        <p class="mb-1">Santiago de Surco, Lima</p>
+                                        <p class="mb-1">Lima, Perú - 15023</p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-phone"></i> +51 987 654 321
+                                        </small>
+                                    </div>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-primary" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Dirección 2 -->
+                        <div class="address-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">
+                                            Oficina
+                                            <span class="badge bg-info address-badge">Trabajo</span>
+                                        </h6>
+                                        <p class="mb-1">Jr. Lampa 545</p>
+                                        <p class="mb-1">Cercado de Lima, Lima</p>
+                                        <p class="mb-1">Lima, Perú - 15001</p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-phone"></i> +51 987 654 322
+                                        </small>
+                                    </div>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-primary" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Dirección 3 -->
+                        <div class="address-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">
+                                            Casa de Padres
+                                            <span class="badge bg-warning address-badge">Familiar</span>
+                                        </h6>
+                                        <p class="mb-1">Calle Los Pinos 123</p>
+                                        <p class="mb-1">San Borja, Lima</p>
+                                        <p class="mb-1">Lima, Perú - 15036</p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-phone"></i> +51 987 654 323
+                                        </small>
+                                    </div>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-primary" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card content-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-info-circle text-primary"></i> Información</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-truck text-success"></i>
+                            <strong>Envío Gratis</strong>
+                            <p class="text-muted small">En compras mayores a S/ 150</p>
+                        </div>
+                        <div class="mb-3">
+                            <i class="fas fa-clock text-warning"></i>
+                            <strong>Entrega Express</strong>
+                            <p class="text-muted small">Recibe tu pedido en 24 horas</p>
+                        </div>
+                        <div class="mb-3">
+                            <i class="fas fa-shield-alt text-info"></i>
+                            <strong>Compra Segura</strong>
+                            <p class="text-muted small">Protección en todas las transacciones</p>
+                        </div>
+                        <a href="/client/catalogo" class="btn btn-primary w-100">
+                            <i class="fas fa-shopping-cart"></i> Empezar a Comprar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para agregar dirección -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Nueva Dirección</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="addressName" class="form-label">Nombre de la Dirección</label>
+                            <input type="text" class="form-control" id="addressName" placeholder="Ej: Casa, Oficina, etc.">
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressStreet" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="addressStreet" placeholder="Calle, Avenida, Jr.">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="addressDistrict" class="form-label">Distrito</label>
+                                    <input type="text" class="form-control" id="addressDistrict" placeholder="Distrito">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="addressCity" class="form-label">Ciudad</label>
+                                    <input type="text" class="form-control" id="addressCity" placeholder="Ciudad">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressPhone" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="addressPhone" placeholder="+51 987 654 321">
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressType" class="form-label">Tipo de Dirección</label>
+                            <select class="form-select" id="addressType">
+                                <option value="principal">Principal</option>
+                                <option value="trabajo">Trabajo</option>
+                                <option value="familiar">Familiar</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Guardar Dirección</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

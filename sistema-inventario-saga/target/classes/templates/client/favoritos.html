@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Favoritos - Saga Falabella</title>
+    
+    <!-- Favicon -->
+    <th:block th:replace="~{fragments/head :: favicon}"></th:block>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link href="/css/client-theme.css" rel="stylesheet">
+    
+    <!-- Meta etiquetas de caché -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body class="client-page">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container client-container client-fade-in">
+        <!-- Header -->
+        <div class="client-header">
+            <h1>
+                <i class="fas fa-heart text-danger me-2"></i>
+                💖 Mis Favoritos
+            </h1>
+            <p class="lead">Tus productos favoritos en un solo lugar</p>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="text-white">
+                        <i class="fas fa-heart text-danger"></i> Mis Favoritos
+                    </h2>
+                    <a href="/client/dashboard" class="btn btn-outline-light">
+                        <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="card content-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-star text-warning"></i> Productos Favoritos</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Favorito 1 -->
+                            <div class="col-md-3 mb-4">
+                                <div class="card favorite-card">
+                                    <img src="/images/producto-default.svg" class="product-image" alt="Laptop HP Pavilion">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Laptop HP Pavilion</h6>
+                                        <p class="card-text">
+                                            <span class="text-success h5">S/ 2,499.00</span><br>
+                                            <small class="text-muted">Agregado: 10/06/2025</small>
+                                        </p>
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-primary btn-sm">
+                                                <i class="fas fa-shopping-cart"></i> Añadir
+                                            </button>
+                                            <button class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-heart"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Favorito 2 -->
+                            <div class="col-md-3 mb-4">
+                                <div class="card favorite-card">
+                                    <img src="/images/producto-default.svg" class="product-image" alt="Mouse Logitech MX">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Mouse Logitech MX</h6>
+                                        <p class="card-text">
+                                            <span class="text-success h5">S/ 299.00</span><br>
+                                            <small class="text-muted">Agregado: 12/06/2025</small>
+                                        </p>
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-primary btn-sm">
+                                                <i class="fas fa-shopping-cart"></i> Añadir
+                                            </button>
+                                            <button class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-heart"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Favorito 3 -->
+                            <div class="col-md-3 mb-4">
+                                <div class="card favorite-card">
+                                    <img src="/images/producto-default.svg" class="product-image" alt="Teclado Mecánico">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Teclado Mecánico</h6>
+                                        <p class="card-text">
+                                            <span class="text-success h5">S/ 450.00</span><br>
+                                            <small class="text-muted">Agregado: 14/06/2025</small>
+                                        </p>
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-primary btn-sm">
+                                                <i class="fas fa-shopping-cart"></i> Añadir
+                                            </button>
+                                            <button class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-heart"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Favorito 4 -->
+                            <div class="col-md-3 mb-4">
+                                <div class="card favorite-card">
+                                    <img src="/images/producto-default.svg" class="product-image" alt="Monitor 4K">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Monitor 4K Samsung</h6>
+                                        <p class="card-text">
+                                            <span class="text-success h5">S/ 1,299.00</span><br>
+                                            <small class="text-muted">Agregado: 16/06/2025</small>
+                                        </p>
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-primary btn-sm">
+                                                <i class="fas fa-shopping-cart"></i> Añadir
+                                            </button>
+                                            <button class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-heart"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted">¿Buscas más productos?</p>
+                            <a href="/client/catalogo" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Explorar Catálogo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

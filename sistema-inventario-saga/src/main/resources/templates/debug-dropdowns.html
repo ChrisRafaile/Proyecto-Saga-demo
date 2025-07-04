@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head}"></div>
+    <title>Debug Dropdowns - Sistema Saga Falabella</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <!-- Contenido de debug -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h3 class="mb-0">
+                            <i class="fas fa-bug me-2"></i>
+                            Debug de Dropdowns - Navbar
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>🔍 Estado de Bootstrap</h4>
+                                <div id="bootstrapStatus" class="alert alert-info">Verificando...</div>
+                                
+                                <h4 class="mt-4">📋 Dropdowns Detectados</h4>
+                                <div id="dropdownsList" class="list-group">
+                                    <!-- Se llenará con JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h4>🎯 Test Manual de Dropdowns</h4>
+                                <div class="dropdown mb-3">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="testDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Test Dropdown Básico
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="testDropdown">
+                                        <li><a class="dropdown-item" href="#">Opción 1</a></li>
+                                        <li><a class="dropdown-item" href="#">Opción 2</a></li>
+                                        <li><a class="dropdown-item" href="#">Opción 3</a></li>
+                                    </ul>
+                                </div>
+                                
+                                <h5>Manual Test</h5>
+                                <button onclick="testAdminDropdown()" class="btn btn-outline-primary btn-sm me-2 mb-2">Test Admin</button>
+                                <button onclick="testNotificationsDropdown()" class="btn btn-outline-warning btn-sm me-2 mb-2">Test Campana</button>
+                                <button onclick="testUserDropdown()" class="btn btn-outline-success btn-sm me-2 mb-2">Test Usuario</button>
+                                
+                                <h4 class="mt-4">📝 Log de Eventos</h4>
+                                <div id="eventLog" class="bg-dark text-light p-3" style="height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px;">
+                                    <!-- Se llenará con logs -->
+                                </div>
+                                <button onclick="clearLog()" class="btn btn-outline-secondary btn-sm mt-2">Limpiar Log</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let logElement = null;
+        
+        function log(message) {
+            if (!logElement) logElement = document.getElementById('eventLog');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.innerHTML += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        function clearLog() {
+            if (!logElement) logElement = document.getElementById('eventLog');
+            logElement.innerHTML = '';
+        }
+        
+        function testAdminDropdown() {
+            const element = document.getElementById('adminDropdown');
+            if (element) {
+                log('🎯 Testing adminDropdown...');
+                try {
+                    const dropdown = bootstrap.Dropdown.getInstance(element) || new bootstrap.Dropdown(element);
+                    dropdown.toggle();
+                    log('✅ adminDropdown toggle successful');
+                } catch (error) {
+                    log('❌ adminDropdown error: ' + error.message);
+                }
+            } else {
+                log('❌ adminDropdown element not found');
+            }
+        }
+        
+        function testNotificationsDropdown() {
+            const element = document.getElementById('notificationsDropdown');
+            if (element) {
+                log('🎯 Testing notificationsDropdown...');
+                try {
+                    const dropdown = bootstrap.Dropdown.getInstance(element) || new bootstrap.Dropdown(element);
+                    dropdown.toggle();
+                    log('✅ notificationsDropdown toggle successful');
+                } catch (error) {
+                    log('❌ notificationsDropdown error: ' + error.message);
+                }
+            } else {
+                log('❌ notificationsDropdown element not found');
+            }
+        }
+        
+        function testUserDropdown() {
+            const element = document.getElementById('userDropdown');
+            if (element) {
+                log('🎯 Testing userDropdown...');
+                try {
+                    const dropdown = bootstrap.Dropdown.getInstance(element) || new bootstrap.Dropdown(element);
+                    dropdown.toggle();
+                    log('✅ userDropdown toggle successful');
+                } catch (error) {
+                    log('❌ userDropdown error: ' + error.message);
+                }
+            } else {
+                log('❌ userDropdown element not found');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🔧 Starting dropdown debug...');
+            
+            // Verificar Bootstrap
+            const bootstrapStatus = document.getElementById('bootstrapStatus');
+            if (typeof bootstrap !== 'undefined') {
+                bootstrapStatus.className = 'alert alert-success';
+                bootstrapStatus.innerHTML = '✅ Bootstrap ' + bootstrap.Tooltip.VERSION + ' cargado correctamente';
+                log('✅ Bootstrap available: ' + bootstrap.Tooltip.VERSION);
+            } else {
+                bootstrapStatus.className = 'alert alert-danger';
+                bootstrapStatus.innerHTML = '❌ Bootstrap NO está disponible';
+                log('❌ Bootstrap not available');
+            }
+            
+            // Listar dropdowns
+            const dropdownsList = document.getElementById('dropdownsList');
+            const dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+            log(`📋 Found ${dropdowns.length} dropdown elements`);
+            
+            dropdowns.forEach((el, index) => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                
+                const id = el.id || `dropdown-${index}`;
+                const tag = el.tagName.toLowerCase();
+                const classes = el.className;
+                
+                listItem.innerHTML = `
+                    <div>
+                        <strong>${id}</strong><br>
+                        <small>Tag: ${tag} | Classes: ${classes.substring(0, 50)}...</small>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">${index + 1}</span>
+                `;
+                
+                dropdownsList.appendChild(listItem);
+                log(`📋 Dropdown ${index + 1}: ${id} (${tag})`);
+                
+                // Intentar inicializar
+                try {
+                    new bootstrap.Dropdown(el);
+                    log(`✅ Initialized dropdown: ${id}`);
+                } catch (error) {
+                    log(`❌ Failed to initialize ${id}: ${error.message}`);
+                }
+            });
+            
+            log('🔧 Debug initialization complete');
+        });
+    </script>
+</body>
+</html>

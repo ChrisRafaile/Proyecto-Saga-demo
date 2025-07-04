@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones - Saga Falabella</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" href="/favicon-16.svg">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Client Theme -->
+    <link href="/css/client-theme.css" rel="stylesheet">
+    
+    <style>
+        .notification-item {
+            border: none;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .notification-item.unread {
+            border-left: 4px solid var(--client-primary);
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.05), rgba(52, 208, 88, 0.05));
+        }
+        
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        .notification-icon.order {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+        
+        .notification-icon.promo {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .notification-icon.alert {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+        }
+        
+        .notification-icon.info {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+        }
+        
+        .notification-time {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .notification-filters {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .filter-btn {
+            border: 2px solid var(--client-primary);
+            color: var(--client-primary);
+            background: transparent;
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: var(--client-primary);
+            color: white;
+        }
+        
+        .filter-btn:hover {
+            background: var(--client-primary);
+            color: white;
+        }
+        
+        .empty-notifications {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+        }
+        
+        .empty-notifications i {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .mark-all-read {
+            background: linear-gradient(135deg, var(--client-primary), var(--client-secondary));
+            border: none;
+            color: white;
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .mark-all-read:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="client-page">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <!-- Main Content -->
+    <div class="container client-container client-fade-in">
+        <!-- Header -->
+        <div class="client-header mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1>
+                        <i class="fas fa-bell me-2"></i>
+                        🔔 Mis Notificaciones
+                    </h1>
+                    <p class="lead">Mantente al día con todas las novedades</p>
+                </div>
+                <button class="btn mark-all-read" onclick="marcarTodasLeidas()">
+                    <i class="fas fa-check-double me-2"></i>Marcar todas como leídas
+                </button>
+            </div>
+        </div>
+        
+        <!-- Filtros -->
+        <div class="notification-filters">
+            <div class="d-flex flex-wrap align-items-center">
+                <span class="me-3 fw-bold">Filtrar por tipo:</span>
+                <button class="filter-btn active" onclick="filtrarNotificaciones('todas')">
+                    <i class="fas fa-list me-1"></i>Todas
+                </button>
+                <button class="filter-btn" onclick="filtrarNotificaciones('pedidos')">
+                    <i class="fas fa-shopping-bag me-1"></i>Pedidos
+                </button>
+                <button class="filter-btn" onclick="filtrarNotificaciones('promociones')">
+                    <i class="fas fa-tags me-1"></i>Promociones
+                </button>
+                <button class="filter-btn" onclick="filtrarNotificaciones('alertas')">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Alertas
+                </button>
+                <button class="filter-btn" onclick="filtrarNotificaciones('novedades')">
+                    <i class="fas fa-info-circle me-1"></i>Novedades
+                </button>
+            </div>
+        </div>
+        
+        <!-- Lista de Notificaciones -->
+        <div class="notifications-list">
+            <!-- Notificación 1 - Pedido -->
+            <div class="notification-item unread" data-type="pedidos">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="notification-icon order">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h6 class="mb-1">Tu pedido está en camino</h6>
+                                <p class="mb-1 text-muted">El pedido #12345 ha sido despachado y llegará en 24-48 horas.</p>
+                                <small class="notification-time">
+                                    <i class="fas fa-clock me-1"></i>Hace 2 horas
+                                </small>
+                            </div>
+                            <div class="col-auto">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="marcarComoLeida(this)">
+                                            <i class="fas fa-check me-2"></i>Marcar como leída
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="eliminarNotificacion(this)">
+                                            <i class="fas fa-trash me-2"></i>Eliminar
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notificación 2 - Promoción -->
+            <div class="notification-item" data-type="promociones">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="notification-icon promo">
+                                    <i class="fas fa-tags"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h6 class="mb-1">¡Oferta especial! 50% de descuento</h6>
+                                <p class="mb-1 text-muted">Aprovecha nuestras ofertas de temporada en productos seleccionados.</p>
+                                <small class="notification-time">
+                                    <i class="fas fa-clock me-1"></i>Hace 1 día
+                                </small>
+                            </div>
+                            <div class="col-auto">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="marcarComoLeida(this)">
+                                            <i class="fas fa-check me-2"></i>Marcar como leída
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="eliminarNotificacion(this)">
+                                            <i class="fas fa-trash me-2"></i>Eliminar
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notificación 3 - Alerta -->
+            <div class="notification-item unread" data-type="alertas">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="notification-icon alert">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h6 class="mb-1">Producto en tu lista de deseos disponible</h6>
+                                <p class="mb-1 text-muted">El producto "Laptop HP Omen" que tenías en favoritos está nuevamente en stock.</p>
+                                <small class="notification-time">
+                                    <i class="fas fa-clock me-1"></i>Hace 3 horas
+                                </small>
+                            </div>
+                            <div class="col-auto">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="marcarComoLeida(this)">
+                                            <i class="fas fa-check me-2"></i>Marcar como leída
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="eliminarNotificacion(this)">
+                                            <i class="fas fa-trash me-2"></i>Eliminar
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notificación 4 - Novedad -->
+            <div class="notification-item" data-type="novedades">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="notification-icon info">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h6 class="mb-1">Nuevas funcionalidades disponibles</h6>
+                                <p class="mb-1 text-muted">Descubre las mejoras en tu experiencia de compra en nuestra plataforma.</p>
+                                <small class="notification-time">
+                                    <i class="fas fa-clock me-1"></i>Hace 2 días
+                                </small>
+                            </div>
+                            <div class="col-auto">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="marcarComoLeida(this)">
+                                            <i class="fas fa-check me-2"></i>Marcar como leída
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="eliminarNotificacion(this)">
+                                            <i class="fas fa-trash me-2"></i>Eliminar
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notificación 5 - Pedido -->
+            <div class="notification-item" data-type="pedidos">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="notification-icon order">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h6 class="mb-1">Pedido entregado exitosamente</h6>
+                                <p class="mb-1 text-muted">Tu pedido #12344 ha sido entregado. ¡Esperamos que disfrutes tu compra!</p>
+                                <small class="notification-time">
+                                    <i class="fas fa-clock me-1"></i>Hace 1 semana
+                                </small>
+                            </div>
+                            <div class="col-auto">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="marcarComoLeida(this)">
+                                            <i class="fas fa-check me-2"></i>Marcar como leída
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="eliminarNotificacion(this)">
+                                            <i class="fas fa-trash me-2"></i>Eliminar
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Filtrar notificaciones
+        function filtrarNotificaciones(tipo) {
+            // Actualizar botones
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filtrar notificaciones
+            document.querySelectorAll('.notification-item').forEach(item => {
+                if (tipo === 'todas' || item.dataset.type === tipo) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // Marcar todas como leídas
+        function marcarTodasLeidas() {
+            document.querySelectorAll('.notification-item.unread').forEach(item => {
+                item.classList.remove('unread');
+            });
+            showToast('Todas las notificaciones marcadas como leídas', 'success');
+        }
+        
+        // Marcar como leída
+        function marcarComoLeida(element) {
+            const notification = element.closest('.notification-item');
+            notification.classList.remove('unread');
+            showToast('Notificación marcada como leída', 'success');
+        }
+        
+        // Eliminar notificación
+        function eliminarNotificacion(element) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta notificación?')) {
+                const notification = element.closest('.notification-item');
+                notification.style.transition = 'all 0.3s ease';
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(-100%)';
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+                
+                showToast('Notificación eliminada', 'info');
+            }
+        }
+        
+        // Función para mostrar notificaciones toast
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toast-container') || createToastContainer();
+            
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : (type === 'info' ? 'info' : 'primary')} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+        
+        // Crear contenedor de toasts si no existe
+        function createToastContainer() {
+            const container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+            return container;
+        }
+    </script>
+</body>
+</html>

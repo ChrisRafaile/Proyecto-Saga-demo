@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .requestMatchers("/webjars/**", "/favicon.ico", "/error").permitAll()
                 .requestMatchers("/inventario/css/**", "/inventario/js/**", "/inventario/images/**", "/inventario/fonts/**").permitAll()
                 .requestMatchers("/test/**", "/api/test/**").permitAll()
+                .requestMatchers("/test-admin-nav").hasAnyRole("SUPER_ADMIN", "ADMIN_INVENTARIO", "ADMIN_VENTAS")
                 
                 // Rutas autenticadas - administración
                 .requestMatchers("/admin/**").hasAnyRole("SUPER_ADMIN", "ADMIN_INVENTARIO", "ADMIN_VENTAS")

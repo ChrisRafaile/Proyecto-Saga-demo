@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Styles - Sistema Inventario Saga Falabella</title>
+    
+    <!-- Favicon usando el nuevo fragmento -->
+    <th:block th:replace="~{fragments/head :: favicon}"></th:block>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #e31e24, #ff6b35);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .test-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .favicon-status {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .favicon-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .favicon-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-link {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 20px;
+            background: #e31e24;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .test-link:hover {
+            background: #c41e24;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .favicon-preview {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-card">
+        <h1 class="text-center mb-4">
+            <i class="fas fa-flask text-primary"></i>
+            Test de Favicon y Estilos
+        </h1>
+        
+        <div class="favicon-status favicon-success">
+            <h4><i class="fas fa-check-circle"></i> Estado del Favicon</h4>
+            <p><strong>✅ Fragmento Thymeleaf:</strong> Implementado correctamente</p>
+            <p><strong>✅ Archivos SVG/ICO:</strong> Disponibles en /static/</p>
+            <p><strong>✅ Configuración Spring:</strong> Recursos estáticos habilitados</p>
+            <p><strong>✅ Cache:</strong> Deshabilitado para debugging</p>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h5>Enlaces de Test:</h5>
+                <a href="/favicon.svg" target="_blank" class="test-link">
+                    <i class="fas fa-image"></i> Ver favicon.svg
+                </a>
+                <a href="/favicon.ico" target="_blank" class="test-link">
+                    <i class="fas fa-file"></i> Ver favicon.ico
+                </a>
+                <a href="/auth/login" target="_blank" class="test-link">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="/admin/usuarios" target="_blank" class="test-link">
+                    <i class="fas fa-users"></i> Admin Users
+                </a>
+            </div>
+            <div class="col-md-6">
+                <h5>Previsualización del Favicon:</h5>
+                <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                    <img src="/favicon.svg" alt="Favicon" class="favicon-preview">
+                    <span>Favicon de Falabella</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-info">
+            <h5><i class="fas fa-info-circle"></i> Instrucciones de Verificación:</h5>
+            <ol>
+                <li><strong>Pestaña del navegador:</strong> Debe mostrar el favicon rojo con "F"</li>
+                <li><strong>Enlaces directos:</strong> Deben cargar los archivos del favicon</li>
+                <li><strong>Páginas del sistema:</strong> Todas deben mostrar el favicon</li>
+                <li><strong>Cache del navegador:</strong> Presiona Ctrl+Shift+R para recargar sin cache</li>
+            </ol>
+        </div>
+        
+        <div class="text-center">
+            <button onclick="window.location.reload(true)" class="btn btn-primary btn-lg">
+                <i class="fas fa-redo"></i> Forzar Recarga
+            </button>
+            <button onclick="clearBrowserCache()" class="btn btn-warning btn-lg ms-2">
+                <i class="fas fa-trash"></i> Limpiar Cache
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function clearBrowserCache() {
+            // Intenta limpiar el cache del navegador
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (let name of names) {
+                        caches.delete(name);
+                    }
+                    alert('Cache limpiado. Recargando página...');
+                    window.location.reload(true);
+                });
+            } else {
+                alert('Presiona Ctrl+Shift+Delete para limpiar el cache manualmente');
+            }
+        }
+        
+        // Verificar si el favicon se carga correctamente
+        window.onload = function() {
+            const faviconLinks = document.querySelectorAll('link[rel*="icon"]');
+            console.log('Favicon links encontrados:', faviconLinks.length);
+            faviconLinks.forEach((link, index) => {
+                console.log(`Favicon ${index + 1}:`, link.href);
+            });
+        };
+    </script>
+</body>
+</html>

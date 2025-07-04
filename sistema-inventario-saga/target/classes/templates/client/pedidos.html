@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Mis Pedidos - Saga Falabella')}"></head>
+
+<!-- CSS específico para cliente - DESPUÉS del head fragment -->
+<th:block>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Client Theme -->
+    <link th:href="@{/css/client-theme.css}" rel="stylesheet">
+    
+    <!-- Meta etiquetas de caché -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <style>
+        /* Estilos específicos para pedidos */
+        .content-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-green-bg) 100%);
+            border-radius: 15px;
+            border: 2px solid rgba(139, 195, 74, 0.3);
+            box-shadow: 0 12px 35px rgba(76, 175, 80, 0.2);
+            margin-bottom: 2rem;
+        }
+        
+        .order-card {
+            border: 1px solid rgba(139, 195, 74, 0.3);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            border-color: var(--primary-green);
+        }
+        
+        .order-status {
+            border-radius: 15px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+</th:block>
+<body class="client-page">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <div class="container client-container client-fade-in">
+        <!-- Header -->
+        <div class="client-header">
+            <h1>
+                <i class="fas fa-shopping-bag me-2"></i>
+                📦 Mis Pedidos
+            </h1>
+            <p class="lead">Rastrea y gestiona todos tus pedidos</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="card content-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-list text-white me-2"></i> Historial de Pedidos</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Pedido 1 -->
+                        <div class="order-card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2">
+                                        <strong>#P-001</strong>
+                                        <br><small class="text-muted">15/06/2025</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6 class="mb-1">Laptop HP Pavilion</h6>
+                                        <small class="text-muted">2 productos</small>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <span class="order-status bg-success text-white">Enviado</span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>S/ 250.00</strong>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="fas fa-eye"></i> Ver Detalles
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pedido 2 -->
+                        <div class="order-card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2">
+                                        <strong>#P-002</strong>
+                                        <br><small class="text-muted">18/06/2025</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6 class="mb-1">Mouse Logitech MX</h6>
+                                        <small class="text-muted">1 producto</small>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <span class="order-status bg-warning text-white">Procesando</span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>S/ 180.50</strong>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="fas fa-eye"></i> Ver Detalles
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pedido 3 -->
+                        <div class="order-card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2">
+                                        <strong>#P-003</strong>
+                                        <br><small class="text-muted">19/06/2025</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6 class="mb-1">Teclado Mecánico</h6>
+                                        <small class="text-muted">1 producto</small>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <span class="order-status bg-secondary text-white">Pendiente</span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <strong>S/ 95.00</strong>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="fas fa-eye"></i> Ver Detalles
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted">¿No encuentras lo que buscas?</p>
+                            <a href="/client/catalogo" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Explorar Productos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

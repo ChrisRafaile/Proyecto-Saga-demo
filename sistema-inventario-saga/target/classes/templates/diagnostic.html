@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico del Sistema - Saga Falabella</title>
+    
+    <!-- Favicon -->
+    <th:block th:replace="~{fragments/head :: favicon}"></th:block>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #e31e24, #ff6b35);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .diagnostic-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 1000px;
+        }
+        .status-good {
+            color: #28a745;
+        }
+        .status-warning {
+            color: #ffc107;
+        }
+        .status-error {
+            color: #dc3545;
+        }
+        .diagnostic-section {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-card">
+        <h1 class="text-center mb-4">
+            <i class="fas fa-stethoscope text-primary"></i>
+            Diagnóstico del Sistema
+        </h1>
+        
+        <!-- Información de Autenticación -->
+        <div class="diagnostic-section">
+            <h3><i class="fas fa-user-shield"></i> Estado de Autenticación</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Autenticado:</strong> 
+                        <span th:class="${isAuthenticated} ? 'status-good' : 'status-error'"
+                              th:text="${isAuthenticated} ? 'SÍ' : 'NO'">NO</span>
+                    </p>
+                    <p><strong>Usuario:</strong> 
+                        <span th:text="${username}">null</span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Authorities/Roles:</strong></p>
+                    <pre th:text="${authorities}">null</pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Información de Spring Security -->
+        <div class="diagnostic-section">
+            <h3><i class="fas fa-shield-alt"></i> Spring Security Context</h3>
+            <div class="row">
+                <div class="col-12">
+                    <p><strong>Principal:</strong></p>
+                    <pre th:text="${principal}">null</pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tests de Autorización con Thymeleaf -->
+        <div class="diagnostic-section">
+            <h3><i class="fas fa-check-circle"></i> Tests de Autorización Thymeleaf</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Super Admin</h5>
+                    <p sec:authorize="hasRole('SUPER_ADMIN')" class="status-good">
+                        <i class="fas fa-check"></i> SÍ es SUPER_ADMIN
+                    </p>
+                    <p sec:authorize="!hasRole('SUPER_ADMIN')" class="status-error">
+                        <i class="fas fa-times"></i> NO es SUPER_ADMIN
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Admin Inventario</h5>
+                    <p sec:authorize="hasRole('ADMIN_INVENTARIO')" class="status-good">
+                        <i class="fas fa-check"></i> SÍ es ADMIN_INVENTARIO
+                    </p>
+                    <p sec:authorize="!hasRole('ADMIN_INVENTARIO')" class="status-error">
+                        <i class="fas fa-times"></i> NO es ADMIN_INVENTARIO
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Admin Ventas</h5>
+                    <p sec:authorize="hasRole('ADMIN_VENTAS')" class="status-good">
+                        <i class="fas fa-check"></i> SÍ es ADMIN_VENTAS
+                    </p>
+                    <p sec:authorize="!hasRole('ADMIN_VENTAS')" class="status-error">
+                        <i class="fas fa-times"></i> NO es ADMIN_VENTAS
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <h5>Empleado Almacén</h5>
+                    <p sec:authorize="hasRole('EMPLEADO_ALMACEN')" class="status-good">
+                        <i class="fas fa-check"></i> SÍ es EMPLEADO_ALMACEN
+                    </p>
+                    <p sec:authorize="!hasRole('EMPLEADO_ALMACEN')" class="status-error">
+                        <i class="fas fa-times"></i> NO es EMPLEADO_ALMACEN
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Empleado Ventas</h5>
+                    <p sec:authorize="hasRole('EMPLEADO_VENTAS')" class="status-good">
+                        <i class="fas fa-check"></i> SÍ es EMPLEADO_VENTAS
+                    </p>
+                    <p sec:authorize="!hasRole('EMPLEADO_VENTAS')" class="status-error">
+                        <i class="fas fa-times"></i> NO es EMPLEADO_VENTAS
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Cliente</h5>
+                    <p sec:authorize="hasRole('CLIENTE')" class="status-good">
+                        <i class="fas fa-check"></i> SÍ es CLIENTE
+                    </p>
+                    <p sec:authorize="!hasRole('CLIENTE')" class="status-error">
+                        <i class="fas fa-times"></i> NO es CLIENTE
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test de múltiples roles (como en navbar) -->
+        <div class="diagnostic-section">
+            <h3><i class="fas fa-users-cog"></i> Test Navbar (hasAnyRole)</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>¿Es Admin? (SUPER_ADMIN, ADMIN_INVENTARIO, ADMIN_VENTAS)</strong></p>
+                    <p sec:authorize="hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')" class="status-good">
+                        <i class="fas fa-check"></i> SÍ - Logo debe ir a /admin/dashboard
+                    </p>
+                    <p sec:authorize="!hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')" class="status-error">
+                        <i class="fas fa-times"></i> NO es Admin
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>¿Es Empleado? (EMPLEADO_ALMACEN, EMPLEADO_VENTAS)</strong></p>
+                    <p sec:authorize="hasAnyRole('EMPLEADO_ALMACEN', 'EMPLEADO_VENTAS')" class="status-good">
+                        <i class="fas fa-check"></i> SÍ - Logo debe ir a /empleado/dashboard
+                    </p>
+                    <p sec:authorize="!hasAnyRole('EMPLEADO_ALMACEN', 'EMPLEADO_VENTAS')" class="status-error">
+                        <i class="fas fa-times"></i> NO es Empleado
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Enlaces de prueba -->
+        <div class="diagnostic-section">
+            <h3><i class="fas fa-link"></i> Enlaces de Prueba</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="/admin/dashboard" class="btn btn-primary w-100 mb-2">
+                        <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="/dashboard" class="btn btn-warning w-100 mb-2">
+                        <i class="fas fa-exclamation-triangle"></i> Dashboard (problemático)
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="/logout/process" class="btn btn-danger w-100 mb-2" onclick="return confirm('¿Cerrar sesión?')">
+                        <i class="fas fa-sign-out-alt"></i> Test Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test de Logout -->
+        <div class="diagnostic-section">
+            <h3><i class="fas fa-sign-out-alt"></i> Test de Logout</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <form action="/logout" method="post">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="fas fa-sign-out-alt"></i> Logout POST
+                        </button>
+                    </form>
+                </div>
+                <div class="col-md-3">
+                    <form action="/logout/process" method="post">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-warning w-100">
+                            <i class="fas fa-power-off"></i> Logout Process
+                        </button>
+                    </form>
+                </div>
+                <div class="col-md-3">
+                    <a href="/logout/page" class="btn btn-info w-100">
+                        <i class="fas fa-door-open"></i> Logout Page
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="/logout/direct" class="btn btn-secondary w-100">
+                        <i class="fas fa-bolt"></i> Logout Direct
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer con timestamp -->
+        <div class="text-center mt-4">
+            <small class="text-muted">
+                Diagnóstico generado el: <span id="timestamp"></span>
+            </small>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+    </script>
+</body>
+</html>

@@ -1,6 +1,59 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{fragments/head :: head('Mi Perfil')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Mi Perfil - Sistema Saga Falabella</title>
+    
+    <!-- Favicon directo -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <!-- También incluir el fragmento como respaldo -->
+    <th:block th:replace="~{fragments/head :: favicon}"></th:block>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- CSS Principal del Sistema -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    
+    <style>
+        .card-saga {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .avatar-circle {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #e31e24, #ff6b35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        .text-saga-primary {
+            color: #e31e24 !important;
+        }
+        .profile-info .info-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .profile-info .info-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
 <body>
     <!-- Navbar -->
     <nav th:replace="~{fragments/navbar :: navbar}"></nav>
@@ -31,7 +84,7 @@
                             <h4 class="card-title" th:text="${nombreCompleto}">Nombre Completo</h4>
                             <p class="text-muted mb-3">
                                 <i class="fas fa-shield-alt me-2"></i>
-                                <span th:text="${usuario.rol.name()}">ROL</span>
+                                <span th:text="${rol}">ROL</span>
                             </p>
                             <div class="d-grid gap-2">
                                 <a th:href="@{/admin/perfil/editar}" class="btn btn-saga-primary">
@@ -55,27 +108,35 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Nombre de Usuario:</label>
-                                <p class="form-control-plaintext" th:text="${usuario.username}">username</p>
+                                <p class="form-control-plaintext" th:text="${username}">username</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Correo Electrónico:</label>
-                                <p class="form-control-plaintext" th:text="${usuario.email}">email@example.com</p>
+                                <p class="form-control-plaintext" th:text="${email}">email@example.com</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Teléfono:</label>
-                                <p class="form-control-plaintext" th:text="${usuario.telefono ?: 'No especificado'}">teléfono</p>
+                                <p class="form-control-plaintext" th:text="${telefono}">teléfono</p>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">DNI:</label>
-                                <p class="form-control-plaintext" th:text="${usuario.dni ?: 'No especificado'}">DNI</p>
+                                <label class="form-label fw-bold">Nombre:</label>
+                                <p class="form-control-plaintext" th:text="${nombre}">Nombre</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Apellido:</label>
+                                <p class="form-control-plaintext" th:text="${apellido}">Apellido</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Tipo de Usuario:</label>
+                                <p class="form-control-plaintext" th:text="${tipoUsuario}">Tipo Usuario</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Fecha de Registro:</label>
-                                <p class="form-control-plaintext" th:text="${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy HH:mm')}">fecha</p>
+                                <p class="form-control-plaintext" th:text="${fechaRegistro != null ? #temporals.format(fechaRegistro, 'dd/MM/yyyy HH:mm') : 'N/A'}">fecha</p>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Último Acceso:</label>
-                                <p class="form-control-plaintext" th:text="${#temporals.format(fechaUltimoAcceso, 'dd/MM/yyyy HH:mm')}">fecha</p>
+                                <p class="form-control-plaintext" th:text="${fechaUltimoAcceso != null ? #temporals.format(fechaUltimoAcceso, 'dd/MM/yyyy HH:mm') : 'N/A'}">fecha</p>
                             </div>
                         </div>
                     </div>
@@ -190,10 +251,18 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .avatar-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
         .avatar-circle i {
             color: white !important;
+            opacity: 1;
+            transition: opacity 0.3s ease;
         }
 
         .feature-icon {
@@ -202,10 +271,13 @@
 
         .card-saga {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .card-saga:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
@@ -232,20 +304,251 @@
         .text-saga-warning {
             color: var(--saga-warning) !important;
         }
+
+        /* Animaciones de entrada suave */
+        .card-saga {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .card-saga:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .card-saga:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Estilos para la carga */
+        .loading-overlay {
+            transition: opacity 0.3s ease;
+        }
+
+        /* Mejoras para contraste */
+        .form-control-plaintext {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 8px 12px;
+            border: 1px solid #e9ecef;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-saga-primary {
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-saga-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(227, 30, 36, 0.3);
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .avatar-circle {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .avatar-circle i {
+                font-size: 3rem !important;
+            }
+        }
     </style>
 
     <!-- Scripts -->
     <script>
         // Auto-hide toast after 5 seconds
         document.addEventListener('DOMContentLoaded', function() {
-            const toasts = document.querySelectorAll('.toast');
-            toasts.forEach(toast => {
+            try {
+                const toasts = document.querySelectorAll('.toast');
+                toasts.forEach(toast => {
+                    setTimeout(() => {
+                        try {
+                            if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+                                const bsToast = new bootstrap.Toast(toast);
+                                bsToast.hide();
+                            } else {
+                                toast.style.display = 'none';
+                            }
+                        } catch (e) {
+                            console.log('Error ocultando toast:', e);
+                        }
+                    }, 5000);
+                });
+                
+                // Verificar que los datos del perfil se cargaron correctamente
                 setTimeout(() => {
-                    const bsToast = new bootstrap.Toast(toast);
-                    bsToast.hide();
-                }, 5000);
-            });
+                    checkProfileData();
+                }, 500);
+                
+                // Mostrar loading inicial
+                showLoadingState();
+                
+                // Ocultar loading después de verificar datos
+                setTimeout(() => {
+                    hideLoadingState();
+                }, 1500);
+                
+            } catch (error) {
+                console.log('Error en la inicialización:', error);
+                // Asegurar que la página se muestre aunque haya errores de JS
+                hideLoadingState();
+            }
         });
+        
+        function showLoadingState() {
+            try {
+                const mainContent = document.querySelector('.container-fluid');
+                if (mainContent && !document.querySelector('.loading-overlay')) {
+                    const loadingDiv = document.createElement('div');
+                    loadingDiv.className = 'loading-overlay';
+                    loadingDiv.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(255, 255, 255, 0.9);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                    `;
+                    loadingDiv.innerHTML = `
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                            <p class="mt-2">Cargando perfil...</p>
+                        </div>
+                    `;
+                    document.body.appendChild(loadingDiv);
+                }
+            } catch (error) {
+                console.log('Error mostrando loading:', error);
+            }
+        }
+        
+        function hideLoadingState() {
+            try {
+                const loadingOverlay = document.querySelector('.loading-overlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        if (loadingOverlay.parentNode) {
+                            loadingOverlay.parentNode.removeChild(loadingOverlay);
+                        }
+                    }, 300);
+                }
+            } catch (error) {
+                console.log('Error ocultando loading:', error);
+            }
+        }
+        
+        function checkProfileData() {
+            try {
+                const nombreCompleto = document.querySelector('h4.card-title');
+                const username = document.querySelectorAll('.form-control-plaintext')[0];
+                const avatarIcon = document.querySelector('.fa-user-circle');
+                
+                // Verificar elementos críticos del perfil
+                let hasValidData = true;
+                
+                if (!nombreCompleto || nombreCompleto.textContent.trim() === 'Nombre Completo') {
+                    hasValidData = false;
+                }
+                
+                if (!username || username.textContent.trim() === 'username') {
+                    hasValidData = false;
+                }
+                
+                // Solo mostrar alerta si realmente faltan datos críticos
+                if (!hasValidData) {
+                    console.warn('Algunos datos del perfil no se cargaron correctamente');
+                    showProfileAlert();
+                } else {
+                    console.log('Datos del perfil cargados correctamente');
+                }
+                
+                // Asegurar que el avatar se vea bien
+                if (avatarIcon) {
+                    avatarIcon.style.opacity = '1';
+                }
+                
+            } catch (error) {
+                console.log('Error verificando datos del perfil:', error);
+            }
+        }
+        
+        function showProfileAlert() {
+            try {
+                // Crear alerta de recarga
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-info alert-dismissible fade show';
+                alertDiv.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    right: 20px;
+                    z-index: 9999;
+                    max-width: 400px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                `;
+                alertDiv.innerHTML = `
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Cargando datos...</strong> Los datos del perfil se están actualizando.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                document.body.appendChild(alertDiv);
+                
+                // Auto-ocultar después de 3 segundos
+                setTimeout(() => {
+                    if (alertDiv && alertDiv.parentNode) {
+                        alertDiv.style.opacity = '0';
+                        setTimeout(() => {
+                            if (alertDiv.parentNode) {
+                                alertDiv.parentNode.removeChild(alertDiv);
+                            }
+                        }, 300);
+                    }
+                }, 3000);
+            } catch (error) {
+                console.log('Error mostrando alerta:', error);
+            }
+        }
+        
+        // Función para recargar la página si es necesario
+        function reloadIfNeeded() {
+            try {
+                const nombreCompleto = document.querySelector('h4.card-title');
+                if (!nombreCompleto || nombreCompleto.textContent.trim() === 'Nombre Completo') {
+                    console.log('Recargando página por datos faltantes...');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                }
+            } catch (error) {
+                console.log('Error verificando necesidad de recarga:', error);
+            }
+        }
     </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

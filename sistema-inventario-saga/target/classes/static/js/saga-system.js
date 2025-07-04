@@ -30,11 +30,8 @@ const SagaSystem = {
     
     // Inicializar componentes de Bootstrap
     initBootstrapComponents() {
-        // Inicializar dropdowns
-        const dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
-        dropdowns.forEach(dropdown => {
-            new bootstrap.Dropdown(dropdown);
-        });
+        // Bootstrap inicializa automáticamente los dropdowns con data-bs-toggle="dropdown"
+        // No necesitamos inicialización manual para evitar conflictos
         
         // Inicializar popovers
         const popovers = document.querySelectorAll('[data-bs-toggle="popover"]');

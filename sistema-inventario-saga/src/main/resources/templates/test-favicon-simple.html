@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Favicon - Sistema Inventario Saga Falabella</title>
+    
+    <!-- Favicon directo para probar -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(135deg, #e31e24, #ff6b35);
+            color: white;
+        }
+        .favicon-test {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+        .favicon-link {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background: #e31e24;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .favicon-link:hover {
+            background: #c41e24;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test de Favicon</h1>
+    <p>Esta página está diseñada para probar si el favicon se carga correctamente.</p>
+    
+    <div class="favicon-test">
+        <h2>Enlaces directos a favicon:</h2>
+        <a href="/favicon.ico" class="favicon-link" target="_blank">📄 Ver favicon.ico</a>
+        <a href="/favicon.svg" class="favicon-link" target="_blank">🎨 Ver favicon.svg</a>
+        <a href="/favicon.png" class="favicon-link" target="_blank">🎯 Ver favicon.png</a>
+        
+        <h3>Instrucciones:</h3>
+        <ol style="text-align: left;">
+            <li>Mira la pestaña del navegador para ver si aparece el favicon (F roja)</li>
+            <li>Haz clic en los enlaces para verificar que los archivos se cargan</li>
+            <li>Si no ves el favicon, presiona Ctrl+F5 para forzar la recarga</li>
+            <li>Si aún no funciona, revisa la consola del navegador (F12)</li>
+        </ol>
+    </div>
+    
+    <div class="favicon-test">
+        <h3>Estado del Cache:</h3>
+        <p>Última actualización: <span id="timestamp"></span></p>
+        <button onclick="location.reload(true)" style="padding: 10px 20px; background: #e31e24; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Forzar Recarga
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+    </script>
+</body>
+</html>

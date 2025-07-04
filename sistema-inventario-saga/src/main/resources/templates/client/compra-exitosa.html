@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Head fragment -->
+    <th:block th:replace="~{fragments/head :: head('¡Compra Exitosa! - Saga Falabella')}"></th:block>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Client Theme -->
+    <link th:href="@{/css/client-theme.css}" rel="stylesheet">
+    <!-- Compra Exitosa Styles -->
+    <link th:href="@{/css/compra-exitosa.css}" rel="stylesheet">
+</head>
+<body class="client-page">
+    <!-- ===== PANTALLA DE CARGA ELEGANTE ===== -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Procesando tu compra</div>
+            <div class="loading-subtext">Un momento por favor<span id="loadingDots">...</span></div>
+        </div>
+    </div>
+
+    <!-- ===== PARTÍCULAS FLOTANTES ===== -->
+    <div class="floating-particles" id="particles"></div>
+
+    <!-- ===== CONFETI MEJORADO ===== -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <div class="main-wrapper">
+        <div class="success-container">
+            <div class="success-card">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                
+                <h1 class="success-title">¡Compra Exitosa!</h1>
+                
+                <p class="success-subtitle">
+                    Tu pedido ha sido procesado correctamente. Te enviaremos un email de confirmación muy pronto.
+                </p>
+                
+                <div class="order-details">
+                    <div class="order-number">
+                        <i class="fas fa-receipt me-2"></i>
+                        Número de Pedido: #<span id="orderNumber">SF-2024-001234</span>
+                    </div>
+                    <div class="row text-start mt-3">
+                        <div class="col-md-4">
+                            <small class="text-muted">📅 Fecha:</small><br>
+                            <strong id="orderDate"></strong>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted">💰 Total:</small><br>
+                            <strong style="color: var(--primary-green);">S/ <span id="orderTotal">299.99</span></strong>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted">🚚 Entrega:</small><br>
+                            <strong id="deliveryDate"></strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+                    <a href="/client/pedidos" class="btn-success-custom">
+                        <i class="fas fa-list-alt me-2"></i>
+                        Ver mis Pedidos
+                    </a>
+                    <a href="/client/catalogo" class="btn-outline-custom">
+                        <i class="fas fa-shopping-bag me-2"></i>
+                        Seguir Comprando
+                    </a>
+                </div>
+                
+                <div class="countdown">
+                    <i class="fas fa-clock me-2"></i>
+                    Redirigiendo al dashboard en <span class="countdown-number" id="countdown">10</span> segundos
+                    <br>
+                    <small style="opacity: 0.7;">Puedes cancelar haciendo clic en cualquier botón</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // ===== FUNCIONES DE ANIMACIÓN ===== 
+        
+        // Crear partículas flotantes
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 6 + 3 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Crear confeti
+        function createConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const confettiCount = 100;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = Math.random() * 4 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                container.appendChild(confetti);
+            }
+        }
+
+        // Animación de puntos de carga
+        function animateLoadingDots() {
+            const dots = document.getElementById('loadingDots');
+            let dotCount = 0;
+            
+            setInterval(() => {
+                dotCount = (dotCount + 1) % 4;
+                dots.textContent = '.'.repeat(dotCount === 0 ? 3 : dotCount);
+            }, 500);
+        }
+
+        // Ocultar pantalla de carga
+        function hideLoadingScreen() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                // Iniciar efectos después de ocultar la carga
+                setTimeout(() => {
+                    createParticles();
+                    createConfetti();
+                    startCountdown();
+                }, 300);
+            }, 2500); // Mostrar por 2.5 segundos
+        }
+
+        // ===== FUNCIONES DE DATOS ===== 
+        
+        // Generar número de pedido aleatorio
+        function generateOrderNumber() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return `SF-${year}${month}${day}-${random}`;
+        }
+        
+        // Formatear fecha actual
+        function formatCurrentDate() {
+            const today = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return today.toLocaleDateString('es-ES', options);
+        }
+
+        // Calcular fecha de entrega (3-5 días hábiles)
+        function calculateDeliveryDate() {
+            const today = new Date();
+            const deliveryDays = Math.floor(Math.random() * 3) + 3; // 3-5 días
+            today.setDate(today.getDate() + deliveryDays);
+            
+            const options = { 
+                month: 'short', 
+                day: 'numeric'
+            };
+            return today.toLocaleDateString('es-ES', options);
+        }
+
+        // Generar total aleatorio
+        function generateRandomTotal() {
+            return (Math.random() * 500 + 50).toFixed(2);
+        }
+        
+        // ===== COUNTDOWN Y REDIRECCIÓN ===== 
+        
+        let countdownValue = 10;
+        let countdownActive = true;
+        
+        function updateCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            if (countdownElement && countdownActive) {
+                countdownElement.textContent = countdownValue;
+                if (countdownValue <= 0) {
+                    window.location.href = '/client/dashboard';
+                } else {
+                    countdownValue--;
+                    setTimeout(updateCountdown, 1000);
+                }
+            }
+        }
+        
+        function startCountdown() {
+            setTimeout(updateCountdown, 1000);
+        }
+
+        // Cancelar countdown al hacer clic en botones
+        function cancelCountdown() {
+            countdownActive = false;
+        }
+
+        // ===== INICIALIZACIÓN ===== 
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Iniciar animación de puntos
+            animateLoadingDots();
+            
+            // Ocultar pantalla de carga después de 2.5 segundos
+            hideLoadingScreen();
+            
+            // Establecer datos del pedido
+            document.getElementById('orderNumber').textContent = generateOrderNumber();
+            document.getElementById('orderDate').textContent = formatCurrentDate();
+            document.getElementById('orderTotal').textContent = generateRandomTotal();
+            document.getElementById('deliveryDate').textContent = calculateDeliveryDate();
+            
+            // Agregar event listeners para cancelar countdown
+            document.querySelectorAll('.btn-success-custom, .btn-outline-custom').forEach(btn => {
+                btn.addEventListener('click', cancelCountdown);
+            });
+        });
+
+        // ===== EFECTOS ADICIONALES ===== 
+        
+        // Efecto de click en botones
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-success-custom') || 
+                e.target.classList.contains('btn-outline-custom')) {
+                
+                // Crear efecto de ondas
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = (e.offsetX - 10) + 'px';
+                ripple.style.top = (e.offsetY - 10) + 'px';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                
+                e.target.style.position = 'relative';
+                e.target.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            }
+        });
+
+        // CSS para efecto ripple
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                0% {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

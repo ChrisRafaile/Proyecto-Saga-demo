@@ -1,130 +1,579 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{fragments/head :: head('Configuración - Cliente')}"></head>
-<body>
+<head th:replace="~{fragments/head :: head('Configuración - Saga Falabella')}">            <button type="button" class="btn" onclick="restaurarDefecto()" style="
+                background: linear-gradient(135deg, #ffc107, #fd7e14);
+                border: 3px solid #ffc107;
+                color: white;
+                padding: 15px 40px;
+                border-radius: 50px;
+                font-weight: 700;
+                font-size: 1.1rem;
+                transition: all 0.3s ease;
+                box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                position: relative;
+                overflow: hidden;">
+                <i class="fas fa-undo me-2"></i>Restaurar por Defecto
+            </button>-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Client Theme -->
+    <link href="/css/client-theme.css" rel="stylesheet">
+    
+    <style>
+        .config-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid rgba(40, 167, 69, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .config-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .config-section-title {
+            color: #28a745;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+        
+        .config-section-title i {
+            background: linear-gradient(135deg, #28a745, #ffc107);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .config-option {
+            padding: 1rem;
+            border: 2px solid rgba(40, 167, 69, 0.1);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .config-option:hover {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.05);
+        }
+        
+        .btn-config {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-config:hover {
+            background: linear-gradient(135deg, #218838, #1ea080);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+            color: white;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .notification-badge {
+            background: #ffc107;
+            color: #333;
+            border-radius: 15px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .privacy-card {
+            border-left: 4px solid #28a745;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(40, 167, 69, 0.2);
+        }
+        
+        .privacy-card .config-option {
+            background: rgba(40, 167, 69, 0.05);
+            border-color: rgba(40, 167, 69, 0.2);
+        }
+        
+        .privacy-card .config-option strong {
+            color: #1e7e34;
+        }
+        
+        .privacy-card .config-option .text-muted {
+            color: #6c757d !important;
+        }
+        
+        .security-card {
+            border-left: 4px solid #dc3545;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(220, 53, 69, 0.2);
+        }
+        
+        .security-card .config-option {
+            background: rgba(220, 53, 69, 0.05);
+            border-color: rgba(220, 53, 69, 0.2);
+        }
+        
+        .security-card .config-option strong {
+            color: #bd2130;
+        }
+        
+        .security-card .config-option .text-muted {
+            color: #6c757d !important;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="client-page">
     <!-- Navbar -->
     <nav th:replace="~{fragments/navbar :: navbar}"></nav>
-
-    <div class="container-fluid">
+    
+    <!-- Main Content -->
+    <div class="container client-container">
+        <!-- Header -->
+        <div class="client-card">
+            <div class="client-header text-center">
+                <h1>
+                    <i class="fas fa-cog me-3"></i>
+                    Configuración de tu Cuenta
+                </h1>
+                <p class="lead">Personaliza tu experiencia de compra en Saga Falabella</p>
+            </div>
+        </div>
+        
         <div class="row">
-            <main class="col-md-12 ms-sm-auto px-md-4">
-                <!-- Header -->
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">
-                        <i class="fas fa-cogs me-3"></i>Configuración
-                    </h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <a th:href="@{/client/dashboard}" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
-                            </a>
+            <!-- Estadísticas rápidas -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card">
+                    <div class="stats-number">5</div>
+                    <div>Pedidos realizados</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card">
+                    <div class="stats-number">12</div>
+                    <div>Productos favoritos</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card">
+                    <div class="stats-number">3</div>
+                    <div>Direcciones guardadas</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stats-card">
+                    <div class="stats-number">8</div>
+                    <div>Notificaciones</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Notificaciones -->
+            <div class="col-lg-6 mb-4">
+                <div class="config-card">
+                    <h3 class="config-section-title">
+                        <i class="fas fa-bell"></i>
+                        Notificaciones
+                    </h3>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Ofertas y Promociones</strong>
+                                <p class="text-muted mb-0 small">Recibe notificaciones sobre descuentos especiales</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Estado de Pedidos</strong>
+                                <p class="text-muted mb-0 small">Actualizaciones sobre tus compras</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Nuevos Productos</strong>
+                                <p class="text-muted mb-0 small">Novedades en tu categoría favorita</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Newsletter</strong>
+                                <p class="text-muted mb-0 small">Boletín semanal con lo mejor de Saga</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
                         </div>
                     </div>
                 </div>
-
-                <!-- Configuración del Cliente -->
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <!-- Configuración de Notificaciones -->
-                        <div class="card shadow-sm mb-4">
-                            <div class="card-header bg-saga-primary text-white">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-bell me-2"></i>Notificaciones
-                                </h5>
+            </div>
+            
+            <!-- Preferencias de Compra -->
+            <div class="col-lg-6 mb-4">
+                <div class="config-card">
+                    <h3 class="config-section-title">
+                        <i class="fas fa-shopping-bag"></i>
+                        Preferencias de Compra
+                    </h3>
+                    
+                    <div class="mb-3">
+                        <label for="moneda" class="form-label">Moneda Preferida</label>
+                        <select class="form-select" id="moneda">
+                            <option value="PEN" selected>Soles Peruanos (PEN)</option>
+                            <option value="USD">Dólares (USD)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="idioma" class="form-label">Idioma</label>
+                        <select class="form-select" id="idioma">
+                            <option value="es" selected>Español</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="categoria" class="form-label">Categoría Favorita</label>
+                        <select class="form-select" id="categoria">
+                            <option>Seleccionar categoría...</option>
+                            <option value="tecnologia">Tecnología</option>
+                            <option value="hogar">Hogar y Decoración</option>
+                            <option value="moda">Moda</option>
+                            <option value="deportes">Deportes</option>
+                            <option value="electrodomesticos">Electrodomésticos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Guardar carrito</strong>
+                                <p class="text-muted mb-0 small">Mantener productos entre sesiones</p>
                             </div>
-                            <div class="card-body">
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
-                                    <label class="form-check-label" for="emailNotifications">
-                                        Recibir notificaciones por email
-                                    </label>
-                                </div>
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="orderNotifications" checked>
-                                    <label class="form-check-label" for="orderNotifications">
-                                        Notificaciones de pedidos
-                                    </label>
-                                </div>
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="promoNotifications">
-                                    <label class="form-check-label" for="promoNotifications">
-                                        Ofertas y promociones
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Configuración de Privacidad -->
-                        <div class="card shadow-sm mb-4">
-                            <div class="card-header bg-saga-secondary text-white">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-shield-alt me-2"></i>Privacidad
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="profileVisibility" checked>
-                                    <label class="form-check-label" for="profileVisibility">
-                                        Perfil visible
-                                    </label>
-                                </div>
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="dataSharing">
-                                    <label class="form-check-label" for="dataSharing">
-                                        Compartir datos para mejorar la experiencia
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Preferencias de Interfaz -->
-                        <div class="card shadow-sm mb-4">
-                            <div class="card-header bg-saga-success text-white">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-palette me-2"></i>Interfaz
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="theme" class="form-label">Tema:</label>
-                                        <select class="form-select" id="theme">
-                                            <option value="light" selected>Claro</option>
-                                            <option value="dark">Oscuro</option>
-                                            <option value="auto">Automático</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="language" class="form-label">Idioma:</label>
-                                        <select class="form-select" id="language">
-                                            <option value="es" selected>Español</option>
-                                            <option value="en">English</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Botones de Acción -->
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-outline-secondary me-md-2">
-                                        <i class="fas fa-undo me-2"></i>Restablecer
-                                    </button>
-                                    <button type="button" class="btn btn-saga-primary">
-                                        <i class="fas fa-save me-2"></i>Guardar Cambios
-                                    </button>
-                                </div>
-                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
                         </div>
                     </div>
                 </div>
-            </main>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Privacidad -->
+            <div class="col-lg-6 mb-4">
+                <div class="config-card privacy-card">
+                    <h3 class="config-section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Privacidad
+                    </h3>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Perfil Público</strong>
+                                <p class="text-muted mb-0 small">Permitir que otros vean tus reseñas</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Historial de Compras</strong>
+                                <p class="text-muted mb-0 small">Usar historial para recomendaciones</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Cookies de Marketing</strong>
+                                <p class="text-muted mb-0 small">Personalizar anuncios y ofertas</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seguridad -->
+            <div class="col-lg-6 mb-4">
+                <div class="config-card security-card">
+                    <h3 class="config-section-title">
+                        <i class="fas fa-lock"></i>
+                        Seguridad
+                    </h3>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Autenticación en dos pasos</strong>
+                                <p class="text-muted mb-0 small">Protección adicional para tu cuenta</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="config-option">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Notificar inicios de sesión</strong>
+                                <p class="text-muted mb-0 small">Alerta por email en nuevos dispositivos</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <a href="/client/perfil/editar" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-key me-2"></i>Cambiar Contraseña
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botones de Acción -->
+        <div class="text-center mb-4">
+            <button type="button" class="btn btn-config me-3" onclick="guardarConfiguracion()">
+                <i class="fas fa-save me-2"></i>Guardar Configuración
+            </button>
+            <button type="button" class="btn btn-outline-warning" onclick="restaurarPorDefecto()" style="
+                border: 2px solid #ffc107;
+                color: #f57c00;
+                background: transparent;
+                padding: 12px 30px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;">
+                <i class="fas fa-undo me-2"></i>Restaurar por Defecto
+            </button>
         </div>
     </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Función para guardar configuración
+        function guardarConfiguracion() {
+            // Simular guardado
+            showToast('Configuración guardada correctamente', 'success');
+        }
+        
+        // Agregar efectos hover al botón restaurar
+        const restaurarBtn = document.querySelector('button[onclick="restaurarDefecto()"]');
+        if (restaurarBtn) {
+            restaurarBtn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.05)';
+                this.style.boxShadow = '0 15px 35px rgba(255, 193, 7, 0.6)';
+                this.style.background = 'linear-gradient(135deg, #fd7e14, #ffc107)';
+            });
+            
+            restaurarBtn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = '0 8px 25px rgba(255, 193, 7, 0.4)';
+                this.style.background = 'linear-gradient(135deg, #ffc107, #fd7e14)';
+            });
+            
+            restaurarBtn.addEventListener('mousedown', function() {
+                this.style.transform = 'translateY(-1px) scale(0.98)';
+            });
+            
+            restaurarBtn.addEventListener('mouseup', function() {
+                this.style.transform = 'translateY(-3px) scale(1.05)';
+            });
+        }
 
-    <!-- Footer -->
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+        // Función para restaurar configuración por defecto
+        function restaurarDefecto() {
+            if (confirm('¿Estás seguro de que deseas restaurar la configuración por defecto?')) {
+                // Restaurar switches a valores por defecto
+                document.querySelectorAll('.switch input[type="checkbox"]').forEach((checkbox, index) => {
+                    const defaultValues = [true, true, false, true, true, false, true, false, false, true];
+                    checkbox.checked = defaultValues[index] || false;
+                });
+                
+                // Restaurar selects
+                document.getElementById('moneda').value = 'PEN';
+                document.getElementById('idioma').value = 'es';
+                document.getElementById('categoria').selectedIndex = 0;
+                
+                showToast('Configuración restaurada por defecto', 'info');
+            }
+        }
+        
+        // Función para mostrar notificaciones toast
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toast-container') || createToastContainer();
+            
+            const bgClass = type === 'success' ? 'bg-success' : 
+                           type === 'error' ? 'bg-danger' : 'bg-info';
+            
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white ${bgClass} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+        
+        // Crear contenedor de toasts si no existe
+        function createToastContainer() {
+            const container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+            return container;
+        }
+        
+        // Auto-guardar cuando se cambian las configuraciones
+        document.querySelectorAll('.switch input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // Simular auto-guardado
+                setTimeout(() => {
+                    showToast('Configuración actualizada', 'success');
+                }, 500);
+            });
+        });
+        
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('change', function() {
+                // Simular auto-guardado
+                setTimeout(() => {
+                    showToast('Preferencia actualizada', 'success');
+                }, 300);
+            });
+        });
+    </script>
 </body>
 </html>

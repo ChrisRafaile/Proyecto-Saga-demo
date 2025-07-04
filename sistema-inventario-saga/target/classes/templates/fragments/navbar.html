@@ -13,10 +13,25 @@
                     <span class="fw-bold">Sistema de Inventario</span>
                 </a>
             </th:block>
-            <!-- Para otros roles: redirige según autenticación -->
-            <th:block sec:authorize="!hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')">
-                <a class="navbar-brand d-flex align-items-center" 
-                   th:href="@{${#authentication.name != null and #authentication.name != 'anonymousUser'} ? '/dashboard' : '/'}">
+            <!-- Para empleados: redirige a /empleado/dashboard -->
+            <th:block sec:authorize="hasAnyRole('EMPLEADO_ALMACEN', 'EMPLEADO_VENTAS')">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{/empleado/dashboard}">
+                    <img th:src="@{/images/saga-logo-white.png}" alt="Saga Falabella" height="40" class="me-2 logo-saga" 
+                         onerror="this.style.display='none'">
+                    <span class="fw-bold">Sistema de Inventario</span>
+                </a>
+            </th:block>
+            <!-- Para clientes: siempre redirige a /client/dashboard -->
+            <th:block sec:authorize="hasRole('CLIENTE')">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{/client/dashboard}">
+                    <img th:src="@{/images/saga-logo-white.png}" alt="Saga Falabella" height="40" class="me-2 logo-saga" 
+                         onerror="this.style.display='none'">
+                    <span class="fw-bold">🛍️ Saga Falabella</span>
+                </a>
+            </th:block>
+            <!-- Para usuarios no autenticados -->
+            <th:block sec:authorize="!isAuthenticated()">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
                     <img th:src="@{/images/saga-logo-white.png}" alt="Saga Falabella" height="40" class="me-2 logo-saga" 
                          onerror="this.style.display='none'">
                     <span class="fw-bold">Sistema de Inventario</span>
@@ -85,13 +100,13 @@
                         </a>
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('CLIENTE')">
-                        <a class="nav-link" th:href="@{/catalogo}">
+                        <a class="nav-link" th:href="@{/client/catalogo}">
                             <i class="fas fa-store me-1"></i>Catálogo
                         </a>
                     </li>
                       <!-- Menús para Administradores -->
                     <li class="nav-item dropdown" sec:authorize="hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')">
-                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-cogs me-1"></i>Administración
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
@@ -142,7 +157,7 @@
                     </li>
                       <!-- Menús para Empleados -->
                     <li class="nav-item dropdown" sec:authorize="hasAnyRole('EMPLEADO_ALMACEN', 'EMPLEADO_VENTAS')">
-                        <a class="nav-link dropdown-toggle" href="#" id="operationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="operationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-tasks me-1"></i>Operaciones
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="operationsDropdown">
@@ -181,6 +196,36 @@
                             <i class="fas fa-heart me-1"></i>Favoritos
                         </a>
                     </li>
+                    
+                    <!-- Dropdown adicional para clientes -->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('CLIENTE')">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="clientDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i>Mi Cuenta
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="clientDropdown">
+                            <li>
+                                <a class="dropdown-item" th:href="@{/client/perfil}">
+                                    <i class="fas fa-user-circle me-2"></i>Mi Perfil
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/client/direcciones}">
+                                    <i class="fas fa-map-marker-alt me-2"></i>Mis Direcciones
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/client/soporte}">
+                                    <i class="fas fa-headset me-2"></i>Soporte
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/client/configuracion}">
+                                    <i class="fas fa-cog me-2"></i>Configuración
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
                 
                 <!-- Menú del usuario (derecha) -->
@@ -202,16 +247,17 @@
                     <th:block sec:authorize="isAuthenticated()">
                         <!-- Carrito de compras (solo para clientes) -->
                         <li class="nav-item position-relative" sec:authorize="hasRole('CLIENTE')">
-                            <a class="nav-link" th:href="@{/carrito}">
+                            <a class="nav-link" th:href="@{/client/carrito}">
                                 <i class="fas fa-shopping-cart me-1"></i>Carrito
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count" style="display: none;">
                                     0
                                 </span>
                             </a>
                         </li>
-                          <!-- Notificaciones -->
+                        
+                        <!-- Notificaciones dropdown (para todos los usuarios autenticados) -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle position-relative" href="#" role="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-bell"></i>
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning notification-count" style="display: none;">
                                     0
@@ -250,10 +296,11 @@
                         </li>
                           <!-- Perfil del usuario -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-user-circle me-2 fs-5"></i>
                                 <span sec:authentication="name">Usuario</span>
-                            </a>                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <!-- Mi Dashboard - simplificado por rol -->
                                 <li sec:authorize="hasAnyRole('SUPER_ADMIN', 'ADMIN_INVENTARIO', 'ADMIN_VENTAS')">
                                     <a class="dropdown-item" th:href="@{/admin/dashboard}">
@@ -307,27 +354,9 @@
                                 
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <!-- Logout con página intermedia - PRINCIPAL -->
-                                    <a class="dropdown-item text-danger" th:href="@{/logout/page}">
+                                    <!-- Logout con página de confirmación -->
+                                    <a class="dropdown-item text-danger" href="/logout/page">
                                         <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
-                                    </a>
-                                    
-                                    <!-- Logout directo sin modal (fallback 1) -->
-                                    <form th:action="@{/logout/process}" method="post" style="display: none;" id="directLogoutForm">
-                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                                        <button type="submit" class="dropdown-item text-warning w-100" style="background: none; border: none; text-align: left;">
-                                            <i class="fas fa-power-off me-2"></i>Logout Directo (POST)
-                                        </button>
-                                    </form>
-                                    
-                                    <!-- Logout GET como fallback de debugging (fallback 2) -->
-                                    <a class="dropdown-item text-info" th:href="@{/logout/direct}" style="display: none;">
-                                        <i class="fas fa-bolt me-2"></i>Logout Directo (GET)
-                                    </a>
-                                    
-                                    <!-- Logout de emergencia (fallback 3) -->
-                                    <a class="dropdown-item text-secondary" th:href="@{/logout/force}" style="display: none;">
-                                        <i class="fas fa-exclamation-triangle me-2"></i>Logout Forzado
                                     </a>
                                 </li>
                             </ul>
@@ -337,101 +366,86 @@
         </div>
     </nav>
     
-    <!-- Form oculto para logout (actualizado para usar LogoutController) -->
-    <form id="logoutForm" th:action="@{/logout/process}" method="post" style="display: none;">
+    <!-- Form oculto para logout simplificado -->
+    <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;">
         <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     </form>
     
-    <!-- CSS del modal -->
+    <!-- CSS del navbar -->
     <style>
-        .bg-saga-primary {
-            background: linear-gradient(135deg, var(--saga-primary), var(--saga-secondary)) !important;
+        /* Estilos básicos para el navbar - evitar conflictos con dropdowns */
+        .navbar-saga {
+            background: linear-gradient(135deg, #e31e24, #ff6b35);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
-        .text-saga-primary {
-            color: var(--saga-primary) !important;
+        .navbar-saga .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
         }
         
-        .bg-saga-primary .progress-bar {
-            background: linear-gradient(135deg, var(--saga-secondary), var(--saga-warning)) !important;
-        }
-        
-        .modal-content {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .modal-header {
-            border-radius: 15px 15px 0 0;
-            border-bottom: none;
-        }
-        
-        .logout-btn {
+        .navbar-saga .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
             transition: all 0.3s ease;
         }
         
-        .logout-btn:hover {
-            background-color: rgba(220, 53, 69, 0.1) !important;
+        .navbar-saga .nav-link:hover {
+            color: white !important;
+        }
+        
+        /* Dropdowns - solo estilos visuales, no interferir con funcionalidad */
+        .navbar-saga .dropdown-menu {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            margin-top: 0.5rem;
+            /* NO agregar z-index personalizado para evitar conflictos */
+        }
+        
+        .navbar-saga .dropdown-item {
+            padding: 0.75rem 1.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-saga .dropdown-item:hover {
+            background-color: #e31e24;
+            color: white;
+        }
+        
+        .navbar-saga .dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Badge de notificaciones */
+        .notification-count, .cart-count {
+            font-size: 0.7rem;
+            min-width: 18px;
+            height: 18px;
+            line-height: 1;
+            padding: 2px 4px;
         }
     </style>
     
-    <!-- JavaScript simplificado -->
+    <!-- JavaScript simple para navbar -->
     <script>
-        // Función simple de confirmación de logout (opcional)
-        function confirmSimpleLogout() {
-            if (confirm('¿Está seguro que desea cerrar sesión?')) {
-                // Crear y enviar formulario de logout usando LogoutController
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/logout/process';
-                
-                // Buscar token CSRF
-                const csrfToken = document.querySelector('input[name="_csrf"]')?.value || 
-                                 document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
-                
-                if (csrfToken) {
-                    const csrfInput = document.createElement('input');
-                    csrfInput.type = 'hidden';
-                    csrfInput.name = '_csrf';
-                    csrfInput.value = csrfToken;
-                    form.appendChild(csrfInput);
-                }
-                
-                document.body.appendChild(form);
-                form.submit();
-                return true;
-            }
-            return false;
+        // Función simple de logout
+        function simpleLogout() {
+            document.getElementById('logoutForm').submit();
         }
         
-        // Debug simple y mostrar opciones alternativas
+        // NO inicializar dropdowns manualmente - Bootstrap 5 los maneja automáticamente
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔧 Sistema de logout con LogoutController cargado');
-            const csrfToken = document.querySelector('input[name="_csrf"]')?.value;
-            console.log('📋 Token CSRF disponible:', !!csrfToken);
+            console.log('🔧 Navbar cargado - Bootstrap maneja dropdowns automáticamente');
             
-            // Mostrar opciones de debugging después de 5 segundos si hay problemas
-            setTimeout(() => {
-                const directPost = document.getElementById('directLogoutForm');
-                const directGet = document.querySelector('a[href="/logout/direct"]');
-                const forceLogout = document.querySelector('a[href="/logout/force"]');
-                
-                if (directPost) {
-                    directPost.style.display = 'inline';
-                    console.log('🔧 Formulario POST directo activado');
-                }
-                if (directGet) {
-                    directGet.style.display = 'block';
-                    console.log('🔧 Enlace GET directo activado');
-                }
-                if (forceLogout) {
-                    forceLogout.style.display = 'block';
-                    console.log('🔧 Logout forzado activado');
-                }
-                
-                console.log('🔧 Todas las opciones de debugging del logout activadas');
-            }, 5000);
+            if (typeof bootstrap !== 'undefined') {
+                console.log('✅ Bootstrap disponible:', bootstrap.Tooltip.VERSION);
+                const dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+                console.log('📋 Dropdowns encontrados:', dropdowns.length);
+            } else {
+                console.error('❌ Bootstrap no disponible');
+            }
         });
     </script>
 </body>

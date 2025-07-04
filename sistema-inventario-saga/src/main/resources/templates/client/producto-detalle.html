@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Producto - Sistema Inventario</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" href="/favicon-16.svg">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/client-theme.css" rel="stylesheet">
+    <style>
+        .product-image {
+            max-width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .product-info {
+            padding: 20px;
+        }
+        .stock-badge {
+            font-size: 0.9em;
+        }
+        .related-products {
+            margin-top: 50px;
+        }
+        .product-card {
+            transition: transform 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="client-page">
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <div class="container mt-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/client/dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/client/catalogo">Catálogo</a></li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="${producto.nombre}">Producto</li>
+            </ol>
+        </nav>
+
+        <!-- Mostrar errores -->
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Mostrar éxito -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Detalle del Producto -->
+        <div class="row" th:if="${producto}">
+            <div class="col-md-6">
+                <div class="text-center">
+                    <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/images/producto-default.jpg'}" 
+                         th:alt="${producto.nombre}" 
+                         class="product-image img-fluid">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="product-info">
+                    <h1 class="mb-3" th:text="${producto.nombre}">Nombre del Producto</h1>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-secondary" th:text="${producto.categoria}" th:if="${producto.categoria}">Categoría</span>
+                        <span class="badge bg-info ms-2" th:text="${producto.marca}" th:if="${producto.marca}">Marca</span>
+                        <span class="badge bg-success ms-2 stock-badge" th:if="${producto.stockActual > 0}">
+                            <i class="fas fa-box"></i> Stock: <span th:text="${producto.stockActual}">0</span>
+                        </span>
+                        <span class="badge bg-warning ms-2 stock-badge" th:if="${producto.stockActual == 0}">
+                            <i class="fas fa-times-circle"></i> Sin stock
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <h3 class="text-primary">
+                            S/ <span th:text="${#numbers.formatDecimal(producto.precio, 0, 2)}">0.00</span>
+                        </h3>
+                    </div>
+
+                    <div class="mb-3" th:if="${producto.descripcion}">
+                        <h5>Descripción:</h5>
+                        <p th:text="${producto.descripcion}">Descripción del producto</p>
+                    </div>
+
+                    <div class="mb-3" th:if="${producto.codigoProducto}">
+                        <small class="text-muted">
+                            <strong>Código:</strong> <span th:text="${producto.codigoProducto}">ABC123</span>
+                        </small>
+                    </div>
+
+                    <!-- Formulario para agregar al carrito -->
+                    <form method="post" th:action="@{/client/carrito/agregar}" th:if="${producto.stockActual > 0}">
+                        <input type="hidden" name="productoId" th:value="${producto.idproducto}">
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md-4">
+                                <label for="cantidad" class="form-label">Cantidad:</label>
+                                <input type="number" class="form-control" id="cantidad" name="cantidad" 
+                                       value="1" min="1" th:max="${producto.stockActual}" required>
+                            </div>
+                            <div class="col-md-8">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Botón deshabilitado cuando no hay stock -->
+                    <div th:if="${producto.stockActual == 0}" class="mb-3">
+                        <button type="button" class="btn btn-secondary btn-lg" disabled>
+                            <i class="fas fa-times-circle"></i> Sin stock disponible
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos Relacionados -->
+        <div class="related-products" th:if="${productosRelacionados != null and !productosRelacionados.isEmpty()}">
+            <h3 class="mb-4">Productos Relacionados</h3>
+            <div class="row">
+                <div class="col-md-3 mb-4" th:each="producto : ${productosRelacionados}">
+                    <div class="card product-card h-100">
+                        <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/images/producto-default.jpg'}" 
+                             th:alt="${producto.nombre}" 
+                             class="card-img-top" style="height: 200px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title" th:text="${producto.nombre}">Nombre</h6>
+                            <p class="card-text text-muted small" th:text="${producto.categoria}">Categoría</p>
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-primary fw-bold">
+                                        S/ <span th:text="${#numbers.formatDecimal(producto.precio, 0, 2)}">0.00</span>
+                                    </span>
+                                    <a th:href="@{/client/producto/{id}(id=${producto.idproducto})}" 
+                                       class="btn btn-outline-primary btn-sm">
+                                        Ver
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón para volver al catálogo -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <a href="/client/catalogo" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Catálogo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

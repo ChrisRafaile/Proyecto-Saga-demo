@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/head :: head}"></div>
+    <title>Test Navbar Limpio - Sistema Saga Falabella</title>
+</head>
+<body>
+    <!-- Navbar completamente limpio con solo Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand" href="/admin/dashboard">
+                <i class="fas fa-store me-2"></i>Sistema de Inventario
+            </a>
+            
+            <!-- Botón para móvil -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Menú de navegación -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Menú principal (izquierda) -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/dashboard">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/productos">
+                            <i class="fas fa-box me-1"></i>Productos
+                        </a>
+                    </li>
+                    
+                    <!-- Dropdown 1: Administración -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cogs me-1"></i>Administración
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                            <li><a class="dropdown-item" href="/admin/proveedores">
+                                <i class="fas fa-truck me-2"></i>Proveedores
+                            </a></li>
+                            <li><a class="dropdown-item" href="/admin/pedidos">
+                                <i class="fas fa-shopping-cart me-2"></i>Gestión de Pedidos
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/admin/usuarios">
+                                <i class="fas fa-users me-2"></i>Usuarios
+                            </a></li>
+                            <li><a class="dropdown-item" href="/admin/reportes">
+                                <i class="fas fa-chart-bar me-2"></i>Reportes
+                            </a></li>
+                            <li><a class="dropdown-item" href="/admin/alertas">
+                                <i class="fas fa-bell me-2"></i>Alertas
+                            </a></li>
+                            <li><a class="dropdown-item" href="/admin/configuracion">
+                                <i class="fas fa-cog me-2"></i>Configuración
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <!-- Menú del usuario (derecha) -->
+                <ul class="navbar-nav">
+                    <!-- Dropdown 2: Notificaciones -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle position-relative" href="#" role="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="width: 300px;">
+                            <li><h6 class="dropdown-header">Notificaciones</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                Alerta de stock bajo
+                            </a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-shopping-cart text-info me-2"></i>
+                                Nuevo pedido recibido
+                            </a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-truck text-success me-2"></i>
+                                Proveedor actualizado
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center" href="/admin/alertas">
+                                Ver todas las notificaciones
+                            </a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Dropdown 3: Usuario -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-2 fs-5"></i>
+                            <span sec:authentication="name">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="/admin/dashboard">
+                                <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+                            </a></li>
+                            <li><a class="dropdown-item" href="/admin/perfil">
+                                <i class="fas fa-user me-2"></i>Mi Perfil
+                            </a></li>
+                            <li><a class="dropdown-item" href="/admin/configuracion">
+                                <i class="fas fa-cog me-2"></i>Configuración
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="/logout">
+                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Contenido -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">
+                            <i class="fas fa-vial me-2"></i>
+                            Test Navbar Limpio
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <h5>🧪 Test de Navbar Completamente Limpio</h5>
+                            <p>Esta página utiliza únicamente clases de Bootstrap sin CSS personalizado que pueda interferir.</p>
+                            
+                            <h6>Elementos a probar:</h6>
+                            <ol>
+                                <li><strong>Administración</strong> - Dropdown con opciones de gestión</li>
+                                <li><strong>Campana (🔔)</strong> - Dropdown de notificaciones</li>
+                                <li><strong>Usuario</strong> - Dropdown con perfil y logout</li>
+                            </ol>
+                            
+                            <p class="mb-0">
+                                <strong>Si estos dropdowns funcionan pero los del sistema principal no, confirma que hay un conflicto de CSS o JS.</strong>
+                            </p>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0">✅ Estado de Bootstrap</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="bootstrap-status">Verificando...</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0">📋 Test Manual</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <button onclick="testDropdown('adminDropdown')" class="btn btn-outline-primary btn-sm me-2 mb-2">Test Admin</button>
+                                        <button onclick="testDropdown('notificationsDropdown')" class="btn btn-outline-warning btn-sm me-2 mb-2">Test Campana</button>
+                                        <button onclick="testDropdown('userDropdown')" class="btn btn-outline-success btn-sm me-2 mb-2">Test Usuario</button>
+                                        
+                                        <div id="test-results" class="mt-3" style="min-height: 100px; font-family: monospace; font-size: 12px; background: #f8f9fa; padding: 10px; border-radius: 5px;">
+                                            <!-- Resultados de test -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function log(message) {
+            const results = document.getElementById('test-results');
+            const timestamp = new Date().toLocaleTimeString();
+            results.innerHTML += `[${timestamp}] ${message}\n`;
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function testDropdown(dropdownId) {
+            const element = document.getElementById(dropdownId);
+            if (element) {
+                log(`🎯 Testing ${dropdownId}...`);
+                try {
+                    const dropdown = bootstrap.Dropdown.getInstance(element) || new bootstrap.Dropdown(element);
+                    dropdown.toggle();
+                    log(`✅ ${dropdownId} toggle successful`);
+                } catch (error) {
+                    log(`❌ ${dropdownId} error: ${error.message}`);
+                }
+            } else {
+                log(`❌ ${dropdownId} element not found`);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusElement = document.getElementById('bootstrap-status');
+            
+            if (typeof bootstrap !== 'undefined') {
+                statusElement.innerHTML = `
+                    <div class="alert alert-success mb-0">
+                        ✅ Bootstrap ${bootstrap.Tooltip.VERSION} cargado correctamente<br>
+                        📋 Dropdowns detectados: ${document.querySelectorAll('[data-bs-toggle="dropdown"]').length}
+                    </div>
+                `;
+                log('✅ Bootstrap disponible: ' + bootstrap.Tooltip.VERSION);
+                log('📋 Dropdowns detectados: ' + document.querySelectorAll('[data-bs-toggle="dropdown"]').length);
+            } else {
+                statusElement.innerHTML = `
+                    <div class="alert alert-danger mb-0">
+                        ❌ Bootstrap NO está disponible
+                    </div>
+                `;
+                log('❌ Bootstrap no disponible');
+            }
+        });
+    </script>
+</body>
+</html>

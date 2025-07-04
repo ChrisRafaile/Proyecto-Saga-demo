@@ -123,6 +123,17 @@ public class ClienteService {
     public Optional<Cliente> buscarPorUsuario(Usuario usuario) {
         return clienteRepository.findByUsuario(usuario);
     }
+    
+    /**
+     * Obtener cliente por ID de usuario
+     */
+    public Optional<Cliente> obtenerClientePorUsuario(Long usuarioId) {
+        Optional<Usuario> usuarioOpt = usuarioService.buscarPorId(usuarioId);
+        if (usuarioOpt.isPresent()) {
+            return clienteRepository.findByUsuario(usuarioOpt.get());
+        }
+        return Optional.empty();
+    }
 
     /**
      * Listar clientes por tipo

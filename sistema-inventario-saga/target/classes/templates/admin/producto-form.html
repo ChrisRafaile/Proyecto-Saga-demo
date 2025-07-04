@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <div th:replace="~{fragments/head :: head('Formulario de Producto')}"></div>
-    <title th:text="${producto.idproducto != null ? 'Editar Producto' : 'Nuevo Producto'} + ' - Sistema Saga Falabella'">Formulario Producto</title>
+<head th:replace="~{fragments/head :: head('Formulario de Producto')}">
+</head>
     <style>
         .form-card {
             border: none;

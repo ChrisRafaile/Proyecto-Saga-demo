@@ -1,23 +1,39 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{fragments/head :: head('Mi Perfil - Cliente')}"></head>
-<body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Mi Perfil - Saga Falabella</title>
+    
+    <!-- Favicon -->
+    <th:block th:replace="~{fragments/head :: favicon}"></th:block>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- CSS Principal del Sistema -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <!-- CSS del tema cliente -->
+    <link href="/css/client-theme.css" rel="stylesheet">
+</head>
+<body class="client-page">
     <!-- Navbar -->
-    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <main class="col-md-12 ms-sm-auto px-md-4">
-                <!-- Header -->
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">
-                        <i class="fas fa-user me-3"></i>Mi Perfil
-                    </h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <a th:href="@{/client/dashboard}" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
-                            </a>
+    <div class="container client-container client-fade-in">
+        <!-- Header -->
+        <div class="client-header">
+            <h1>
+                <i class="fas fa-user me-2"></i>
+                👤 Mi Perfil Personal
+            </h1>
+            <p class="lead">Gestiona tu información personal y preferencias</p>
+        </div>
                         </div>
                     </div>
                 </div>
@@ -65,9 +81,9 @@
                                 </div>
                                 
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-saga-primary">
+                                    <a th:href="@{/client/perfil/editar}" class="btn client-btn-primary">
                                         <i class="fas fa-edit me-2"></i>Editar Perfil
-                                    </button>
+                                    </a>
                                     <button type="button" class="btn btn-outline-secondary">
                                         <i class="fas fa-key me-2"></i>Cambiar Contraseña
                                     </button>
@@ -82,5 +98,10 @@
 
     <!-- Footer -->
     <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JS Principal del Sistema -->
+    <script th:src="@{/js/saga-system.js}"></script>
 </body>
 </html>

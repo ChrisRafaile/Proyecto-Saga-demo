@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dropdowns Simple</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Test Navbar</a>
+            
+            <div class="navbar-nav">
+                <!-- Dropdown 1: Administración -->
+                <li class="nav-item dropdown d-inline-block">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cogs me-1"></i>Administración
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-truck me-2"></i>Proveedores</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-shopping-cart me-2"></i>Pedidos</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-users me-2"></i>Usuarios</a></li>
+                    </ul>
+                </li>
+                
+                <!-- Dropdown 2: Notificaciones -->
+                <li class="nav-item dropdown d-inline-block ms-3">
+                    <a class="nav-link dropdown-toggle position-relative" href="#" role="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">3</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="width: 300px;">
+                        <li><h6 class="dropdown-header">Notificaciones</h6></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Alerta de stock bajo</a></li>
+                        <li><a class="dropdown-item" href="#">Nuevo pedido recibido</a></li>
+                        <li><a class="dropdown-item" href="#">Proveedor actualizado</a></li>
+                    </ul>
+                </li>
+                
+                <!-- Dropdown 3: Usuario -->
+                <li class="nav-item dropdown d-inline-block ms-3">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-2 fs-5"></i>
+                        <span>Admin</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Mi Perfil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configuración</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h1>Test de Dropdowns Simple</h1>
+                <p>Esta página usa únicamente Bootstrap sin ningún JavaScript adicional.</p>
+                
+                <div class="alert alert-info">
+                    <h5>Instrucciones:</h5>
+                    <ol>
+                        <li>Haz clic en "Administración" - debería mostrar un menú desplegable</li>
+                        <li>Haz clic en el ícono de la campana - debería mostrar notificaciones</li>
+                        <li>Haz clic en "Admin" - debería mostrar el menú de usuario</li>
+                    </ol>
+                    <p class="mb-0"><strong>Si estos dropdowns funcionan pero los del navbar principal no, hay un conflicto específico en el navbar del sistema.</strong></p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Estado de Bootstrap</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="bootstrap-status">Verificando...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusElement = document.getElementById('bootstrap-status');
+            
+            if (typeof bootstrap !== 'undefined') {
+                statusElement.innerHTML = `
+                    <div class="alert alert-success">
+                        ✅ Bootstrap ${bootstrap.Tooltip.VERSION} cargado correctamente<br>
+                        📋 Dropdowns detectados: ${document.querySelectorAll('[data-bs-toggle="dropdown"]').length}
+                    </div>
+                `;
+                console.log('✅ Bootstrap disponible:', bootstrap.Tooltip.VERSION);
+            } else {
+                statusElement.innerHTML = `
+                    <div class="alert alert-danger">
+                        ❌ Bootstrap NO está disponible
+                    </div>
+                `;
+                console.error('❌ Bootstrap no disponible');
+            }
+        });
+    </script>
+</body>
+</html>

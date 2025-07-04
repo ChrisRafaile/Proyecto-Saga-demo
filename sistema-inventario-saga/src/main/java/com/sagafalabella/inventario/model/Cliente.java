@@ -55,6 +55,10 @@ public class Cliente {
     @Email(message = "Formato de email inválido")
     private String email;
 
+    @Column(name = "dni", unique = true, length = 8)
+    @Pattern(regexp = "^[0-9]{8}$", message = "El DNI debe tener exactamente 8 dígitos")
+    private String dni;
+
     @Column(name = "telefono", length = 20)
     @Pattern(regexp = "^[0-9+\\-\\s()]*$", message = "Formato de teléfono inválido")
     private String telefono;

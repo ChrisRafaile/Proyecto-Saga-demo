@@ -1,8 +1,10 @@
 com\sagafalabella\inventario\service\UsuarioService.class
+com\sagafalabella\inventario\config\FaviconInterceptorConfig$FaviconInterceptor.class
 com\sagafalabella\inventario\model\OrdenPicking$EstadoOrdenPicking.class
 com\sagafalabella\inventario\service\ExportService.class
 com\sagafalabella\inventario\util\SimplePasswordGenerator.class
 com\sagafalabella\inventario\controller\AdminController.class
+com\sagafalabella\inventario\controller\TestController.class
 com\sagafalabella\inventario\controller\EmpleadoController$1.class
 com\sagafalabella\inventario\model\Alerta$1.class
 com\sagafalabella\inventario\service\ActividadService.class
@@ -28,6 +30,7 @@ com\sagafalabella\inventario\model\Rol.class
 com\sagafalabella\inventario\model\Proveedor.class
 com\sagafalabella\inventario\model\Actividad.class
 com\sagafalabella\inventario\model\Alerta$TipoAlerta.class
+com\sagafalabella\inventario\controller\FaviconController.class
 com\sagafalabella\inventario\model\OrdenPicking$OrdenPickingBuilder.class
 com\sagafalabella\inventario\controller\HomeController.class
 com\sagafalabella\inventario\config\AppProperties$Upload.class
@@ -38,6 +41,7 @@ com\sagafalabella\inventario\model\Proveedor$ProveedorBuilder.class
 com\sagafalabella\inventario\SistemaInventarioApplication.class
 com\sagafalabella\inventario\service\AlertaService$AlertaEstadisticas.class
 com\sagafalabella\inventario\security\CustomAuthenticationSuccessHandler.class
+com\sagafalabella\inventario\config\StaticResourceConfig.class
 com\sagafalabella\inventario\controller\DashboardController.class
 com\sagafalabella\inventario\model\MovimientoInventario$MovimientoInventarioBuilder.class
 com\sagafalabella\inventario\model\Pedido$EstadoPedido.class
@@ -54,6 +58,7 @@ com\sagafalabella\inventario\repository\ProductoRepository.class
 com\sagafalabella\inventario\model\Pedido.class
 com\sagafalabella\inventario\util\TestPassword.class
 com\sagafalabella\inventario\config\WebConfig.class
+com\sagafalabella\inventario\config\FaviconInterceptorConfig.class
 com\sagafalabella\inventario\repository\UsuarioRepository.class
 com\sagafalabella\inventario\service\AlertaService.class
 com\sagafalabella\inventario\model\Alerta$NivelPrioridad.class
@@ -76,3 +81,4 @@ com\sagafalabella\inventario\controller\LogoutController.class
 com\sagafalabella\inventario\repository\ProveedorRepository.class
 com\sagafalabella\inventario\config\SecurityConfig.class
 com\sagafalabella\inventario\service\ImagenService.class
+com\sagafalabella\inventario\controller\DiagnosticController.class

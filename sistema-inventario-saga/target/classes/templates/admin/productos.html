@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <div th:replace="~{fragments/head :: head('Gestión de Productos')}"></div>
-    <title>Gestión de Productos - Sistema Saga Falabella</title>
-    <style>
+<head th:replace="~{fragments/head :: head('Gestión de Productos')}">
+</head>
+<style>
         .admin-card {
             border: none;
             border-radius: 15px;
@@ -28,8 +27,7 @@
         .stock-normal { background-color: #d4edda; color: #155724; }
         .stock-bajo { background-color: #fff3cd; color: #856404; }
         .stock-agotado { background-color: #f8d7da; color: #721c24; }
-    </style>
-</head>
+</style>
 <body>
     <!-- Navbar -->
     <div th:replace="~{fragments/navbar :: navbar}"></div>

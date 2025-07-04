@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mi Carrito - Saga Falabella</title>
+    
+    <!-- Favicon -->
+    <th:block th:replace="~{fragments/head :: favicon}"></th:block>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- CSS Principal del Sistema -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <!-- CSS del tema cliente -->
+    <link href="/css/client-theme.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #28a745, #20c997, #ffc107) !important;
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .cart-container {
+            padding-top: 2rem;
+            padding-bottom: 3rem;
+        }
+        
+        .cart-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .cart-title {
+            background: linear-gradient(135deg, #28a745, #ffc107);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cart-subtitle {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        
+        .cart-item {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(40, 167, 69, 0.1);
+        }
+        
+        .cart-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .product-image-cart {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #28a745;
+            border-radius: 15px;
+            border: 2px solid rgba(40, 167, 69, 0.1);
+        }
+        
+        .product-image-cart img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 13px;
+        }
+        
+        .cart-summary {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid rgba(40, 167, 69, 0.1);
+            position: sticky;
+            top: 120px;
+        }
+        
+        .cart-summary h4 {
+            color: #28a745;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cart-summary h4 i {
+            background: linear-gradient(135deg, #28a745, #ffc107);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid rgba(40, 167, 69, 0.1);
+        }
+        
+        .empty-cart i {
+            font-size: 4rem;
+            color: #ffc107;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-cart h3 {
+            color: #28a745;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-cart-primary {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-cart-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(40, 167, 69, 0.4);
+            background: linear-gradient(135deg, #20c997, #28a745);
+            color: white;
+        }
+        
+        .btn-cart-secondary {
+            background: transparent;
+            border: 2px solid #ffc107;
+            border-radius: 50px;
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            color: #f57c00;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cart-secondary:hover {
+            background: #ffc107;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border: 2px solid #28a745;
+            background: white;
+            color: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .quantity-btn:hover {
+            background: #28a745;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .price-current {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+        
+        .price-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #28a745, #ffc107);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body class="client-page">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <!-- Main Content -->
+    <div class="container cart-container">
+        <!-- Header -->
+        <div class="cart-header">
+            <h1 class="cart-title">
+                <i class="fas fa-shopping-cart me-3"></i>
+                Mi Carrito de Compras
+            </h1>
+            <p class="cart-subtitle">Revisa los productos que has seleccionado</p>
+        </div>
+        
+        <!-- Contenido del Carrito -->
+        <div class="row">
+            <!-- Lista de Productos -->
+            <div class="col-lg-8">
+                <!-- Carrito Vacío -->
+                <div th:if="${productosCarrito == null or productosCarrito.empty}" class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Tu carrito está vacío</h3>
+                    <p class="lead">¡Agrega algunos productos increíbles a tu carrito!</p>
+                    <a th:href="@{/client/catalogo}" class="btn btn-cart-primary mt-3">
+                        <i class="fas fa-shopping-bag me-2"></i>Continuar Comprando
+                    </a>
+                </div>
+                
+                <!-- Productos en el Carrito -->
+                <div th:if="${productosCarrito != null and !productosCarrito.empty}">
+                    <div class="cart-item" th:each="entry : ${productosCarrito}">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <!-- Imagen del Producto -->
+                                    <div class="col-md-2 col-sm-3">
+                                        <div class="product-image-cart">
+                                            <img th:if="${entry.key.imagenUrl != null and !entry.key.imagenUrl.empty}" 
+                                                 th:src="${entry.key.imagenUrl}" 
+                                                 th:alt="${entry.key.nombre}">
+                                            <i th:if="${entry.key.imagenUrl == null or entry.key.imagenUrl.empty}"
+                                               class="fas fa-box-open"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Información del Producto -->
+                                    <div class="col-md-6 col-sm-9">
+                                        <h6 class="mb-1" th:text="${entry.key.nombre}">Producto</h6>
+                                        <p class="text-muted small mb-1">
+                                            <span th:text="${entry.key.categoria}">Categoría</span> • 
+                                            <span th:text="${entry.key.marca}">Marca</span>
+                                        </p>
+                                        <p class="text-muted small mb-0" 
+                                           th:text="${#strings.abbreviate(entry.key.descripcion ?: 'Sin descripción', 60)}">
+                                           Descripción
+                                        </p>
+                                        <div class="mt-2">
+                                            <span class="badge bg-info">Cantidad: <span th:text="${entry.value}">1</span></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Precio y Total -->
+                                    <div class="col-md-4 text-end">
+                                        <div class="fw-bold text-success mb-2 fs-5">
+                                            S/ <span th:text="${#numbers.formatDecimal(entry.key.precio * entry.value, 1, 2)}">0.00</span>
+                                        </div>
+                                        <div class="small text-muted mb-2">
+                                            S/ <span th:text="${#numbers.formatDecimal(entry.key.precio, 1, 2)}">0.00</span> c/u
+                                        </div>
+                                        <a th:href="@{/client/producto/{id}(id=${entry.key.idproducto})}" 
+                                           class="btn btn-outline-primary btn-sm me-2">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-outline-danger btn-sm"
+                                                onclick="alert('Funcionalidad de eliminar en desarrollo')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Botón Continuar Comprando -->
+                    <div class="mt-4">
+                        <a th:href="@{/client/catalogo}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>Continuar Comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Resumen del Carrito -->
+            <div class="col-lg-4" th:if="${productosCarrito != null and !productosCarrito.empty}">
+                <div class="cart-summary">
+                    <h4>
+                        <i class="fas fa-receipt"></i>Resumen del Pedido
+                    </h4>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Productos (<span th:text="${cantidadItems}">0</span>):</span>
+                        <span>S/ <span th:text="${#numbers.formatDecimal(totalCarrito, 1, 2)}">0.00</span></span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Envío:</span>
+                        <span class="text-warning">¡Gratis!</span>
+                    </div>
+                    
+                    <hr class="my-3" style="border-color: rgba(255,255,255,0.3);">
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Total:</strong>
+                        <strong class="price-total">S/ <span th:text="${#numbers.formatDecimal(totalCarrito, 1, 2)}">0.00</span></strong>
+                    </div>
+                    
+                    <a th:href="@{/client/checkout}" class="btn btn-cart-primary mb-3 w-100">
+                        <i class="fas fa-credit-card me-2"></i>Proceder al Pago
+                    </a>
+                    
+                    <div class="text-center small" style="opacity: 0.9;">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Compra 100% segura y protegida
+                    </div>
+                </div>
+                
+                <!-- Información Adicional -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-info-circle me-2 text-info"></i>
+                            Información de Envío
+                        </h6>
+                        <ul class="list-unstyled mb-0 small">
+                            <li class="mb-2">
+                                <i class="fas fa-truck me-2 text-success"></i>
+                                Envío gratis en compras mayores a S/ 99
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-clock me-2 text-warning"></i>
+                                Entrega en 24-48 horas
+                            </li>
+                            <li class="mb-0">
+                                <i class="fas fa-undo me-2 text-primary"></i>
+                                30 días para devoluciones
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

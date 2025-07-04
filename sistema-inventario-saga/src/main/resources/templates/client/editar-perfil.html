@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Saga Falabella</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" href="/favicon-16.svg">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Client Theme -->
+    <link href="/css/client-theme.css" rel="stylesheet">
+    
+    <style>
+        .profile-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #28a745, #ffc107);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            margin: 0 auto 2rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 4px solid white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
+        }
+        
+        .avatar-upload {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #ffc107;
+            border: 3px solid white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-upload:hover {
+            background: #e0a800;
+            transform: scale(1.1);
+        }
+        
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+        
+        .form-control:focus {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+        
+        .btn-save {
+            background: linear-gradient(135deg, #28a745, #20c997) !important;
+            border: none !important;
+            color: white !important;
+            padding: 12px 30px !important;
+            border-radius: 25px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-save:hover {
+            background: linear-gradient(135deg, #218838, #1ea080) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4) !important;
+            color: white !important;
+        }
+        
+        .btn-cancel {
+            background: linear-gradient(135deg, #6c757d, #495057) !important;
+            border: none !important;
+            color: white !important;
+            padding: 12px 30px !important;
+            border-radius: 25px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .btn-cancel:hover {
+            background: linear-gradient(135deg, #5a6268, #3d4246) !important;
+            transform: translateY(-2px);
+            color: white !important;
+            text-decoration: none;
+        }
+        
+        .section-title {
+            border-bottom: 2px solid #28a745;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #28a745;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="client-page">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+    <!-- Main Content -->
+    <div class="container client-container client-fade-in">
+        <!-- Header -->
+        <div class="client-header mb-4">
+            <h1>
+                <i class="fas fa-user-edit me-2"></i>
+                ✏️ Editar Mi Perfil
+            </h1>
+            <p class="lead">Actualiza tu información personal</p>
+        </div>
+        
+        <!-- Formulario de Edición -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="profile-form">
+                    <!-- Avatar -->
+                    <div class="text-center">
+                        <div class="profile-avatar" onclick="document.getElementById('avatar-input').click()">
+                            <i class="fas fa-user"></i>
+                            <div class="avatar-upload">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                        </div>
+                        <input type="file" id="avatar-input" accept="image/*" style="display: none;" onchange="previewAvatar(this)">
+                        <p class="text-muted small mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Haz clic en el avatar para cambiar tu foto de perfil
+                        </p>
+                    </div>
+                    
+                    <!-- Formulario -->
+                    <form th:action="@{/client/perfil/actualizar}" method="post">
+                        <!-- Información Personal -->
+                        <h5 class="section-title">
+                            <i class="fas fa-user me-2"></i>Información Personal
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="nombre" 
+                                           name="nombre" 
+                                           th:value="${cliente?.nombre ?: usuario?.nombre}"
+                                           placeholder="Nombre"
+                                           required>
+                                    <label for="nombre">
+                                        <i class="fas fa-user me-2"></i>Nombre
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="apellido" 
+                                           name="apellido" 
+                                           th:value="${cliente?.apellido ?: usuario?.apellido}"
+                                           placeholder="Apellido"
+                                           required>
+                                    <label for="apellido">
+                                        <i class="fas fa-user me-2"></i>Apellido
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" 
+                                           class="form-control" 
+                                           id="email" 
+                                           name="email" 
+                                           th:value="${cliente?.email ?: usuario?.email}"
+                                           placeholder="Email"
+                                           required>
+                                    <label for="email">
+                                        <i class="fas fa-envelope me-2"></i>Correo Electrónico
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="tel" 
+                                           class="form-control" 
+                                           id="telefono" 
+                                           name="telefono" 
+                                           th:value="${cliente?.telefono}"
+                                           placeholder="Teléfono">
+                                    <label for="telefono">
+                                        <i class="fas fa-phone me-2"></i>Teléfono
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="dni" 
+                                   name="dni" 
+                                   th:value="${cliente?.dni}"
+                                   placeholder="DNI"
+                                   pattern="[0-9]{8}"
+                                   maxlength="8">
+                            <label for="dni">
+                                <i class="fas fa-id-card me-2"></i>DNI
+                            </label>
+                        </div>
+                        
+                        <!-- Información de Contacto -->
+                        <h5 class="section-title mt-4">
+                            <i class="fas fa-map-marker-alt me-2"></i>Información de Contacto
+                        </h5>
+                        
+                        <div class="form-floating">
+                            <textarea class="form-control" 
+                                      id="direccion" 
+                                      name="direccion" 
+                                      style="height: 100px"
+                                      placeholder="Dirección"
+                                      th:text="${cliente?.direccion}"></textarea>
+                            <label for="direccion">
+                                <i class="fas fa-home me-2"></i>Dirección
+                            </label>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="ciudad" 
+                                           name="ciudad" 
+                                           th:value="${cliente?.ciudad}"
+                                           placeholder="Ciudad">
+                                    <label for="ciudad">
+                                        <i class="fas fa-city me-2"></i>Ciudad
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="codigoPostal" 
+                                           name="codigoPostal" 
+                                           th:value="${cliente?.codigoPostal}"
+                                           placeholder="Código Postal">
+                                    <label for="codigoPostal">
+                                        <i class="fas fa-mail-bulk me-2"></i>Código Postal
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Botones -->
+                        <div class="d-flex gap-3 justify-content-center mt-4">
+                            <button type="submit" class="btn btn-save">
+                                <i class="fas fa-save me-2"></i>Guardar Cambios
+                            </button>
+                            <a th:href="@{/client/perfil}" class="btn btn-cancel">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Cambiar Contraseña -->
+                <div class="profile-form mt-4">
+                    <h5 class="section-title">
+                        <i class="fas fa-lock me-2"></i>Cambiar Contraseña
+                    </h5>
+                    
+                    <form th:action="@{/client/perfil/cambiar-password}" method="post">
+                        <div class="form-floating">
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="passwordActual" 
+                                   name="passwordActual" 
+                                   placeholder="Contraseña actual"
+                                   required>
+                            <label for="passwordActual">
+                                <i class="fas fa-key me-2"></i>Contraseña Actual
+                            </label>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="nuevaPassword" 
+                                           name="nuevaPassword" 
+                                           placeholder="Nueva contraseña"
+                                           minlength="8"
+                                           required>
+                                    <label for="nuevaPassword">
+                                        <i class="fas fa-lock me-2"></i>Nueva Contraseña
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="confirmarPassword" 
+                                           name="confirmarPassword" 
+                                           placeholder="Confirmar contraseña"
+                                           minlength="8"
+                                           required>
+                                    <label for="confirmarPassword">
+                                        <i class="fas fa-lock me-2"></i>Confirmar Contraseña
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-save">
+                                <i class="fas fa-shield-alt me-2"></i>Cambiar Contraseña
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Previsualizar avatar
+        function previewAvatar(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatar = document.querySelector('.profile-avatar');
+                    avatar.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                       <div class="avatar-upload"><i class="fas fa-camera"></i></div>`;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        // Validar que las contraseñas coincidan
+        document.getElementById('confirmarPassword').addEventListener('input', function() {
+            const nueva = document.getElementById('nuevaPassword').value;
+            const confirmar = this.value;
+            
+            if (nueva !== confirmar) {
+                this.setCustomValidity('Las contraseñas no coinciden');
+                this.classList.add('is-invalid');
+            } else {
+                this.setCustomValidity('');
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            }
+        });
+        
+        // Mostrar mensajes de éxito/error
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success') === 'true') {
+                showToast('Perfil actualizado correctamente', 'success');
+            }
+            if (urlParams.get('error') === 'true') {
+                showToast('Error al actualizar perfil', 'error');
+            }
+        });
+        
+        // Función para mostrar notificaciones toast
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toast-container') || createToastContainer();
+            
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+        
+        // Crear contenedor de toasts si no existe
+        function createToastContainer() {
+            const container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+            return container;
+        }
+    </script>
+</body>
+</html>
